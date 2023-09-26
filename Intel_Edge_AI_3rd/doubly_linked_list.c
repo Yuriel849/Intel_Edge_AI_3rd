@@ -1,5 +1,7 @@
 #if 1
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -25,9 +27,44 @@ void delete(DLL* list, int id);
 void show_head_to_tail(DLL* list);
 void show_tail_to_head(DLL* list);
 
-
 int main(void)
 {
+	DLL* list = (DLL*)malloc(sizeof(DLL));
+
+	init(list);
+
+	add(list, 1, "A");
+	add(list, 2, "C");
+	add(list, 3, "E");
+	add(list, 4, "G");
+	add(list, 5, "I");
+
+	show_head_to_tail(list);
+	show_tail_to_head(list);
+
+	int id_to_find;
+	printf("검색할 ID를 입력하세요 : ");
+	scanf("%d", &id_to_find);
+	NODE* find_node = find(list, id_to_find);
+	if (find_node == NULL)
+	{
+		printf("존재하지 않는 노드입니다.\n");
+	}
+	else
+	{
+		printf("ID : %d 노드를 찾았습니다.\n", id_to_find);
+	}
+
+	int id_to_delete;
+	printf("삭제할 ID를 입력하세요 : ");
+	scanf("%d", &id_to_delete);
+	delete(list, id_to_delete);
+	show_head_to_tail(list);
+
+	printf("다시 한번 확인해주세요.\n");
+	show_head_to_tail(list);
+	show_tail_to_head(list);
+
 	return 0;
 }
 
@@ -87,25 +124,25 @@ void delete(DLL* list, int id)
 	
 	if (current == NULL)
 	{
-		printf("찾으시는 노드가 존재하지 않습니다.");
+		printf("찾으시는 노드가 존재하지 않습니다.\n");
 	}
 	else if (current == list->head)
 	{
-		printf("첫번째 노드를 삭제합니다.");
+		printf("첫번째 노드를 삭제합니다.\n");
 		list->head = current->next;
 		current->next->prev = NULL;
 		free(current);
 	}
 	else if (current == list->tail)
 	{
-		printf("마지막 노드를 삭제합니다.");
+		printf("마지막 노드를 삭제합니다.\n");
 		list->tail = current->prev;
 		current->prev->next = NULL;
 		free(current);
 	}
 	else
 	{
-		printf("삭제합니다.");
+		printf("삭제합니다.\n");
 		current->next->prev = current->prev;
 		current->prev->next = current->next;
 		free(current);
@@ -136,8 +173,5 @@ void show_tail_to_head(DLL* list)
 	}
 	printf("\n");
 }
-
-
-
 
 #endif
