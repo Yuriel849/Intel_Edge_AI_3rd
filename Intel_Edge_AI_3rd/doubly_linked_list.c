@@ -32,7 +32,7 @@ int main(void)
 {
 #if 1
 	// 모바일 뱅킹 앱에서 최근에 이체한 계좌번호 목록
-	int i, selection, acct_num, order = 0; // order == 0이면 최신 순, order == 1이면 오래된 ㅅㄴ
+	int i, selection, acct_num, order = 0; // order == 0이면 최신 순, order == 1이면 오래된 순
 	const int MAX_NUMBER = 54321; // 계좌번호 최고값
 	const int MIN_NUMBER = 12345; // 계좌번호 최소값
 
