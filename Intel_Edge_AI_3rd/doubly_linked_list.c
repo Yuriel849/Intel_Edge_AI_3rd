@@ -21,7 +21,7 @@ typedef struct dll
 } DLL;
 
 void init(struct dll* list);
-void add(DLL* list, int id, char data[]);
+void insert(DLL* list, int after_here, int new_id, char data[]);
 struct node* find(DLL* list, int id);
 void delete(DLL* list, int id);
 void show_head_to_tail(DLL* list);
@@ -33,12 +33,11 @@ int main(void)
 
 	init(list);
 
-	add(list, 1, "A");
-	add(list, 2, "C");
-	add(list, 3, "E");
-	add(list, 4, "G");
-	add(list, 5, "I");
-
+	insert(list, 1, 1, "A");
+	insert(list, 1, 2, "C");
+	insert(list, 2, 3, "E");
+	insert(list, 3, 4, "G");
+	insert(list, 4, 5, "I");
 	show_head_to_tail(list);
 	show_tail_to_head(list);
 
@@ -74,28 +73,48 @@ void init(struct dll* list)
 	list->tail = NULL;
 }
 
-void add(DLL* list, int id, char data[])
+// 지정된 ID "after_here"를 가진 노드 다음에 추가하거나, 찾지 못할 경우 가장 마지막에 tail 다음에 추가한다.
+void insert(DLL* list, int after_here, int new_id, char data[])
 {
 	NODE* new = (NODE*)malloc(sizeof(NODE));
-	(*new).id = id;
+	new->id = new_id;
 	new->data[0] = data[0]; // 코드 구현의 편의상 문자열의 첫 문자만 복사
 	new->next = NULL;
 	new->prev = NULL;
 
+	NODE* current = (NODE*)malloc(sizeof(NODE));
+	current = list->head;
+
 	// 만약 빈 리스트에 최초로 노드를 추가한다면...
-	if (list->head == NULL)
+	if (current == NULL)
 	{
 		list->head = new;
 		list->tail = new;
 		return;
 	}
-	// 빈 리스트가 아닐 경우...
-	else
+
+	while (current != NULL)
 	{
-		list->tail->next = new;
-		new->prev = list->tail;
-		list->tail = new;
-		return;
+		// 현재 노드가 마지막 노드일 경우, 바로 뒤에 새로운 노드를 추가한다.
+		if (current == list->tail)
+		{
+			new->prev = current;
+			new->next = NULL;
+			current->next = new;
+			list->tail = new;
+			return;
+		}
+		// 일치하는 ID를 가진 노드를 찾았을 경우 그 다음 위치에 새로운 노드를 추가한다.
+		else if (current->id == after_here)
+		{
+			printf("got in");
+			new->prev = current;
+			new->next = current->next;
+			current->next = new;
+			new->next->prev = new;
+			return;
+		}
+		current = current->next;
 	}
 }
 
