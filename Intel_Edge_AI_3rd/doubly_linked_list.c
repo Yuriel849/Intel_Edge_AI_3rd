@@ -32,9 +32,9 @@ int main(void)
 {
 #if 1
 	// 모바일 뱅킹 앱에서 최근에 이체한 계좌번호 목록
-	int i, selection, acct_num, order = 0;
-	const int MAX_NUMBER = 54321;
-	const int MIN_NUMBER = 12345;
+	int i, selection, acct_num, order = 0; // order == 0이면 최신 순, order == 1이면 오래된 ㅅㄴ
+	const int MAX_NUMBER = 54321; // 계좌번호 최고값
+	const int MIN_NUMBER = 12345; // 계좌번호 최소값
 
 	DLL* acct_list = (DLL*)malloc(sizeof(DLL));
 	
@@ -43,13 +43,13 @@ int main(void)
 
 	for (i = 0; i < 20; i++)
 	{
-		insert(acct_list, i, (rand() % (MAX_NUMBER + 1 - MIN_NUMBER)) + MIN_NUMBER);
+		insert(acct_list, i, (rand() % (MAX_NUMBER + 1 - MIN_NUMBER)) + MIN_NUMBER); // 랜덤으로 계좌번호 20개 생성
 	}
 
-	while (1)
+	while (1) // 사용자가 종료할 때까지 무한 반복
 	{
-		selection = 0;
-		acct_num = 0;
+		selection = 0; // 사용자가 선택한 작업 초기화
+		acct_num = 0; // 사용자가 입력한 계좌번호 초기화
 
 		printf("\n==== 최근에 이체한 계좌번호 목록입니다. ====\n");
 		if (order == 0)
@@ -71,6 +71,7 @@ int main(void)
 		printf("===== 5. 사용한 계좌번호를 검색합니다. =====\n");
 		printf("============== 6. 종료합니다. ==============\n");
 		scanf("%d", &selection);
+
 		switch (selection)
 		{
 		case 1: show_head_to_tail(acct_list); order = 0; break;
