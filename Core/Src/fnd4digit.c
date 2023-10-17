@@ -12,6 +12,8 @@
 
 extern volatile int fnd1ms_counter;  // fnd1ms
 
+void fnd4digit_main(void);
+
 uint16_t FND_digit[4] =
 {
 	FND_d1, FND_d10, FND_d100, FND_d1000

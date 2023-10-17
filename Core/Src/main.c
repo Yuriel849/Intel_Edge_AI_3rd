@@ -84,10 +84,10 @@ static void MX_TIM2_Init(void);
 static void MX_RTC_Init(void);
 static void MX_TIM5_Init(void);
 /* USER CODE BEGIN PFP */
-extern void i2c_lcd_main(void);
 extern void i2c_lcd_init(void);
 extern void dcmotor_pwm_control(void);
 extern void run_washing_machine(void);
+extern void fnd4digit_main(void);
 void delay_us(unsigned long us);
 /* USER CODE END PFP */
 
@@ -98,6 +98,17 @@ void delay_us(unsigned long us)
 	__HAL_TIM_SET_COUNTER(&htim11,0);   // tim11 clear
 	while(__HAL_TIM_GET_COUNTER(&htim11) < us)
 		;
+}
+
+// call by SysTick_Handler of stm32f4xx_it.c
+// ARM default timer
+// enter here every 1ms
+volatile int t1ms_counter=0;  // volatile : for disable optimize
+volatile int fnd1ms_counter=0;
+void HAL_SYSTICK_Handler(void)
+{
+	t1ms_counter++;   // 1ms timer
+	fnd1ms_counter++;
 }
 /* USER CODE END 0 */
 
@@ -152,6 +163,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+//	  fnd4digit_main();
 	  run_washing_machine();
   }
   /* USER CODE END 3 */

@@ -2,37 +2,11 @@
 #include "i2c_lcd.h"
 
 // 초기버튼 상태 table
-char button_status[BUTTON_NUMBER] =
-{BUTTON_RELEASE,BUTTON_RELEASE,BUTTON_RELEASE,BUTTON_RELEASE,BUTTON_RELEASE};
-uint8_t lcd_display_mode_flag = 0;
+char button_status[BUTTON_NUMBER] = {BUTTON_RELEASE,BUTTON_RELEASE,BUTTON_RELEASE,BUTTON_RELEASE,BUTTON_RELEASE};
 
-extern RTC_HandleTypeDef hrtc;
-RTC_TimeTypeDef mTime;  // time when button four is pressed
-
-void lcd_display_mode_select(void);
-
-void lcd_display_mode_select(void)
-{
-	char lcd_buff[40];
-	if(get_button(GPIOC, GPIO_PIN_13, 4) == BUTTON_PRESS)
-	{
-		lcd_command(CLEAR_DISPLAY);
-		lcd_display_mode_flag++;
-		lcd_display_mode_flag %= 4;
-		if(lcd_display_mode_flag == 3)
-		{
-			HAL_RTC_GetTime(&hrtc, &mTime, RTC_FORMAT_BCD);
-//			lcd_command(CLEAR_DISPLAY);
-			sprintf(lcd_buff, "TIME: %02d:%02d:%02d",
-					bin2dec(mTime.Hours), bin2dec(mTime.Minutes), bin2dec(mTime.Seconds));
-			move_cursor(1,0);
-			lcd_string(lcd_buff);
-			move_cursor(1,6); // 시간 정보 field로 커서 이동
-		}
-	}
-}
-// get_button(gpio, pin, button번호)
-// 완전히 눌렀다 떼면 BUTTON_RELEASE(1) 을 return
+/* get_button(GPIO, PIN, button번호)
+ * 버튼을 완전히 눌렀다 떼면 BUTTON_RELEASE(value == 1)을 반환
+ */
 int get_button(GPIO_TypeDef *GPIO, uint16_t GPIO_PIN, uint8_t button_number)
 {
 	unsigned char curr_state;

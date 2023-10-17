@@ -5,6 +5,8 @@
  *      Author: USER
  */
 
+#include "main.h"
+
 #ifndef INC_WASHING_MACHINE_H_
 #define INC_WASHING_MACHINE_H_
 
