@@ -29,5 +29,7 @@ void run_washing_machine(void)
 			run_state is automatic operation with no user input, except to cancel with USER_Btn and pause/unpause with BTN0
 			Ring buzzer when starting and ending run_state == 3
 			Run specific number of wash cycles, then rinse cycles, then dry cycles, before finishing and returning to run_state == 0
+
+		Source files: I2C_LCD driver
 	 */
 }
