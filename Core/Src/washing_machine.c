@@ -19,6 +19,7 @@ extern void delay_us(unsigned long us);
 void run_washing_machine(void);
 void spin_clockwise(int speed);
 void spin_counter(int speed);
+void stop_spin(void);
 
 void run_washing_machine(void)
 {
@@ -59,7 +60,7 @@ void run_washing_machine(void)
 	static int speed = 0;			  // motor speed (PWM duty cycle)
 	static int mode_duration = 0;	  // duration of wash/rinse/dry mode in ms
 	static int direction_dcmotor = 0; // spin clockwise == 0, spin counterclockwise == 1
-
+	static int set_flag = 0;		  // if value has been set == 1
 
 	// Reset
 	if(get_button(GPIOC, GPIO_PIN_13, 4) == BUTTON_PRESS)
@@ -72,6 +73,7 @@ void run_washing_machine(void)
 			dry = 3;
 			user_select = 3;
 			user_select_flag = 0;
+			stop_spin();
 			lcd_command(CLEAR_DISPLAY);
 		}
 	}
@@ -80,6 +82,7 @@ void run_washing_machine(void)
 	{
 	case 0: // IDLE state / DO NOTHING
 		lcd_command(CLEAR_DISPLAY);
+		stop_spin();
 		// If USER_Btn is pressed, change to state == 1
 		if(get_button(GPIOC, GPIO_PIN_13, 4) == BUTTON_PRESS)
 		{
@@ -140,7 +143,7 @@ void run_washing_machine(void)
 		{
 			user_select = ++user_select % 4;
 		}
-		if(get_button(BUTTON2_GPIO_Port, BUTTON2_Pin, 2) == BUTTON_PRESS)
+		else if(get_button(BUTTON2_GPIO_Port, BUTTON2_Pin, 2) == BUTTON_PRESS)
 		{
 			if(user_select == 0)
 			{
@@ -176,22 +179,22 @@ void run_washing_machine(void)
 			move_cursor(1,0);
 			if(user_select == 0)
 			{
-				wash = 1;
+				wash = 0;
 				lcd_string("W: *1  2  3  4  ");
 			}
 			else if(user_select == 1)
 			{
-				wash = 2;
+				wash = 1;
 				lcd_string("W:  1 *2  3  4  ");
 			}
 			else if(user_select == 2)
 			{
-				wash = 3;
+				wash = 2;
 				lcd_string("W:  1  2 *3  4  ");
 			}
 			else if(user_select == 3)
 			{
-				wash = 4;
+				wash = 3;
 				lcd_string("W:  1  2  3 *4  ");
 			}
 		}
@@ -200,22 +203,22 @@ void run_washing_machine(void)
 			move_cursor(1,0);
 			if(user_select == 0)
 			{
-				rinse = 1;
+				rinse = 0;
 				lcd_string("R: *1  2  3  4  ");
 			}
 			else if(user_select == 1)
 			{
-				rinse = 2;
+				rinse = 1;
 				lcd_string("R:  1 *2  3  4  ");
 			}
 			else if(user_select == 2)
 			{
-				rinse = 3;
+				rinse = 2;
 				lcd_string("R:  1  2 *3  4  ");
 			}
 			else if(user_select == 3)
 			{
-				rinse = 4;
+				rinse = 3;
 				lcd_string("R:  1  2  3 *4  ");
 			}
 		}
@@ -224,22 +227,22 @@ void run_washing_machine(void)
 			move_cursor(1,0);
 			if(user_select == 0)
 			{
-				dry = 1;
+				dry = 0;
 				lcd_string("D: *1  2  3  4  ");
 			}
 			else if(user_select == 1)
 			{
-				dry = 2;
+				dry = 1;
 				lcd_string("D:  1 *2  3  4  ");
 			}
 			else if(user_select == 2)
 			{
-				dry = 3;
+				dry = 2;
 				lcd_string("D:  1  2 *3  4  ");
 			}
 			else if(user_select == 3)
 			{
-				dry = 4;
+				dry = 3;
 				lcd_string("D:  1  2  3 *4  ");
 			}
 		}
@@ -256,10 +259,7 @@ void run_washing_machine(void)
 		// If BTN0 pressed, pause
 		if(get_button(BUTTON0_GPIO_Port, BUTTON0_Pin, 0) == BUTTON_PRESS)
 		{
-			// Stop motor
-			HAL_GPIO_WritePin(IN1_MOTOR1_GPIO_Port, IN1_MOTOR1_Pin, 1);
-			HAL_GPIO_WritePin(IN2_MOTOR1_GPIO_Port, IN2_MOTOR1_Pin, 1);
-
+			stop_spin();
 			lcd_command(CLEAR_DISPLAY);
 			user_select_flag = 0;
 			state = 4;
@@ -270,25 +270,29 @@ void run_washing_machine(void)
 
 			// Automatic cycling
 			// Wash sequence (3 seconds clockwise, 3 seconds counter-clockwise at speed 80)
-			// Rinse sequence (2 seconds closewise, 2 seconds counter-clockwise at speed 70)
-			// Dry sequence (5 seconds clockwise, 5 seconds counter-clockwise at speed 100)
-			if(mode_counter == 0) // Wash mode
+			// Rinse sequence (2.5 seconds closewise, 2.5 seconds counter-clockwise at speed 60)
+			// Dry sequence (4 seconds clockwise, 4 seconds counter-clockwise at speed 100)
+			if(set_flag == 0)
 			{
-				speed = 80;
-				mode_duration = 1000;
-				cycle_counter = wash;
-			}
-			else if(mode_counter == 1) // Rinse mode
-			{
-				speed = 70;
-				mode_duration = 5000;
-				cycle_counter = rinse;
-			}
-			else if(mode_counter == 2) // Dry mode
-			{
-				speed = 100;
-				mode_duration = 10000;
-				cycle_counter = dry;
+				set_flag = 1;
+				if(mode_counter == 0) // Wash mode
+				{
+					speed = 80;
+					mode_duration = 3000;
+					cycle_counter = wash+1;
+				}
+				else if(mode_counter == 1) // Rinse mode
+				{
+					speed = 60;
+					mode_duration = 2500;
+					cycle_counter = rinse+1;
+				}
+				else if(mode_counter == 2) // Dry mode
+				{
+					speed = 100;
+					mode_duration = 4000;
+					cycle_counter = dry+1;
+				}
 			}
 
 			// Run motor
@@ -297,32 +301,32 @@ void run_washing_machine(void)
 				move_cursor(0, 0);
 				if(mode_counter == 0)
 				{
-					lcd_string("WASH");
+					lcd_string("WASH Mode  ");
 				}
 				else if(mode_counter == 1)
 				{
-					lcd_string("RINSE");
+					lcd_string("RINSE Mode ");
 				}
 				else if(mode_counter == 2)
 				{
-					lcd_string("DRY");
+					lcd_string("DRY Mode   ");
 				}
 				move_cursor(1, 0);
-				if(cycle_counter == 0)
+				if(cycle_counter == 1)
 				{
-					lcd_string("0");
-				}
-				else if(cycle_counter == 1)
-				{
-					lcd_string("1");
+					lcd_string("Cycle: 1");
 				}
 				else if(cycle_counter == 2)
 				{
-					lcd_string("2");
+					lcd_string("Cycle: 2");
 				}
 				else if(cycle_counter == 3)
 				{
-					lcd_string("3");
+					lcd_string("Cycle: 3");
+				}
+				else if(cycle_counter == 4)
+				{
+					lcd_string("Cycle: 4");
 				}
 
 				spin_clockwise(speed);
@@ -339,12 +343,22 @@ void run_washing_machine(void)
 				{
 					direction_dcmotor = 0;
 					t1ms_counter = 0;
-					cycle_counter = cycle_counter - 1;
-					if(cycle_counter <= 0)
+					if(--cycle_counter == 0)
 					{
-						mode_counter = ++mode_counter % 3;
+						mode_counter++;
+						set_flag = 0;
+						if(mode_counter > 2)
+						{
+							lcd_command(CLEAR_DISPLAY);
+							move_cursor(0, 0);
+							HAL_Delay(10);
+							lcd_string("Washing done");
+							move_cursor(1, 0);
+							lcd_string("Remove laundry");
+							HAL_Delay(2000);
+							state = 0;
+						}
 					}
-					lcd_command(CLEAR_DISPLAY);
 				}
 			}
 
@@ -379,5 +393,11 @@ void spin_counter(int speed)
 {
 	__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, speed);
 	HAL_GPIO_WritePin(IN1_MOTOR1_GPIO_Port, IN1_MOTOR1_Pin, 0);
+	HAL_GPIO_WritePin(IN2_MOTOR1_GPIO_Port, IN2_MOTOR1_Pin, 1);
+}
+
+void stop_spin(void)
+{
+	HAL_GPIO_WritePin(IN1_MOTOR1_GPIO_Port, IN1_MOTOR1_Pin, 1);
 	HAL_GPIO_WritePin(IN2_MOTOR1_GPIO_Port, IN2_MOTOR1_Pin, 1);
 }

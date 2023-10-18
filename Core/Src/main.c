@@ -104,7 +104,6 @@ void delay_us(unsigned long us)
 // ARM default timer
 // enter here every 1ms
 volatile int t1ms_counter=0;  // volatile : for disable optimize
-volatile int fnd1ms_counter=0;
 void HAL_SYSTICK_Handler(void)
 {
 	t1ms_counter++;   // 1ms timer
