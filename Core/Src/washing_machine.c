@@ -55,8 +55,6 @@ void run_washing_machine(void)
 	static char cycle_counter = 0;	  // count of wash/rinse/dry cycles (0~4)
 	static char mode_counter = 0; 	  // wash mode == 0; rinse mode == 1; dry mode == 2
 
-	char lcd_buff[16];
-
 	static int speed = 0;			  // motor speed (PWM duty cycle)
 	static int mode_duration = 0;	  // duration of wash/rinse/dry mode in ms
 	static int direction_dcmotor = 0; // spin clockwise == 0, spin counterclockwise == 1
@@ -82,6 +80,7 @@ void run_washing_machine(void)
 	{
 	case 0: // IDLE state / DO NOTHING
 		lcd_command(CLEAR_DISPLAY);
+		HAL_Delay(10);
 		stop_spin();
 		// If USER_Btn is pressed, change to state == 1
 		if(get_button(GPIOC, GPIO_PIN_13, 4) == BUTTON_PRESS)
@@ -92,7 +91,7 @@ void run_washing_machine(void)
 	case 1: // MODE SELECTION state
 		// Display user interface
 		move_cursor(0,0);
-		lcd_string("Select mode : ");
+		lcd_string((uint8_t*) "Select mode : ");
 
 		// Switch between manual and auto mode with BTN2 as "left" and BTN1 as "right"
 		if((get_button(BUTTON1_GPIO_Port, BUTTON1_Pin, 1) == BUTTON_PRESS) || (get_button(BUTTON2_GPIO_Port, BUTTON2_Pin, 2) == BUTTON_PRESS))
@@ -112,12 +111,12 @@ void run_washing_machine(void)
 		if(user_select_flag == 0)
 		{
 			move_cursor(1,0);
-			lcd_string("<< AUTO MODE >> ");
+			lcd_string((uint8_t*) "<< AUTO MODE >> ");
 		}
 		else if(user_select_flag == 1)
 		{
 			move_cursor(1,0);
-			lcd_string("<< USER INPUT >>");
+			lcd_string((uint8_t*) "<< USER INPUT >>");
 		}
 
 		// If BTN0 is pressed, switch to state == 2 or state == 3 (default state = 3)
@@ -172,7 +171,7 @@ void run_washing_machine(void)
 		}
 
 		move_cursor(0,0);
-		lcd_string("Manual input : ");
+		lcd_string((uint8_t*) "Manual input : ");
 
 		if(user_select_flag == 0)
 		{
@@ -180,22 +179,22 @@ void run_washing_machine(void)
 			if(user_select == 0)
 			{
 				wash = 0;
-				lcd_string("W: *1  2  3  4  ");
+				lcd_string((uint8_t*) "W: *1  2  3  4  ");
 			}
 			else if(user_select == 1)
 			{
 				wash = 1;
-				lcd_string("W:  1 *2  3  4  ");
+				lcd_string((uint8_t*) "W:  1 *2  3  4  ");
 			}
 			else if(user_select == 2)
 			{
 				wash = 2;
-				lcd_string("W:  1  2 *3  4  ");
+				lcd_string((uint8_t*) "W:  1  2 *3  4  ");
 			}
 			else if(user_select == 3)
 			{
 				wash = 3;
-				lcd_string("W:  1  2  3 *4  ");
+				lcd_string((uint8_t*) "W:  1  2  3 *4  ");
 			}
 		}
 		else if(user_select_flag == 1)
@@ -204,22 +203,22 @@ void run_washing_machine(void)
 			if(user_select == 0)
 			{
 				rinse = 0;
-				lcd_string("R: *1  2  3  4  ");
+				lcd_string((uint8_t*) "R: *1  2  3  4  ");
 			}
 			else if(user_select == 1)
 			{
 				rinse = 1;
-				lcd_string("R:  1 *2  3  4  ");
+				lcd_string((uint8_t*) "R:  1 *2  3  4  ");
 			}
 			else if(user_select == 2)
 			{
 				rinse = 2;
-				lcd_string("R:  1  2 *3  4  ");
+				lcd_string((uint8_t*) "R:  1  2 *3  4  ");
 			}
 			else if(user_select == 3)
 			{
 				rinse = 3;
-				lcd_string("R:  1  2  3 *4  ");
+				lcd_string((uint8_t*) "R:  1  2  3 *4  ");
 			}
 		}
 		else if(user_select_flag == 2)
@@ -228,22 +227,22 @@ void run_washing_machine(void)
 			if(user_select == 0)
 			{
 				dry = 0;
-				lcd_string("D: *1  2  3  4  ");
+				lcd_string((uint8_t*) "D: *1  2  3  4  ");
 			}
 			else if(user_select == 1)
 			{
 				dry = 1;
-				lcd_string("D:  1 *2  3  4  ");
+				lcd_string((uint8_t*) "D:  1 *2  3  4  ");
 			}
 			else if(user_select == 2)
 			{
 				dry = 2;
-				lcd_string("D:  1  2 *3  4  ");
+				lcd_string((uint8_t*) "D:  1  2 *3  4  ");
 			}
 			else if(user_select == 3)
 			{
 				dry = 3;
-				lcd_string("D:  1  2  3 *4  ");
+				lcd_string((uint8_t*) "D:  1  2  3 *4  ");
 			}
 		}
 
@@ -301,32 +300,32 @@ void run_washing_machine(void)
 				move_cursor(0, 0);
 				if(mode_counter == 0)
 				{
-					lcd_string("WASH Mode  ");
+					lcd_string((uint8_t*) "WASH Mode  ");
 				}
 				else if(mode_counter == 1)
 				{
-					lcd_string("RINSE Mode ");
+					lcd_string((uint8_t*) "RINSE Mode ");
 				}
 				else if(mode_counter == 2)
 				{
-					lcd_string("DRY Mode   ");
+					lcd_string((uint8_t*) "DRY Mode   ");
 				}
 				move_cursor(1, 0);
 				if(cycle_counter == 1)
 				{
-					lcd_string("Cycle: 1");
+					lcd_string((uint8_t*) "Cycle: 1");
 				}
 				else if(cycle_counter == 2)
 				{
-					lcd_string("Cycle: 2");
+					lcd_string((uint8_t*) "Cycle: 2");
 				}
 				else if(cycle_counter == 3)
 				{
-					lcd_string("Cycle: 3");
+					lcd_string((uint8_t*) "Cycle: 3");
 				}
 				else if(cycle_counter == 4)
 				{
-					lcd_string("Cycle: 4");
+					lcd_string((uint8_t*) "Cycle: 4");
 				}
 
 				spin_clockwise(speed);
@@ -352,9 +351,9 @@ void run_washing_machine(void)
 							lcd_command(CLEAR_DISPLAY);
 							move_cursor(0, 0);
 							HAL_Delay(10);
-							lcd_string("Washing done");
+							lcd_string((uint8_t*) "Washing done");
 							move_cursor(1, 0);
-							lcd_string("Remove laundry");
+							lcd_string((uint8_t*) "Remove laundry");
 							HAL_Delay(2000);
 							state = 0;
 						}
@@ -367,7 +366,7 @@ void run_washing_machine(void)
 		}
 	case 4:
 		move_cursor(0, 0);
-		lcd_string("Paused");
+		lcd_string((uint8_t*) "Paused");
 
 		if(get_button(BUTTON0_GPIO_Port, BUTTON0_Pin, 0) == BUTTON_PRESS)
 		{
