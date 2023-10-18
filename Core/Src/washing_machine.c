@@ -7,9 +7,18 @@
 
 #include "washing_machine.h"
 #include "button.h"
+#include "dcmotor.h"
 #include "i2c_lcd.h"
 
+#include <stdio.h>
+
+extern TIM_HandleTypeDef htim4;
+extern volatile int t1ms_counter;
+extern void delay_us(unsigned long us);
+
 void run_washing_machine(void);
+void spin_clockwise(int speed);
+void spin_counter(int speed);
 
 void run_washing_machine(void)
 {
@@ -31,26 +40,40 @@ void run_washing_machine(void)
 			state is automatic operation with no user input, except to cancel with USER_Btn and pause/unpause with BTN0
 			Ring buzzer when starting and ending state == 3
 			Run specific number of wash cycles, then rinse cycles, then dry cycles, before finishing and returning to state == 0
+		state == 4, pause
 
 		Necessary src files: I2C_LCD driver, DC_motor driver, Button driver, Buzzer driver
 	 */
 
-	static char state = 0;
-	static char wash = 2;
-	static char rinse = 2;
-	static char drying = 3;
-	static char user_select = 3;
+	static char state = 0;			  // current state
+	static char wash = 2;			  // number of wash cycles
+	static char rinse = 2;			  // number of rinse cycles
+	static char dry = 3;			  // number of dry cycles
+	static char user_select = 3;	  // user selection in manual input
 	static char user_select_flag = 0;
+	static char cycle_counter = 0;	  // count of wash/rinse/dry cycles (0~4)
+	static char mode_counter = 0; 	  // wash mode == 0; rinse mode == 1; dry mode == 2
+
+	char lcd_buff[16];
+
+	static int speed = 0;			  // motor speed (PWM duty cycle)
+	static int mode_duration = 0;	  // duration of wash/rinse/dry mode in ms
+	static int direction_dcmotor = 0; // spin clockwise == 0, spin counterclockwise == 1
+
 
 	// Reset
-	if(state != 0 && get_button(GPIOC, GPIO_PIN_13, 4) == BUTTON_PRESS)
+	if(get_button(GPIOC, GPIO_PIN_13, 4) == BUTTON_PRESS)
 	{
-		state = 0; // reset to IDLE mode
-		wash = 2; // reset to default
-		rinse = 2; // reset to default
-		drying = 3; // reset to default
-		user_select = 3; // reset to default
-		lcd_command(CLEAR_DISPLAY);
+		if(state != 0)
+		{
+			state = 0;
+			wash = 2;
+			rinse = 2;
+			dry = 3;
+			user_select = 3;
+			user_select_flag = 0;
+			lcd_command(CLEAR_DISPLAY);
+		}
 	}
 
 	switch(state)
@@ -105,7 +128,7 @@ void run_washing_machine(void)
 	case 2: // MANUAL USER INPUT state
 		// Display on screen and user selects in order the number of washes, rinses, and dryings
 		// BTN0 to confirm selection, BTN1 as "up" and BTN2 as "down", and BTN3 as "next"
-		// BTN1 and BTN2 used to increase or decrease number of washes/rinses/dryings (min. 1 ~ max. 5)
+		// BTN1 and BTN2 used to increase or decrease number of washes/rinses/dryings (min. 1 (value=0) ~ max. 4 (value=3))
 		// BTN3 used to switch to next selection (after choosing number of dryings, switch back to number of washes)
 		// If BTN0 is pressed, switch to state == 3 and overwrite wash configuration
 
@@ -115,15 +138,34 @@ void run_washing_machine(void)
 
 		if(get_button(BUTTON1_GPIO_Port, BUTTON1_Pin, 1) == BUTTON_PRESS)
 		{
-			user_select = ++user_select % 5;
+			user_select = ++user_select % 4;
 		}
 		if(get_button(BUTTON2_GPIO_Port, BUTTON2_Pin, 2) == BUTTON_PRESS)
 		{
-			user_select = --user_select % 5;
+			if(user_select == 0)
+			{
+				user_select = 3;
+			}
+			else
+			{
+				user_select = user_select - 1;
+			}
 		}
 		else if(get_button(BUTTON3_GPIO_Port, BUTTON3_Pin, 3) == BUTTON_PRESS)
 		{
 			user_select_flag = ++user_select_flag % 3;
+			if(user_select_flag == 0)
+			{
+				user_select = wash;
+			}
+			else if(user_select_flag == 1)
+			{
+				user_select = rinse;
+			}
+			else if(user_select_flag == 2)
+			{
+				user_select = dry;
+			}
 		}
 
 		move_cursor(0,0);
@@ -132,102 +174,210 @@ void run_washing_machine(void)
 		if(user_select_flag == 0)
 		{
 			move_cursor(1,0);
-			if(user_select == 1)
+			if(user_select == 0)
 			{
-				lcd_string("Wash: *1 2345   ");
+				wash = 1;
+				lcd_string("W: *1  2  3  4  ");
+			}
+			else if(user_select == 1)
+			{
+				wash = 2;
+				lcd_string("W:  1 *2  3  4  ");
 			}
 			else if(user_select == 2)
 			{
-				lcd_string("Wash: 1 *2 345  ");
+				wash = 3;
+				lcd_string("W:  1  2 *3  4  ");
 			}
-			else if(user_select == 2)
+			else if(user_select == 3)
 			{
-				lcd_string("Wash: 12 *3 45  ");
-			}
-			else if(user_select == 2)
-			{
-				lcd_string("Wash: 123 *4 5  ");
-			}
-			else if(user_select == 2)
-			{
-				lcd_string("Wash: 1234 *5   ");
+				wash = 4;
+				lcd_string("W:  1  2  3 *4  ");
 			}
 		}
 		else if(user_select_flag == 1)
 		{
 			move_cursor(1,0);
-			if(user_select == 1)
+			if(user_select == 0)
 			{
-				lcd_string("Rinse: *1 2345  ");
+				rinse = 1;
+				lcd_string("R: *1  2  3  4  ");
+			}
+			else if(user_select == 1)
+			{
+				rinse = 2;
+				lcd_string("R:  1 *2  3  4  ");
 			}
 			else if(user_select == 2)
 			{
-				lcd_string("Rinse: 1 *2 345 ");
+				rinse = 3;
+				lcd_string("R:  1  2 *3  4  ");
 			}
-			else if(user_select == 2)
+			else if(user_select == 3)
 			{
-				lcd_string("Rinse: 12 *3 45 ");
-			}
-			else if(user_select == 2)
-			{
-				lcd_string("Rinse: 123 *4 5 ");
-			}
-			else if(user_select == 2)
-			{
-				lcd_string("Rinse: 1234 *5  ");
+				rinse = 4;
+				lcd_string("R:  1  2  3 *4  ");
 			}
 		}
 		else if(user_select_flag == 2)
 		{
-
 			move_cursor(1,0);
-			if(user_select == 1)
+			if(user_select == 0)
 			{
-				lcd_string("Dry: *1 2345    ");
+				dry = 1;
+				lcd_string("D: *1  2  3  4  ");
+			}
+			else if(user_select == 1)
+			{
+				dry = 2;
+				lcd_string("D:  1 *2  3  4  ");
 			}
 			else if(user_select == 2)
 			{
-				lcd_string("Dry: 1 *2 345   ");
+				dry = 3;
+				lcd_string("D:  1  2 *3  4  ");
 			}
-			else if(user_select == 2)
+			else if(user_select == 3)
 			{
-				lcd_string("Dry: 12 *3 45   ");
-			}
-			else if(user_select == 2)
-			{
-				lcd_string("Dry: 123 *4 5   ");
-			}
-			else if(user_select == 2)
-			{
-				lcd_string("Dry: 1234 *5    ");
+				dry = 4;
+				lcd_string("D:  1  2  3 *4  ");
 			}
 		}
-
 
 		if(get_button(BUTTON0_GPIO_Port, BUTTON0_Pin, 0) == BUTTON_PRESS)
 		{
+			lcd_command(CLEAR_DISPLAY);
+			user_select_flag = 0;
 			state = 3;
+			t1ms_counter = 0;
 		}
 		break;
 	case 3: // RUN WASHING MACHINE state
-		// state is automatic operation with no user input, except to cancel with USER_Btn and pause/unpause with BTN0
-		// Ring buzzer when starting and ending state == 3
-		// Run specific number of wash cycles, then rinse cycles, then dry cycles, before finishing and returning to state == 0
+		// If BTN0 pressed, pause
+		if(get_button(BUTTON0_GPIO_Port, BUTTON0_Pin, 0) == BUTTON_PRESS)
+		{
+			// Stop motor
+			HAL_GPIO_WritePin(IN1_MOTOR1_GPIO_Port, IN1_MOTOR1_Pin, 1);
+			HAL_GPIO_WritePin(IN2_MOTOR1_GPIO_Port, IN2_MOTOR1_Pin, 1);
 
-		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_14);  // LED3
-		HAL_Delay(500);
-		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);  // LED3
-		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_7);  // LED3
-		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_14);  // LED3
+			lcd_command(CLEAR_DISPLAY);
+			user_select_flag = 0;
+			state = 4;
+		}
+		else
+		{
+			// Ring buzzer once (means starting wash)
 
-		// Finish
-		HAL_Delay(2000);
-		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);  // LED3
-		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_7);  // LED3
-		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_14);  // LED3
+			// Automatic cycling
+			// Wash sequence (3 seconds clockwise, 3 seconds counter-clockwise at speed 80)
+			// Rinse sequence (2 seconds closewise, 2 seconds counter-clockwise at speed 70)
+			// Dry sequence (5 seconds clockwise, 5 seconds counter-clockwise at speed 100)
+			if(mode_counter == 0) // Wash mode
+			{
+				speed = 80;
+				mode_duration = 1000;
+				cycle_counter = wash;
+			}
+			else if(mode_counter == 1) // Rinse mode
+			{
+				speed = 70;
+				mode_duration = 5000;
+				cycle_counter = rinse;
+			}
+			else if(mode_counter == 2) // Dry mode
+			{
+				speed = 100;
+				mode_duration = 10000;
+				cycle_counter = dry;
+			}
+
+			// Run motor
+			if(!direction_dcmotor)
+			{
+				move_cursor(0, 0);
+				if(mode_counter == 0)
+				{
+					lcd_string("WASH");
+				}
+				else if(mode_counter == 1)
+				{
+					lcd_string("RINSE");
+				}
+				else if(mode_counter == 2)
+				{
+					lcd_string("DRY");
+				}
+				move_cursor(1, 0);
+				if(cycle_counter == 0)
+				{
+					lcd_string("0");
+				}
+				else if(cycle_counter == 1)
+				{
+					lcd_string("1");
+				}
+				else if(cycle_counter == 2)
+				{
+					lcd_string("2");
+				}
+				else if(cycle_counter == 3)
+				{
+					lcd_string("3");
+				}
+
+				spin_clockwise(speed);
+				if(t1ms_counter >= mode_duration)
+				{
+					direction_dcmotor = 1;
+					t1ms_counter = 0;
+				}
+			}
+			else
+			{
+				spin_counter(speed);
+				if(t1ms_counter >= mode_duration)
+				{
+					direction_dcmotor = 0;
+					t1ms_counter = 0;
+					cycle_counter = cycle_counter - 1;
+					if(cycle_counter <= 0)
+					{
+						mode_counter = ++mode_counter % 3;
+					}
+					lcd_command(CLEAR_DISPLAY);
+				}
+			}
+
+			// Ring buzzer twice (means finishing wash)
+			break;
+		}
+	case 4:
+		move_cursor(0, 0);
+		lcd_string("Paused");
+
+		if(get_button(BUTTON0_GPIO_Port, BUTTON0_Pin, 0) == BUTTON_PRESS)
+		{
+			lcd_command(CLEAR_DISPLAY);
+			user_select_flag = 0;
+			state = 3;
+		}
 		break;
 	default:
 		break;
 	}
 
+}
+
+void spin_clockwise(int speed)
+{
+	__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, speed);
+	HAL_GPIO_WritePin(IN1_MOTOR1_GPIO_Port, IN1_MOTOR1_Pin, 1);
+	HAL_GPIO_WritePin(IN2_MOTOR1_GPIO_Port, IN2_MOTOR1_Pin, 0);
+}
+
+void spin_counter(int speed)
+{
+	__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, speed);
+	HAL_GPIO_WritePin(IN1_MOTOR1_GPIO_Port, IN1_MOTOR1_Pin, 0);
+	HAL_GPIO_WritePin(IN2_MOTOR1_GPIO_Port, IN2_MOTOR1_Pin, 1);
 }

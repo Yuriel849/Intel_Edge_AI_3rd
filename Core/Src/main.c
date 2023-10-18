@@ -108,7 +108,6 @@ volatile int fnd1ms_counter=0;
 void HAL_SYSTICK_Handler(void)
 {
 	t1ms_counter++;   // 1ms timer
-	fnd1ms_counter++;
 }
 /* USER CODE END 0 */
 
@@ -153,6 +152,7 @@ int main(void)
   MX_RTC_Init();
   MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
+  HAL_TIM_PWM_Start_IT(&htim4, TIM_CHANNEL_1); // for DC motor PWM control
   i2c_lcd_init();
   /* USER CODE END 2 */
 

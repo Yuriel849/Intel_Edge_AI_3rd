@@ -64,7 +64,7 @@ extern TIM_HandleTypeDef htim11;
 extern UART_HandleTypeDef huart3;
 extern UART_HandleTypeDef huart6;
 /* USER CODE BEGIN EV */
-
+extern void HAL_SYSTICK_Handler(void);
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -194,7 +194,7 @@ void SysTick_Handler(void)
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
-
+  HAL_SYSTICK_Handler(); // Added 2023.10.18
   /* USER CODE END SysTick_IRQn 1 */
 }
 
