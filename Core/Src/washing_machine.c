@@ -71,6 +71,8 @@ void run_washing_machine(void)
 			dry = 3;
 			user_select = 3;
 			user_select_flag = 0;
+			mode_counter = 0;
+			set_flag = 0;
 			stop_spin();
 			lcd_command(CLEAR_DISPLAY);
 		}
@@ -123,6 +125,9 @@ void run_washing_machine(void)
 		if(get_button(BUTTON0_GPIO_Port, BUTTON0_Pin, 0) == BUTTON_PRESS)
 		{
 			lcd_command(CLEAR_DISPLAY);
+			wash--;
+			rinse--;
+			dry--;
 			user_select_flag = 0;
 			state = user_select;
 		}
@@ -265,8 +270,6 @@ void run_washing_machine(void)
 		}
 		else
 		{
-			// Ring buzzer once (means starting wash)
-
 			// Automatic cycling
 			// Wash sequence (3 seconds clockwise, 3 seconds counter-clockwise at speed 80)
 			// Rinse sequence (2.5 seconds closewise, 2.5 seconds counter-clockwise at speed 60)
@@ -360,8 +363,6 @@ void run_washing_machine(void)
 					}
 				}
 			}
-
-			// Ring buzzer twice (means finishing wash)
 			break;
 		}
 	case 4:
