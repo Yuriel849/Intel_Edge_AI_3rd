@@ -23,6 +23,7 @@ int is_wall(int map[MAX_ROW][MAX_COL], int row, int col);
 int is_valid(int val);
 void find_way(int map[MAX_ROW][MAX_COL], int row, int col, int* up, int* down, int* left, int* right);
 
+#if 0
 void main(void)
 {
 	// 미로를 5x5크기의 2차원 배열에 저장 (0이면 빈공간, 1이면 벽, 왼쪽 위 꼭지점이 (x=0,y=0))
@@ -63,6 +64,7 @@ void main(void)
 	// 상하좌우 4방향을 모두 확인하여 벽을 만나기 전까지 이동할 수 있는 거리와 좌표를 확인
 	find_way(map, row-1, col-1, &up, &down, &left, &right);
 }
+#endif
 
 // 사용자 지정 좌표가 벽인지 확인하고 벽이면 1 반환, 벽이 아니라면 0 반환
 int is_wall(int map[MAX_ROW][MAX_COL], int row, int col)
