@@ -130,9 +130,11 @@
     <ClCompile Include="3_김명준_홍종현.c" />
     <ClCompile Include="Car.cpp" />
     <ClCompile Include="ParkingMgmt.cpp" />
+    <ClCompile Include="PL+Timestamp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Car.h" />
+    <ClInclude Include="PL_Timestamp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
