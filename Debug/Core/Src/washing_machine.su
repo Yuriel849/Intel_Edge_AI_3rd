@@ -1,0 +1,4 @@
+../Core/Src/washing_machine.c:24:6:run_washing_machine	8	static
+../Core/Src/washing_machine.c:385:6:spin_clockwise	16	static
+../Core/Src/washing_machine.c:392:6:spin_counter	16	static
+../Core/Src/washing_machine.c:399:6:stop_spin	8	static
