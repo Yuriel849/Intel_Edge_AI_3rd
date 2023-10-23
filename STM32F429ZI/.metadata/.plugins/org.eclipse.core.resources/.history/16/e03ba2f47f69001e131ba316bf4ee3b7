@@ -1,0 +1,43 @@
+#include "dcmotor.h"
+#include "button.h"
+
+extern TIM_HandleTypeDef htim4;
+
+void dcmotor_pwm_control(void);
+
+// BUTTON 0 : start/stop : LED1 (toggle)
+// BUTTON 1 : speed-up	 : LED2 (toggle)
+// BUTTON 2 : speed-down : LED3 (toggle)
+uint8_t pwm_start_flag = 0; // dcmotor start/stop indicator flag
+void dcmotor_pwm_control(void)
+{
+
+	if (get_button(BUTTON0_GPIO_Port, BUTTON0_Pin, 0) == BUTTON_PRESS)
+	{
+		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0); // LED1
+		if(!pwm_start_flag)
+		{
+			pwm_start_flag = 1;
+			HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
+		}
+		else
+		{
+			pwm_start_flag = 0;
+			HAL_TIM_PWM_Stop(&htim4, TIM_CHANNEL_1);
+		}
+	}
+	else if (get_button(BUTTON1_GPIO_Port, BUTTON1_Pin, 0) == BUTTON_PRESS)
+	{
+		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0); // LED1
+		if(!pwm_start_flag)
+		{
+			pwm_start_flag = 1;
+			HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
+		}
+		else
+		{
+			pwm_start_flag = 0;
+			HAL_TIM_PWM_Stop(&htim4, TIM_CHANNEL_1);
+		}
+	}
+}

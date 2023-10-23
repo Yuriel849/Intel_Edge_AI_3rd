@@ -1,0 +1,3 @@
+../Core/Src/ultrasonic.c:22:6:HAL_TIM_IC_CaptureCallback	3
+../Core/Src/ultrasonic.c:42:6:ultrasonic_processing	3
+../Core/Src/ultrasonic.c:62:6:make_trigger	1

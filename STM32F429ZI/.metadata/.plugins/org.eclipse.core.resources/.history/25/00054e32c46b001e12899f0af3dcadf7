@@ -1,0 +1,54 @@
+#include "main.h" // GPIO, HAL functions
+#include "i2c_lcd.h"
+
+void get_rtc(void);
+void set_rtc(void);
+
+extern RTC_HandleTypeDef hrtc;
+
+RTC_TimeTypeDef sTime = { 0 }; // time information
+RTC_DateTypeDef sDate = { 0 }; // date information
+
+// 23년이 save된 binary format
+// 7564 3210
+// 0010 0011
+// STM32의 RTC로부터 시간 & 날짜 정보를 읽어오는 함수
+unsigned char bin2dec(unsigned char byte)
+{
+	unsigned char high, low;
+
+	low = byte & 0x0f; // 하위 4비트 (low nibble)
+	high = (byte >> 4) * 10; // 상위 4비트 (high nibble)
+
+	return high + low;
+}
+
+unsigned char dec2bin(unsigned char byte)
+{
+	unsigned char high, low;
+
+	high = (byte / 10) << 4;
+	low = byte % 10;
+
+	return high + low;
+
+}
+
+void get_rtc(void)
+{
+	static RTC_TimeTypeDef oldTime; // 이전 시간 정보를 가지고 있기 위함이다.
+
+	HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BCD);
+	HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BCD);
+
+	if(oldTime.Seconds != sTime.Seconds)
+	{
+		// YYYY-MM-DD HH:mm:ss
+		printf("%04d-%02d-%02d %02:%02d:%02d\n", bin2dec(sDate.Year)+2000, bin2dec(sDate.Month), bin2dec(sDate.Date),
+				bin2dec(sTime.Hours), bin2dec(sTime.Minutes), bin2dec(sTime.Seconds));
+	}
+
+	oldTime.Seconds = sTime.Seconds;
+
+}
+

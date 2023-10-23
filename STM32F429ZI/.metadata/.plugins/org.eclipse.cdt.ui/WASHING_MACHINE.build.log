@@ -1,0 +1,10 @@
+11:22:41 **** Incremental Build of configuration Debug for project WASHING_MACHINE ****
+make -j24 all 
+arm-none-eabi-size   WASHING_MACHINE.elf 
+   text	   data	    bss	    dec	    hex	filename
+  30636	     32	   4136	  34804	   87f4	WASHING_MACHINE.elf
+Finished building: default.size.stdout
+ 
+
+11:22:41 Build Finished. 0 errors, 0 warnings. (took 121ms)
+

@@ -1,0 +1,14 @@
+#include "main.h" // GPIO, HAL functions
+#include "i2c_lcd.h"
+
+void get_rtc(void);
+void set_rtc(void);
+
+extern RTC_HandleTypeDef hrtc;
+
+RTC_TimeTypeDef sTime = { 0 }; // time information
+RTC_DateTypeDef sDate = { 0 }; // date information
+
+
+
+

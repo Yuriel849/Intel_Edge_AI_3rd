@@ -1,0 +1,216 @@
+#include "led.h" // <>는 라이브러리에 있는 파일을 가져올 때, 현재 디렉터리에 있는 파일을 가져올 때는 "" 사용
+
+void led_main(void);
+void led_all_on(void);
+void led_all_off(void);
+void led_on_sequential(void);
+void led_off_sequential(void);
+void led_on_up(void);
+void led_on_down(void);
+void led_keep_on_up(void);
+void led_keep_on_down(void);
+void flower_on(void);
+void flower_off(void);
+void flower_on_simple(void);
+void flower_off_simple(void);
+
+void led_main(void)
+{
+	while(1)
+	{
+		// phase 1
+//		led_all_on();
+//		HAL_Delay(500); // Sleep시킨다
+//		led_all_off();
+//		HAL_Delay(100); // Sleep시킨다
+
+		// phase 2
+//		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_All);
+//		HAL_Delay(500);
+
+		// phase 3
+//		led_on_sequential();
+//		led_off_sequential();
+
+		// phase 4
+//		// LED 점멸 순서: 0 -> 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 (200ms delay 후 전부 점등)
+//		led_on_up();
+//		led_all_off();
+//		HAL_Delay(500);
+//		// 2회차 점멸 순서: 7 -> 6 -> 5 -> 4 -> 3 -> 2 -> 1 -> 0
+//		led_on_down();
+//		led_all_off();
+//		HAL_Delay(500);
+
+		// phase 5
+//		// LED 점멸 순서: 0 -> 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
+//		// 앞전에 ON 했던 LED는 그대로 유지
+//		led_keep_on_up();
+//		// 2회차 점멸 순서: 7 -> 6 -> 5 -> 4 -> 3 -> 2 -> 1 -> 0
+//		// 앞전에 ON 했던 LED는 그대로 유지
+//		led_keep_on_down();
+
+		// phase 6
+//		flower_on();
+//		flower_off();
+//		HAL_Delay(50);
+
+		// phase 7 - simplified phase 6
+		flower_on_simple();
+		flower_off_simple();
+		HAL_Delay(50);
+	}
+}
+
+void led_all_on(void)
+{
+//	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+//		GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7, 1); // LED_BAR_1~8, 1 == GPIO_PIN_SET
+	HAL_GPIO_WritePin(GPIOD, 0xff, 1);
+}
+
+void led_all_off(void)
+{
+//	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_0, GPIO_PIN_RESET); // LED_BAR_1
+//	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_1, GPIO_PIN_RESET); // LED_BAR_2
+//	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_2, GPIO_PIN_RESET); // LED_BAR_3
+//	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, GPIO_PIN_RESET); // LED_BAR_4
+//	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_4, GPIO_PIN_RESET); // LED_BAR_5
+//	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_5, GPIO_PIN_RESET); // LED_BAR_6
+//	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, GPIO_PIN_RESET); // LED_BAR_7
+//	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_RESET); // LED_BAR_8
+
+	HAL_GPIO_WritePin(GPIOD, 0xff, 0);
+}
+
+void flower_on_simple(void)
+{
+	led_all_off();
+	for(int i = 0; i < 4; i++)
+	{
+		HAL_GPIO_WritePin(GPIOD, 0x10 << i, 1);
+		HAL_GPIO_WritePin(GPIOD, 0x08 >> i, 1);
+		HAL_Delay((i+1) * 100);
+	}
+}
+
+void flower_off_simple(void)
+{
+	led_all_on();
+	for(int i = 0; i < 4; i++)
+	{
+		HAL_GPIO_WritePin(GPIOD, 0x80 >> i, 0);
+		HAL_GPIO_WritePin(GPIOD, 0x01 << i, 0);
+		HAL_Delay((i+1) * 100);
+	}
+}
+
+void flower_on(void)
+{
+	int prev_a = 0x00, prev_b = 0x00;
+	for(int i = 0; i < 4; i++)
+	{
+		led_all_off();
+		prev_a = prev_a | (0x10 << i);
+		prev_b = prev_b | (0x08 >> i);
+		HAL_GPIO_WritePin(GPIOD, prev_a | prev_b, 1);
+		HAL_Delay((i+1) * 100);
+	}
+}
+
+void flower_off(void)
+{
+	int prev_a = 0xf0, prev_b = 0x0f;
+	for(int i = 0; i < 4; i++)
+	{
+		led_all_off();
+		HAL_GPIO_WritePin(GPIOD, prev_a | prev_b, 1);
+		prev_a = prev_a & (0xf0 >> (i+1));
+		prev_b = prev_b & ~(0x01 << i);
+		HAL_Delay(i * 100);
+	}
+}
+
+void led_keep_on_up(void)
+{
+	int prev = 0x00;
+	for(int i = 0; i < 8; i++)
+	{
+		led_all_off();
+		prev = (prev) | (0x01 << i);
+		HAL_GPIO_WritePin(GPIOD, prev, 1);
+		HAL_Delay(200);
+	}
+}
+
+void led_keep_on_down(void)
+{
+	int prev = 0x00;
+	for(int i = 0; i < 8; i++)
+	{
+		led_all_off();
+		prev = (prev) | (0x80 >> i);
+		HAL_GPIO_WritePin(GPIOD, prev, 1);
+		HAL_Delay(200);
+	}
+}
+
+void led_on_up(void)
+{
+	for(int i = 0; i < 8; i++)
+	{
+		led_all_off();
+		HAL_GPIO_WritePin(GPIOD, 0x01 << i, 1);
+		HAL_Delay(200);
+	}
+}
+
+void led_on_down(void)
+{
+	for(int i = 0; i < 8; i++)
+	{
+		led_all_off();
+		HAL_GPIO_WritePin(GPIOD, 0x80 >> i, 1);
+		HAL_Delay(200);
+	}
+}
+
+void led_on_sequential(void)
+{
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_0, 1);
+	HAL_Delay(200);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_1, 1);
+	HAL_Delay(200);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_2, 1);
+	HAL_Delay(200);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, 1);
+	HAL_Delay(200);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_4, 1);
+	HAL_Delay(200);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_5, 1);
+	HAL_Delay(200);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, 1);
+	HAL_Delay(200);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, 1);
+	HAL_Delay(200);
+}
+
+void led_off_sequential(void)
+{
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, 0);
+	HAL_Delay(200);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, 0);
+	HAL_Delay(200);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_5, 0);
+	HAL_Delay(200);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_4, 0);
+	HAL_Delay(200);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, 0);
+	HAL_Delay(200);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_2, 0);
+	HAL_Delay(200);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_1, 0);
+	HAL_Delay(200);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_0, 0);
+	HAL_Delay(200);
+}

@@ -1,0 +1,68 @@
+#include "ultrasonic.h"
+
+// Below callback function cut and pasted here from Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c
+// 1. 아래 콜백 함수를 여기에 가져온다.
+// 2. 초음파 센서의 ECHO핀이 상승 엣지와 하강 엣지 발생 시 이곳으로 들어온다.
+
+extern void display_us(unsigned long us);
+
+extern volatile int TIM10_10ms_ultrasonic;
+void ultrasonic_processing(void);
+void make_trigger(void);
+
+volatile int distance; // 거리를 측정한 펄스 개수를 저장하는 변수
+volatile int ic_cpt_finish_flag = 0; // 초음파 거리 측정 완료 표시
+
+/**
+  * @brief  Input Capture callback in non-blocking mode
+  * @param  htim TIM IC handle
+  * @retval None
+  */
+volatile uint8_t is_first_capture = 0; // 0: 상승엣지, 1: 하강엣지
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
+{
+	if(htim->Instance == TIM3)
+	{
+		if(is_first_capture == 0) // 상승엣지
+		{
+			__HAL_TIM_SET_COUNTER(htim, 0); // clear HW counter
+			is_first_capture = 1; // 상승엣지 후 하강엣지 발생을 예상, set flag indicator
+		}
+		else // 하강엣지
+		{
+			is_first_capture = 0; // reset flag indicator in anticipation of next echo pulse
+			HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1); // 현재까지 카운트한 펄스 수를 읽어온다
+			ic_cpt_finish_flag=1;
+		}
+
+	}
+}
+
+void ultrasonic_processing(void)
+{
+	int dis; // 거리를 측정한 펄스 갯수를 저장하는 변수
+
+	if(TIM10_10ms_ultrasonic >= 100) // 1초
+	{
+printf("TIM10_10ms_ultrasonic\n");
+
+		TIM10_10ms_ultrasonic = 0;
+		make_trigger();
+		if(ic_cpt_finish_flag) // 초음파 측정이 완료되었으면
+		{
+			ic_cpt_finish_flag = 0;
+			dis = distance;
+			dis = dis * 0.034 / 2; // 1us(microsecond)가 0.034cm를 이동하며, 왕복거리이기 때문에 2로 나눈다.
+			printf("dis: %dcm\n", dis);
+		}
+	}
+}
+
+void make_trigger(void)
+{
+	HAL_GPIO_WritePin(ULTRASONIC_TRIGGER_GPIO_Port, ULTRASONIC_TRIGGER_Pin, 0);
+	delay_us(2);
+	HAL_GPIO_WritePin(ULTRASONIC_TRIGGER_GPIO_Port, ULTRASONIC_TRIGGER_Pin, 1);
+	delay_us(10);
+	HAL_GPIO_WritePin(ULTRASONIC_TRIGGER_GPIO_Port, ULTRASONIC_TRIGGER_Pin, 0);
+}

@@ -1,0 +1,16 @@
+#include "dcmotor.h"
+#include "button.h"
+
+extern TIM_HandleTypeDef htim4;
+
+void dcmotor_pwm_control(void);
+
+// BUTTON 0 : start/stop : LED1 (toggle)
+// BUTTON 1 : speed-up	 : LED2 (toggle)
+// BUTTON 2 : speed-down : LED3 (toggle)
+void dcmotor_pwm_control(void)
+{
+
+	if()
+
+}
