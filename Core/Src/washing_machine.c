@@ -16,6 +16,8 @@ extern TIM_HandleTypeDef htim4;
 extern volatile int t1ms_counter;
 extern void delay_us(unsigned long us);
 
+
+
 void run_washing_machine(void);
 void spin_clockwise(int speed);
 void spin_counter(int speed);
