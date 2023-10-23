@@ -1,4 +1,0 @@
-../Core/Src/washing_machine.c:24:6:run_washing_machine	57
-../Core/Src/washing_machine.c:385:6:spin_clockwise	1
-../Core/Src/washing_machine.c:392:6:spin_counter	1
-../Core/Src/washing_machine.c:399:6:stop_spin	1
