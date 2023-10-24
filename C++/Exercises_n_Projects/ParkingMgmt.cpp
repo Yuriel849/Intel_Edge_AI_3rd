@@ -9,6 +9,7 @@ using namespace std;
 
 #include "car.h"
 
+#if 0
 int main()
 {
 	cout << "Welcome to our parking lot XXX (Lot No. 0123)" << endl;
@@ -20,3 +21,4 @@ int main()
 
 	return 0;
 }
+#endif
