@@ -16,6 +16,7 @@ private:
 	int disabled;
 public:
 	Car(string plate, double arrival, double departure, int lot_no, int disabled);
+
 	int getTimeDifference();
 };
 #endif

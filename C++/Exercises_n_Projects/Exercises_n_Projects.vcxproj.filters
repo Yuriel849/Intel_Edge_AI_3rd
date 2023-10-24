@@ -13,27 +13,33 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\ParkingMgmt">
+      <UniqueIdentifier>{888d9226-54ee-4b96-aa63-263a63249d93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\ParkingMgmt">
+      <UniqueIdentifier>{b2ab13a6-1f8a-4678-a550-b46e58b65bb7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3_김명준_홍종현.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ParkingMgmt.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="PL+Timestamp.cpp">
+      <Filter>소스 파일\ParkingMgmt</Filter>
     </ClCompile>
     <ClCompile Include="Car.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\ParkingMgmt</Filter>
     </ClCompile>
-    <ClCompile Include="PL+Timestamp.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="ParkingMgmt.cpp">
+      <Filter>소스 파일\ParkingMgmt</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Car.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\ParkingMgmt</Filter>
     </ClInclude>
     <ClInclude Include="PL_Timestamp.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\ParkingMgmt</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
