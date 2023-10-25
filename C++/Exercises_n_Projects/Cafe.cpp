@@ -5,7 +5,7 @@ using namespace std;
 
 #include "cafe.h"
 
-Cafe::Cafe()
+Cafe::Cafe() // Set up menu items
 {
 	menu[0].setName("카페_아메리카노");
 	menu[0].setSize("Short");
@@ -58,22 +58,23 @@ Cafe::Cafe()
 
 void Cafe::run()
 {
-	while (1)
+	while (1) // Infinite loop until broken by user input of '0'
 	{
+		// Reset variables
 		total = 0;
 		input = 0;
 		cnt = 0;
 
-		printList();
+		printList(); // Print menu for user to choose from
 		cout << endl;
 
 		do
 		{
 			cin >> input;
 			selection[cnt++] = input - 1;
-		} while (input != 0);
+		} while (input != 0); // Accept user input of numbers until '0' is entered
 
-		if (selection[0] == -1)
+		if (selection[0] == -1) // If user enters '0', break infinite loop; user entry of '0' is saved as '-1'
 		{
 			printSummary();
 			break;
@@ -81,18 +82,17 @@ void Cafe::run()
 
 		for (int i = 0; i < cnt; i++)
 		{
-			if (selection[i] < -1 || 11 < selection[i])
+			if (selection[i] < -1 || 11 < selection[i]) // If user enters number less than 1 or greater than 12
 			{
-				cout << i << endl;
 				cout << selection[i]+1 << "는/은 없는 메뉴입니다..." << endl;
 				selectFlag = 1;
 				break;
 			}
 		}
 
-		if (selectFlag == 1)
+		if (selectFlag == 1) // If user entered unavailable menu item, continue
 		{
-			selectFlag == 0;
+			selectFlag = 0;
 			continue;
 		}
 		
