@@ -14,7 +14,7 @@ private:
 	PL_Timestamp arrival;
 	PL_Timestamp departure;
 	int lot_no;
-	int disabled;
+	int disabled; // 1 for disabled, 0 for not disabled
 public:
 	// constructors
 	Car();
