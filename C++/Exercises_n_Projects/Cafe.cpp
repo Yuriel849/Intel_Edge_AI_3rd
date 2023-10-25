@@ -60,9 +60,9 @@ void Cafe::run()
 {
 	while (1)
 	{
-		total == 0;
-		input == 0;
-		cnt == 0;
+		total = 0;
+		input = 0;
+		cnt = 0;
 
 		printList();
 		cout << endl;
@@ -83,7 +83,8 @@ void Cafe::run()
 		{
 			if (selection[i] < -1 || 11 < selection[i])
 			{
-				cout << selection[i] << "는/은 없는 메뉴입니다..." << endl;
+				cout << i << endl;
+				cout << selection[i]+1 << "는/은 없는 메뉴입니다..." << endl;
 				selectFlag = 1;
 				break;
 			}
@@ -103,7 +104,7 @@ void Cafe::run()
 			sales_total[selection[i]] += 1;
 			total += menu[selection[i]].getPrice();
 		}
-		cout << "합계 : " << 000 << "원" << endl;
+		cout << "합계 : " << total << "원" << endl;
 		total_sales += total;
 	}
 }
