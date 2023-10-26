@@ -43,6 +43,7 @@ UINT ThreadProc(LPVOID lParam)
 			max(xLeft, xRight), max(yTop, yBottom));
 		pDC->SelectObject(oldBrush);
 		cBrush.DeleteObject();
+		Sleep(1);
 		if (exitFlag)  break;
 	}
 	pView->ReleaseDC(pDC);
