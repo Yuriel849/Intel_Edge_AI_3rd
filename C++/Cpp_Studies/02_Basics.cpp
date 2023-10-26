@@ -52,7 +52,7 @@ int main()
 
 	delete[] p;
 }
-#elif 1
+#elif 0
 int main()
 {
 	return 0;

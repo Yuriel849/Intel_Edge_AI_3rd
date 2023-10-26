@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="01_Getting_started.cpp" />
     <ClCompile Include="02_Basics.cpp" />
+    <ClCompile Include="03_FileIO.cpp" />
     <ClCompile Include="Circle.cpp" />
   </ItemGroup>
   <ItemGroup>
