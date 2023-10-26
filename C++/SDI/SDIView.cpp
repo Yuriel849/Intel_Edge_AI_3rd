@@ -43,7 +43,7 @@ UINT ThreadProc(LPVOID lParam)
 			max(xLeft, xRight), max(yTop, yBottom));
 		pDC->SelectObject(oldBrush);
 		cBrush.DeleteObject();
-		Sleep(1);
+		Sleep(0.5);
 		if (exitFlag)  break;
 	}
 	pView->ReleaseDC(pDC);
@@ -141,7 +141,6 @@ CSDIDoc* CSDIView::GetDocument() const // 디버그되지 않은 버전은 인�
 
 // CSDIView 메시지 처리기
 
-
 void CSDIView::OnThreadbegin()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
@@ -150,7 +149,6 @@ void CSDIView::OnThreadbegin()
 
 }
 
-
 void CSDIView::OnUpdateThreadbegin(CCmdUI* pCmdUI)
 {
 	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
@@ -158,13 +156,11 @@ void CSDIView::OnUpdateThreadbegin(CCmdUI* pCmdUI)
 	else pCmdUI->Enable(FALSE);
 }
 
-
 void CSDIView::OnThreadend()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 	exitFlag = TRUE;
 }
-
 
 void CSDIView::OnUpdateThreadend(CCmdUI* pCmdUI)
 {
