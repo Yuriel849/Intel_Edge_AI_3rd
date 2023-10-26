@@ -4,7 +4,6 @@
 
 #pragma once
 
-
 class CMFC1View : public CView
 {
 protected: // serialization에서만 만들어집니다.
