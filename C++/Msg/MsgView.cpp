@@ -28,6 +28,8 @@ BEGIN_MESSAGE_MAP(CMsgView, CView)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
 	ON_WM_KEYDOWN()
+	ON_COMMAND(ID_EDIT_UNDO, &CMsgView::OnEditUndo)
+	ON_WM_LBUTTONDOWN()
 END_MESSAGE_MAP()
 
 // CMsgView 생성/소멸
@@ -117,4 +119,20 @@ void CMsgView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	//AfxMessageBox(_T("Key Pressed")); // "!" icon in the popup window
 
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);
+}
+
+
+void CMsgView::OnEditUndo()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	AfxMessageBox(_T("Select the Menu Undo item"));
+}
+
+
+void CMsgView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	AfxMessageBox(_T("Mouse Left Button click"));
+
+	CView::OnLButtonDown(nFlags, point);
 }
