@@ -27,4 +27,9 @@ public:
 	BOOL m_bCheckButton;
 	afx_msg void OnBnClickedCheck1();
 	afx_msg void OnBnClickedButton1();
+	afx_msg void OnNMThemeChangedScrollbar1(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnEnChangeEdit1();
+	afx_msg void OnNMThemeChangedScrollbar2(NMHDR* pNMHDR, LRESULT* pResult);
+	CString m_strEdit;
+	BOOL OnInitDialog();
 };
