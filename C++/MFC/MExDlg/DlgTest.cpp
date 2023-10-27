@@ -33,6 +33,7 @@ void CDlgTest::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_SLIDER1, m_Slidectrl);
 	DDX_Control(pDX, IDC_SLIDER2, m_Slidectrl1);
 	DDX_Control(pDX, IDC_SLIDER3, m_Slidectrl2);
+	DDX_Control(pDX, IDC_PIC, m_picControl);
 }
 
 
@@ -48,6 +49,7 @@ BEGIN_MESSAGE_MAP(CDlgTest, CDialog)
 	ON_EN_CHANGE(IDC_EDIT2, &CDlgTest::OnEnChangeEdit2)
 	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER2, &CDlgTest::OnNMCustomdrawSlider2)
 	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER3, &CDlgTest::OnNMCustomdrawSlider3)
+	ON_BN_CLICKED(IDC_BUTTON2, &CDlgTest::OnBnClickedButton2)
 END_MESSAGE_MAP()
 
 
@@ -189,4 +191,19 @@ void CDlgTest::OnNMCustomdrawSlider3(NMHDR* pNMHDR, LRESULT* pResult)
 	SetDlgItemInt(IDC_EDIT4, position);
 
 	*pResult = 0;
+}
+
+
+void CDlgTest::OnBnClickedButton2()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CRect rect;//픽쳐 컨트롤의 크기를 저장할 CRect 객체
+	m_picControl.GetWindowRect(rect);//GetWindowRect를 사용해서 픽쳐 컨트롤의 크기를 받는다.
+	CDC* dc; //픽쳐 컨트롤의 DC를 가져올  CDC 포인터
+	dc = m_picControl.GetDC(); //픽쳐 컨트롤의 DC를 얻는다.
+	CImage image;//불러오고 싶은 이미지를 로드할 CImage 
+	image.Load(_T("GitBashIcon.png"));//이미지 로드
+
+	image.StretchBlt(dc->m_hDC, 0, 0, rect.Width(), rect.Height(), SRCCOPY);//이미지를 픽쳐 컨트롤 크기로 조정
+	ReleaseDC(dc);//DC 해제
 }

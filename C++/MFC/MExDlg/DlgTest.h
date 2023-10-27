@@ -43,4 +43,6 @@ public:
 	afx_msg void OnNMCustomdrawSlider2(NMHDR* pNMHDR, LRESULT* pResult);
 	CSliderCtrl m_Slidectrl2;
 	afx_msg void OnNMCustomdrawSlider3(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnBnClickedButton2();
+	CStatic m_picControl;
 };
