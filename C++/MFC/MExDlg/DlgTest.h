@@ -32,4 +32,8 @@ public:
 	afx_msg void OnNMThemeChangedScrollbar2(NMHDR* pNMHDR, LRESULT* pResult);
 	CString m_strEdit;
 	BOOL OnInitDialog();
+	CListBox m_ListBox;
+	afx_msg void OnLbnSelchangeList1();
+	CComboBox m_ComboBox;
+	afx_msg void OnCbnSelchangeCombo1();
 };

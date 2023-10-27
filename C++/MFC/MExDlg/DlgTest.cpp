@@ -28,6 +28,8 @@ void CDlgTest::DoDataExchange(CDataExchange* pDX)
 	CDialog::DoDataExchange(pDX);
 	DDX_Check(pDX, IDC_CHECK1, m_bCheckButton);
 	DDX_Text(pDX, IDC_EDIT1, m_strEdit);
+	DDX_Control(pDX, IDC_LIST1, m_ListBox);
+	DDX_Control(pDX, IDC_COMBO1, m_ComboBox);
 }
 
 
@@ -37,6 +39,8 @@ BEGIN_MESSAGE_MAP(CDlgTest, CDialog)
 	ON_BN_CLICKED(IDC_CHECK1, &CDlgTest::OnBnClickedCheck1)
 	ON_BN_CLICKED(IDC_BUTTON1, &CDlgTest::OnBnClickedButton1)
 	ON_EN_CHANGE(IDC_EDIT1, &CDlgTest::OnEnChangeEdit1)
+	ON_LBN_SELCHANGE(IDC_LIST1, &CDlgTest::OnLbnSelchangeList1)
+	ON_CBN_SELCHANGE(IDC_COMBO1, &CDlgTest::OnCbnSelchangeCombo1)
 END_MESSAGE_MAP()
 
 
@@ -92,5 +96,25 @@ BOOL CDlgTest::OnInitDialog()
 	m_strEdit = _T("HELLO WORLD! ...from OnInitDialog()");
 	UpdateData(FALSE);
 
+	CString data;
+	for (int i = 1; i < 11; i++)
+	{
+		data.Format(_T("List data%d"), i);
+		m_ListBox.AddString(data);
+		data.Format(_T("Combo data%d"), i);
+		m_ComboBox.AddString(data);
+	}
 	return true;
+}
+
+
+void CDlgTest::OnLbnSelchangeList1()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+
+void CDlgTest::OnCbnSelchangeCombo1()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
