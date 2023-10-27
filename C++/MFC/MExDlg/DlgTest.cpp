@@ -30,6 +30,9 @@ void CDlgTest::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT1, m_strEdit);
 	DDX_Control(pDX, IDC_LIST1, m_ListBox);
 	DDX_Control(pDX, IDC_COMBO1, m_ComboBox);
+	DDX_Control(pDX, IDC_SLIDER1, m_Slidectrl);
+	DDX_Control(pDX, IDC_SLIDER2, m_Slidectrl1);
+	DDX_Control(pDX, IDC_SLIDER3, m_Slidectrl2);
 }
 
 
@@ -41,6 +44,10 @@ BEGIN_MESSAGE_MAP(CDlgTest, CDialog)
 	ON_EN_CHANGE(IDC_EDIT1, &CDlgTest::OnEnChangeEdit1)
 	ON_LBN_SELCHANGE(IDC_LIST1, &CDlgTest::OnLbnSelchangeList1)
 	ON_CBN_SELCHANGE(IDC_COMBO1, &CDlgTest::OnCbnSelchangeCombo1)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER1, &CDlgTest::OnNMCustomdrawSlider1)
+	ON_EN_CHANGE(IDC_EDIT2, &CDlgTest::OnEnChangeEdit2)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER2, &CDlgTest::OnNMCustomdrawSlider2)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER3, &CDlgTest::OnNMCustomdrawSlider3)
 END_MESSAGE_MAP()
 
 
@@ -104,6 +111,16 @@ BOOL CDlgTest::OnInitDialog()
 		data.Format(_T("Combo data%d"), i);
 		m_ComboBox.AddString(data);
 	}
+
+	m_Slidectrl.SetRange(2000, 2300, TRUE);
+	m_Slidectrl.SetPos(2023);
+
+	m_Slidectrl1.SetRange(1, 12, TRUE);
+	m_Slidectrl1.SetPos(1);
+
+	m_Slidectrl2.SetRange(1, 31, TRUE);
+	m_Slidectrl2.SetPos(1);
+
 	return true;
 }
 
@@ -125,4 +142,51 @@ void CDlgTest::OnCbnSelchangeCombo1()
 	CString data;
 	m_ComboBox.GetLBText(num, data); // Get character at select position
 	AfxMessageBox(data); // Output message box
+}
+
+
+void CDlgTest::OnNMCustomdrawSlider1(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	int position;
+	position = m_Slidectrl.GetPos();
+	SetDlgItemInt(IDC_EDIT2, position);
+
+	*pResult = 0;
+}
+
+
+void CDlgTest::OnEnChangeEdit2()
+{
+	// TODO:  RICHEDIT 컨트롤인 경우, 이 컨트롤은
+	// CDialog::OnInitDialog() 함수를 재지정 
+	//하고 마스크에 OR 연산하여 설정된 ENM_CHANGE 플래그를 지정하여 CRichEditCtrl().SetEventMask()를 호출하지 않으면
+	// 이 알림 메시지를 보내지 않습니다.
+
+	// TODO:  여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+
+void CDlgTest::OnNMCustomdrawSlider2(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	int position;
+	position = m_Slidectrl1.GetPos();
+	SetDlgItemInt(IDC_EDIT3, position);
+
+	*pResult = 0;
+}
+
+
+void CDlgTest::OnNMCustomdrawSlider3(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	int position;
+	position = m_Slidectrl2.GetPos();
+	SetDlgItemInt(IDC_EDIT4, position);
+
+	*pResult = 0;
 }

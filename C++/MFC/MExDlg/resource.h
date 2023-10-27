@@ -15,6 +15,12 @@
 #define IDC_SCROLLBAR3                  1007
 #define IDC_LIST1                       1008
 #define IDC_COMBO1                      1009
+#define IDC_EDIT2                       1010
+#define IDC_SLIDER1                     1011
+#define IDC_EDIT3                       1016
+#define IDC_SLIDER2                     1017
+#define IDC_EDIT4                       1018
+#define IDC_SLIDER3                     1019
 #define ID_32771                        32771
 #define ID_DIALOGSHOW                   32772
 
@@ -24,7 +30,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        312
 #define _APS_NEXT_COMMAND_VALUE         32773
-#define _APS_NEXT_CONTROL_VALUE         1010
+#define _APS_NEXT_CONTROL_VALUE         1012
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

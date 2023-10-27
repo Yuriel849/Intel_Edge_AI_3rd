@@ -36,4 +36,11 @@ public:
 	afx_msg void OnLbnSelchangeList1();
 	CComboBox m_ComboBox;
 	afx_msg void OnCbnSelchangeCombo1();
+	CSliderCtrl m_Slidectrl;
+	afx_msg void OnNMCustomdrawSlider1(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnEnChangeEdit2();
+	CSliderCtrl m_Slidectrl1;
+	afx_msg void OnNMCustomdrawSlider2(NMHDR* pNMHDR, LRESULT* pResult);
+	CSliderCtrl m_Slidectrl2;
+	afx_msg void OnNMCustomdrawSlider3(NMHDR* pNMHDR, LRESULT* pResult);
 };
