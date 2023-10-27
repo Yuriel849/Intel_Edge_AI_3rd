@@ -13,6 +13,7 @@
 #include "DlgTestDoc.h"
 #include "DlgTestView.h"
 #include "NameDlg.h"
+#include "NameDlg2.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -29,6 +30,7 @@ BEGIN_MESSAGE_MAP(CDlgTestView, CView)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
 	ON_COMMAND(IDD_DIALOG1, &CDlgTestView::OnIddDialog1)
+	ON_COMMAND(IDD_DLG2, &CDlgTestView::OnIddDlg2)
 END_MESSAGE_MAP()
 
 // CDlgTestView 생성/소멸
@@ -111,6 +113,34 @@ void CDlgTestView::OnIddDialog1()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 	CNameDlg dlg;
-	dlg.DoModal();
+	CNameDlg2 dlg2;
+	CString temp;
+	dlg.m_strName = _T("LeFay");
+	dlg.m_nAge = 100;
 
+	if (dlg.DoModal() == IDOK)
+	{
+		dlg2.DoModal(); // 두번째 다이얼로그를 첫번째에 종속시킨다.
+		CString strOutText, strOutText2;
+		strOutText.Format(_T("Name: %s, Age: %d"), dlg.m_strName, dlg.m_nAge);
+		strOutText2.Format(_T("Occupation: %d, Floor: %d, License: %d"), dlg.m_nJob, dlg.m_nFloor, dlg.m_bLicense);
+		temp = strOutText + strOutText2;
+		AfxMessageBox(temp);
+	}
+
+}
+
+
+void CDlgTestView::OnIddDlg2()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CNameDlg2 dlg2;
+	CString temp;
+
+
+	if (dlg2.DoModal() == IDOK)
+	{
+		temp.Format(_T("Control is pressed"));
+		AfxMessageBox(temp);
+	}
 }

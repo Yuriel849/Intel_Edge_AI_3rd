@@ -42,6 +42,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnIddDialog1();
+	afx_msg void OnIddDlg2();
 };
 
 #ifndef _DEBUG  // DlgTestView.cpp의 디버그 버전

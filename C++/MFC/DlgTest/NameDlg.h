@@ -23,4 +23,15 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnEnChangeEdit1();
+	CString m_strName;
+	int m_nAge;
+	afx_msg void OnBnClickedCheck1();
+	BOOL m_bLicense;
+	afx_msg void OnBnClickedRadio1();
+	afx_msg void OnBnClickedRadio3();
+	afx_msg void OnBnClickedRadio6();
+	afx_msg void OnBnClickedRadio8();
+//	int m_njob;
+	int m_nFloor;
+	int m_nJob;
 };
