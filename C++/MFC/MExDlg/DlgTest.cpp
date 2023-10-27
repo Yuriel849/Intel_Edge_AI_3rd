@@ -111,10 +111,18 @@ BOOL CDlgTest::OnInitDialog()
 void CDlgTest::OnLbnSelchangeList1()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	int num = m_ListBox.GetCurSel(); // Search the current position
+	CString data;
+	m_ListBox.GetText(num, data); // Get character at select position
+	AfxMessageBox(data); // Output message box
 }
 
 
 void CDlgTest::OnCbnSelchangeCombo1()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	int num = m_ComboBox.GetCurSel(); // Search the current position
+	CString data;
+	m_ComboBox.GetLBText(num, data); // Get character at select position
+	AfxMessageBox(data); // Output message box
 }
