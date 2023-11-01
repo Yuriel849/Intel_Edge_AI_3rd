@@ -20,10 +20,6 @@ public:
 	char m_strDate[MAXDATESIZE + 1] = {};
 	char m_strSubject[MAXSUBJECTSIZE + 1] = {};
 	char m_strContent[MAXCONTENTSIZE + 1] = {}
-	
-	
-	
-	
 	;
 // 작업입니다.
 public:
