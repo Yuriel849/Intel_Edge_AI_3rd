@@ -50,6 +50,13 @@ protected:
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	DECLARE_MESSAGE_MAP()
+public:
+	CString m_strDate;
+	CString m_strSubject;
+	CString m_strContent;
+	afx_msg void OnChangeContent();
+	afx_msg void OnChangeDate();
+	afx_msg void OnChangeSubject();
 };
 
 #ifndef _DEBUG  // MExDiaryView.cpp의 디버그 버전

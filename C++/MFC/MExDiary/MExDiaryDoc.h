@@ -5,6 +5,9 @@
 
 #pragma once
 
+#define MAXCONTENTSIZE 1024
+#define MAXSUBJECTSIZE 256
+#define MAXDATESIZE 80
 
 class CMExDiaryDoc : public CDocument
 {
@@ -14,7 +17,9 @@ protected: // serialization에서만 만들어집니다.
 
 // 특성입니다.
 public:
-
+	char m_strDate[MAXDATESIZE + 1] = {};
+	char m_strSubject[MAXSUBJECTSIZE + 1] = {};
+	char m_strContent[MAXCONTENTSIZE + 1] = {};
 // 작업입니다.
 public:
 
@@ -45,4 +50,13 @@ protected:
 	// 검색 처리기에 대한 검색 콘텐츠를 설정하는 도우미 함수
 	void SetSearchContent(const CString& value);
 #endif // SHARED_HANDLERS
+public:
+	void SetSubject(char* subject);
+	void SetContent(char* content);
+	void SetDate(char* date);
+	char* GetDate();
+	char* GetSubject();
+	char* GetContent();
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
+	virtual BOOL OnSaveDocument(LPCTSTR lpszPathName);
 };

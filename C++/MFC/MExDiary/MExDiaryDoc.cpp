@@ -13,6 +13,8 @@
 #include "MExDiaryDoc.h"
 
 #include <propkey.h>
+#include <io.h>
+#include <fcntl.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -23,6 +25,9 @@
 IMPLEMENT_DYNCREATE(CMExDiaryDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CMExDiaryDoc, CDocument)
+	//ON_COMMAND(ID_FILE_OPEN, &CMExDiaryDoc::OnFileOpen)
+	//ON_COMMAND(ID_FILE_OPEN, &CMExDiaryDoc::OnOpenDocument)
+	//ON_COMMAND(ID_FILE_SAVE, &CMExDiaryDoc::OnSaveDocument)
 END_MESSAGE_MAP()
 
 
@@ -136,3 +141,82 @@ void CMExDiaryDoc::Dump(CDumpContext& dc) const
 
 
 // CMExDiaryDoc 명령
+
+
+void CMExDiaryDoc::SetSubject(char* subject)
+{
+	// TODO: 여기에 구현 코드 추가.
+	strcpy_s(m_strSubject, sizeof(m_strSubject), subject);  // 안전한(보안)을 위해 strcpy대신 strcpy_s를 사용
+}
+
+
+void CMExDiaryDoc::SetContent(char* content)
+{
+	// TODO: 여기에 구현 코드 추가.
+	strcpy_s(m_strContent, sizeof(m_strContent), content);
+}
+
+
+void CMExDiaryDoc::SetDate(char* date)
+{
+	// TODO: 여기에 구현 코드 추가.
+	strcpy_s(m_strDate, sizeof(m_strDate), date);
+}
+
+
+char* CMExDiaryDoc::GetDate()
+{
+	// TODO: 여기에 구현 코드 추가.
+	return m_strDate;
+}
+
+
+char* CMExDiaryDoc::GetSubject()
+{
+	// TODO: 여기에 구현 코드 추가.
+	return m_strSubject;
+}
+
+
+char* CMExDiaryDoc::GetContent()
+{
+	// TODO: 여기에 구현 코드 추가.
+	return m_strContent;
+}
+
+
+BOOL CMExDiaryDoc::OnOpenDocument(LPCTSTR lpszPathName)
+{
+	if (!CDocument::OnOpenDocument(lpszPathName))
+		return FALSE;
+
+	// TODO:  여기에 특수화된 작성 코드를 추가합니다.
+	int fd = _open(lpszPathName, _O_RDWR | _O_BINARY, _S_IREAD | _S_IWRITE);
+	if (fd != -1) // 파일이 정상적으로 열렸을 경우에만 처리
+	{
+		_read(fd, m_strDate, sizeof(m_strDate));
+		_read(fd, m_strSubject, sizeof(m_strSubject));
+		_read(fd, m_strContent, sizeof(m_strContent));
+
+		_close(fd);
+
+	}
+
+	return TRUE;
+}
+
+BOOL CMExDiaryDoc::OnSaveDocument(LPCTSTR lpszPathName)
+{
+	// TODO:  여기에 특수화된 작성 코드를 추가합니다.
+	int fd = _open(lpszPathName, _O_CREAT | _O_RDWR | _O_BINARY, _S_IREAD | _S_IWRITE);
+	if (fd != -1)
+	{
+		_write(fd, m_strDate, sizeof(m_strDate));
+		_write(fd, m_strSubject, sizeof(m_strSubject));
+		_write(fd, m_strContent, sizeof(m_strContent));
+
+		_close(fd);
+	}
+	return TRUE;
+
+}

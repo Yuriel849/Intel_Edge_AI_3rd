@@ -29,12 +29,18 @@ BEGIN_MESSAGE_MAP(CMExDiaryView, CFormView)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CMExDiaryView::OnFilePrintPreview)
 	ON_WM_CONTEXTMENU()
 	ON_WM_RBUTTONUP()
+	ON_EN_CHANGE(IDC_CONTENT, &CMExDiaryView::OnChangeContent)
+	ON_EN_CHANGE(IDC_DATE, &CMExDiaryView::OnChangeDate)
+	ON_EN_CHANGE(IDC_SUBJECT, &CMExDiaryView::OnChangeSubject)
 END_MESSAGE_MAP()
 
 // CMExDiaryView 생성/소멸
 
 CMExDiaryView::CMExDiaryView() noexcept
 	: CFormView(IDD_MEXDIARY_FORM)
+	, m_strDate(_T(""))
+	, m_strSubject(_T(""))
+	, m_strContent(_T(""))
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
 
@@ -47,6 +53,9 @@ CMExDiaryView::~CMExDiaryView()
 void CMExDiaryView::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
+	DDX_Text(pDX, IDC_DATE, m_strDate);
+	DDX_Text(pDX, IDC_SUBJECT, m_strSubject);
+	DDX_Text(pDX, IDC_CONTENT, m_strContent);
 }
 
 BOOL CMExDiaryView::PreCreateWindow(CREATESTRUCT& cs)
@@ -62,6 +71,13 @@ void CMExDiaryView::OnInitialUpdate()
 	CFormView::OnInitialUpdate();
 	ResizeParentToFit();
 
+	CMExDiaryDoc* pDoc = (CMExDiaryDoc*)GetDocument();
+
+	m_strSubject = pDoc->GetSubject();
+	m_strDate = pDoc->GetDate();
+	m_strContent = pDoc->GetContent();
+
+	UpdateData(FALSE);
 }
 
 
@@ -132,3 +148,45 @@ CMExDiaryDoc* CMExDiaryView::GetDocument() const // 디버그되지 않은 버�
 
 
 // CMExDiaryView 메시지 처리기
+
+
+void CMExDiaryView::OnChangeContent()
+{
+	// TODO:  RICHEDIT 컨트롤인 경우, 이 컨트롤은
+	// CFormView::OnInitDialog() 함수를 재지정 
+	//하고 마스크에 OR 연산하여 설정된 ENM_CHANGE 플래그를 지정하여 CRichEditCtrl().SetEventMask()를 호출하지 않으면
+	// 이 알림 메시지를 보내지 않습니다.
+
+	// TODO:  여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	UpdateData(TRUE);
+	CMExDiaryDoc* pDoc = (CMExDiaryDoc*)GetDocument();
+	pDoc->SetContent(LPSTR(LPCTSTR(m_strContent)));
+}
+
+
+void CMExDiaryView::OnChangeDate()
+{
+	// TODO:  RICHEDIT 컨트롤인 경우, 이 컨트롤은
+	// CFormView::OnInitDialog() 함수를 재지정 
+	//하고 마스크에 OR 연산하여 설정된 ENM_CHANGE 플래그를 지정하여 CRichEditCtrl().SetEventMask()를 호출하지 않으면
+	// 이 알림 메시지를 보내지 않습니다.
+
+	// TODO:  여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	UpdateData(TRUE);
+	CMExDiaryDoc* pDoc = (CMExDiaryDoc*)GetDocument();
+	pDoc->SetDate(LPSTR(LPCTSTR(m_strDate)));
+}
+
+
+void CMExDiaryView::OnChangeSubject()
+{
+	// TODO:  RICHEDIT 컨트롤인 경우, 이 컨트롤은
+	// CFormView::OnInitDialog() 함수를 재지정 
+	//하고 마스크에 OR 연산하여 설정된 ENM_CHANGE 플래그를 지정하여 CRichEditCtrl().SetEventMask()를 호출하지 않으면
+	// 이 알림 메시지를 보내지 않습니다.
+
+	// TODO:  여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	UpdateData(TRUE);
+	CMExDiaryDoc* pDoc = (CMExDiaryDoc*)GetDocument();
+	pDoc->SetSubject(LPSTR(LPCTSTR(m_strSubject)));
+}
