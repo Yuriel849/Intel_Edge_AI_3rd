@@ -37,4 +37,5 @@ protected:
 public:
 	CListCtrl m_ListCtrl;
 	afx_msg void OnSelchangeComboOn();
+	afx_msg void OnItemchangedList1(NMHDR* pNMHDR, LRESULT* pResult);
 };

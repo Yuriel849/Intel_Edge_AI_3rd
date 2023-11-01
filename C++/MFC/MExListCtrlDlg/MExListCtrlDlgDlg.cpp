@@ -67,6 +67,7 @@ BEGIN_MESSAGE_MAP(CMExListCtrlDlgDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_CBN_SELCHANGE(IDC_COMBO1, &CMExListCtrlDlgDlg::OnSelchangeComboOn)
+	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST1, &CMExListCtrlDlgDlg::OnItemchangedList1)
 END_MESSAGE_MAP()
 
 
@@ -141,7 +142,7 @@ BOOL CMExListCtrlDlgDlg::OnInitDialog()
 	lvcolumn.fmt = LVCFMT_LEFT;
 	lvcolumn.iSubItem = 0;
 	lvcolumn.cx = 80;
-	lvcolumn.pszText = _T("Robert");
+	lvcolumn.pszText = _T("Report");
 	m_ListCtrl.InsertColumn(0, &lvcolumn);
 
 	lvcolumn.mask = LVCF_FMT | LVCF_SUBITEM | LVCF_TEXT | LVCF_WIDTH;
@@ -163,7 +164,7 @@ BOOL CMExListCtrlDlgDlg::OnInitDialog()
 	lvitem.mask = LVIF_TEXT;
 	lvitem.iItem = 0;
 	lvitem.iSubItem = 1;
-	lvitem.pszText = _T("Working a Industrial");
+	lvitem.pszText = _T("Doing industrial work");
 	m_ListCtrl.SetItem(&lvitem);
 
 	lvitem.mask = LVIF_TEXT | LVIF_IMAGE;
@@ -175,7 +176,7 @@ BOOL CMExListCtrlDlgDlg::OnInitDialog()
 	lvitem.mask = LVIF_TEXT;
 	lvitem.iItem = 1;
 	lvitem.iSubItem = 1;
-	lvitem.pszText = _T("Cleannig the room");
+	lvitem.pszText = _T("Cleaning the room");
 	m_ListCtrl.SetItem(&lvitem);
 
 	lvitem.mask = LVIF_TEXT | LVIF_IMAGE;
@@ -188,7 +189,7 @@ BOOL CMExListCtrlDlgDlg::OnInitDialog()
 	lvitem.mask = LVIF_TEXT;
 	lvitem.iItem = 2;
 	lvitem.iSubItem = 1;
-	lvitem.pszText = _T("playing a soccer");
+	lvitem.pszText = _T("Playing soccer");
 	m_ListCtrl.SetItem(&lvitem);
 
 
@@ -267,4 +268,24 @@ void CMExListCtrlDlgDlg::OnSelchangeComboOn()
 	}
 	::SetWindowLong(m_ListCtrl.m_hWnd, GWL_STYLE, (LONG)style);
 
+}
+
+
+void CMExListCtrlDlgDlg::OnItemchangedList1(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	// 사용자 정의 코드 (2023.11.01 추가)
+	CString message;
+	int num = pNMLV->iItem;
+	static int oldnum = 0;
+
+	if (num > -1 && oldnum != num)
+	{
+		message = m_ListCtrl.GetItemText(num, 0);
+		AfxMessageBox(message);
+		oldnum = num;
+	}
+
+	*pResult = 0;
 }
