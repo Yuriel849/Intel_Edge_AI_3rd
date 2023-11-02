@@ -135,8 +135,12 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="03.C++Gugudan.cpp" />
     <ClCompile Include="Gugudan.cpp" />
     <ClCompile Include="ImageProcs.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Gugudan.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,45 +1,30 @@
 #include <iostream>
 #include <string>
 
-int main()
+#include "Gugudan.h"
+
+Gugudan::Gugudan()
+	: DanS(2)
+	, DanE(9)
+	, StepS(1)
+	, StepE(9)
+{}
+
+void Gugudan::setParams()
 {
-	// 구구단 실습 문제
-	// input  : dan_start, end(2~9)
-	// output : step_start, end(1~9)
+	std::cout << "구구단을 출력하려고 최소값과 최대값을 입력해주세요." << std::endl;
+	std::cout << "먼저 행의 최소값과 최대값을 입력해주세요 >> ";
+	std::cin >> StepS >> StepE;
+	std::cout << "다음은 열의 최소값과 최대값을 입력해주세요 >> ";
+	std::cin >> DanS >> DanE;
+	std::cout << "행은 " << StepS << "부터 " << StepE << "까지, 열은 " << DanS << "부터 " << DanE << "까지로 입력하셨습니다." << std::endl;
+}
 
-	//dan : 2~9, step : 1~9
-	//2*1 = 2      3*1=3    ....     9*1=9
-	//2*2 = 4      3*2=6    ....     9*2=18
-	//
-	//2*9 = 18     3*9=27   ....     9*9=81
-
-	//dan : 2~9, step : 9~9
-	//2*9 = 18     3*9=27   ....     9*9=81
-
-	std::cout << "Gugudan" << std::endl;
-
-	int dan_start = 2, dan_end = 9, step_start = 1, step_end = 9;
-
-	if (1 < dan_start && dan_end < 10 && dan_start <= dan_end && 0 < step_start && step_end < 10 && step_start <= step_end)
+void Gugudan::proc()
+{
+	for (size_t step = this->StepS; step <= this->StepE; step++)
 	{
-		int dan_temp = dan_start;
-		for (; step_start <= step_end; step_start++)
-		{
-			for (dan_start = dan_temp; dan_start <= dan_end; dan_start++)
-			{
-				std::cout << dan_start << "*" << step_start << "=" << dan_start * step_start << "\t";
-			}
-			std::cout << std::endl;
-		}
-	}
-
-	// ALTERNATIVE
-	int DanS, DanE, StepS, StepE;
-	DanS = 2, DanE = 5, StepS = 1, StepE = 9;
-	for (size_t step = StepS; step <= StepE; step++)
-	{
-		std::string msg = "";
-		for (size_t dan = DanS; dan <= DanE; dan++)
+		for (size_t dan = this->DanS; dan <= this->DanE; dan++)
 		{
 			size_t result = dan * step;
 			std::string str = "";
@@ -50,8 +35,11 @@ int main()
 			str += std::to_string(result);
 			msg += str + "\t";
 		}
-		std::cout << msg << std::endl;
+		msg += "\n";
 	}
+}
 
-	return 1;
+void Gugudan::display()
+{
+	std::cout << msg << std::endl;
 }

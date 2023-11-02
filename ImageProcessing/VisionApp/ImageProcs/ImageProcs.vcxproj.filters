@@ -24,8 +24,16 @@
     <ClCompile Include="02.C++Basic.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="03.C++Gugudan.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="Gugudan.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Gugudan.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
