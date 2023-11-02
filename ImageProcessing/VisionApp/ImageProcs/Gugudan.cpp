@@ -8,9 +8,16 @@ Gugudan::Gugudan()
 	, DanE(9)
 	, StepS(1)
 	, StepE(9)
-{}
+{
+	std::cout << "Gugudan::Ctor" << std::endl;
+}
 
-void Gugudan::setParams()
+Gugudan::~Gugudan()
+{
+	std::cout << "Gugudan::Dtor" << std::endl;
+}
+
+void Gugudan::SetParams()
 {
 	std::cout << "구구단을 출력하려고 최소값과 최대값을 입력해주세요." << std::endl;
 	std::cout << "먼저 행의 최소값과 최대값을 입력해주세요 >> ";
@@ -20,7 +27,7 @@ void Gugudan::setParams()
 	std::cout << "행은 " << StepS << "부터 " << StepE << "까지, 열은 " << DanS << "부터 " << DanE << "까지로 입력하셨습니다." << std::endl;
 }
 
-void Gugudan::proc()
+void Gugudan::Proc()
 {
 	for (size_t step = this->StepS; step <= this->StepE; step++)
 	{
@@ -39,7 +46,7 @@ void Gugudan::proc()
 	}
 }
 
-void Gugudan::display()
+void Gugudan::Display()
 {
 	std::cout << msg << std::endl;
 }

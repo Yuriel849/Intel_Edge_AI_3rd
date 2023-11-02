@@ -9,9 +9,10 @@ private:
 	std::string msg = "";
 public:
 	Gugudan();
-	void setParams();
-	void proc();
-	void display();
+	~Gugudan();
+	void SetParams();
+	void Proc();
+	void Display();
 };
 
 #endif
