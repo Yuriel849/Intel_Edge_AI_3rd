@@ -58,9 +58,9 @@ int main()
 	std::cout << std::endl;
 
 	Gugudan gugudan;
-	gugudan.setParams();
-	gugudan.proc();
-	gugudan.display();
+	gugudan.SetParams();
+	gugudan.Proc();
+	gugudan.Display();
 
 	return 1;
 }

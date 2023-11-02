@@ -1,6 +1,3 @@
-#include <iostream>
-#include <string>
-
 #include "Gugudan.h"
 
 Gugudan::Gugudan()
@@ -29,6 +26,8 @@ void Gugudan::SetParams()
 
 void Gugudan::Proc()
 {
+	vMsg.clear(); // º¤ÅÍ ÃÊ±âÈ­
+
 	for (size_t step = this->StepS; step <= this->StepE; step++)
 	{
 		for (size_t dan = this->DanS; dan <= this->DanE; dan++)
@@ -42,11 +41,19 @@ void Gugudan::Proc()
 			str += std::to_string(result);
 			msg += str + "\t";
 		}
-		msg += "\n";
+		//msg += "\n";
+		vMsg.push_back(msg);
 	}
 }
 
 void Gugudan::Display()
 {
-	std::cout << msg << std::endl;
+	//std::cout << msg << std::endl;
+
+	std::cout << "GuGuDan::Display" << std::endl;
+	//for basic
+	for (size_t i = 0; i < vMsg.size(); i++)
+	{
+		std::cout << vMsg[i] << std::endl;
+	}
 }
