@@ -33,7 +33,10 @@
     <ClCompile Include="Gugudan.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="03.ISP_basic.cpp">
+    <ClCompile Include="04.ISP_basic.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="05.ISP_Basic_Alt.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

@@ -4,6 +4,7 @@
 
 #include "Common.h"
 
+#if 0
 int main()
 {
 	std::string fileName = "../KCCImageNet/find_google_area.png";
@@ -65,3 +66,4 @@ int main()
 
 	return 1;
 }
+#endif
