@@ -12,7 +12,7 @@ using namespace std;
 
 int calculateFee(Car car);
 
-#if 1
+#if 0
 int main()
 {
 	cout << "Welcome to our parking lot XXX (Lot No. 0123)" << endl;

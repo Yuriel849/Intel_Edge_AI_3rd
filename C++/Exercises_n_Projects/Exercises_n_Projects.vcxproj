@@ -132,6 +132,7 @@
     <ClCompile Include="CafeMenu.cpp" />
     <ClCompile Include="CafeMgmt.cpp" />
     <ClCompile Include="Car.cpp" />
+    <ClCompile Include="FreqCnt.cpp" />
     <ClCompile Include="ParkingMgmt.cpp" />
     <ClCompile Include="PL_Timestamp.cpp" />
   </ItemGroup>

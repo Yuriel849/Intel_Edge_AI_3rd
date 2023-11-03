@@ -25,6 +25,9 @@
     <Filter Include="헤더 파일\CafeMgmt">
       <UniqueIdentifier>{238aa624-6865-45ed-91de-99b127cf5105}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\FreqCnt">
+      <UniqueIdentifier>{06675bcb-8691-4d44-90ee-f771818cb8bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3_김명준_홍종현.c">
@@ -47,6 +50,9 @@
     </ClCompile>
     <ClCompile Include="Cafe.cpp">
       <Filter>소스 파일\CafeMgmt</Filter>
+    </ClCompile>
+    <ClCompile Include="FreqCnt.cpp">
+      <Filter>소스 파일\FreqCnt</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
