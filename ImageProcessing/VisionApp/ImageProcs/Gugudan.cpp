@@ -26,7 +26,7 @@ void Gugudan::SetParams()
 
 void Gugudan::Proc()
 {
-	vMsg.clear(); // º¤ÅÍ ÃÊ±âÈ­
+	//vMsg.clear(); // º¤ÅÍ ÃÊ±âÈ­
 
 	for (size_t step = this->StepS; step <= this->StepE; step++)
 	{
@@ -41,19 +41,19 @@ void Gugudan::Proc()
 			str += std::to_string(result);
 			msg += str + "\t";
 		}
-		//msg += "\n";
-		vMsg.push_back(msg);
+		msg += "\n";
+		//vMsg.push_back(msg);
 	}
 }
 
 void Gugudan::Display()
 {
-	//std::cout << msg << std::endl;
+	std::cout << msg << std::endl;
 
-	std::cout << "GuGuDan::Display" << std::endl;
-	//for basic
-	for (size_t i = 0; i < vMsg.size(); i++)
-	{
-		std::cout << vMsg[i] << std::endl;
-	}
+	//std::cout << "GuGuDan::Display" << std::endl;
+	////for basic
+	//for (size_t i = 0; i < vMsg.size(); i++)
+	//{
+	//	std::cout << vMsg[i] << std::endl;
+	//}
 }
