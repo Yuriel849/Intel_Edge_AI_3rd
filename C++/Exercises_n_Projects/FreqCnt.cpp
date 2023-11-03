@@ -9,10 +9,39 @@ int main()
 	 *		가장 많은 빈도 값: 4 ... 3개
 	 *		가장 적은 빈도 값: 1 / 5 / 6 / 8 ... 1개
 	 */
-	int datas[3 * 3] = { 5, 3, 1, 4, 6, 4, 8, 4, 3 };
+	const int length = 3 * 3;
+	int datas[length] = { 5, 3, 1, 4, 6, 4, 8, 4, 3 };
 
 #if 1
+	// datas 배열 속 값은 value인 동시에 index값이라고 생각해보면...
+	// 이 문제는 histogram 구하는 문제다
+	int counts[length] = { 0, };
+	// value... -> ...index
+	int _max_val = -1;
+	int _min_val = 1000;
 
+	for (size_t i = 0; i < length; i++)
+	{
+		counts[datas[i]]++;
+		if (_max_val < counts[datas[i]]) { _max_val = counts[datas[i]]; }
+		if (_min_val > counts[datas[i]]) { _min_val = counts[datas[i]]; }
+	}
+
+	// display
+	for (size_t i = 0; i < length; i++)
+	{
+		if (_max_val == counts[i])
+		{
+			std::cout << "가장 많은 빈도 값 : " << i << " ... " << counts[i] << "개" << std::endl;
+		}
+	}
+	for (size_t i = 0; i < length; i++)
+	{
+		if (_min_val == counts[i])
+		{
+			std::cout << "가장 적은 빈도 값 : " << i << " ... " << counts[i] << "개" << std::endl;
+		}
+	}
 #else
 	std::map<int, int> map;
 
