@@ -202,7 +202,7 @@ void CDlgTest::OnBnClickedButton2()
 	CDC* dc; //픽쳐 컨트롤의 DC를 가져올  CDC 포인터
 	dc = m_picControl.GetDC(); //픽쳐 컨트롤의 DC를 얻는다.
 	CImage image;//불러오고 싶은 이미지를 로드할 CImage 
-	image.Load(_T("GitBashIcon.png"));//이미지 로드
+	image.Load(_T("./res/GitBashIcon.png"));//이미지 로드
 
 	image.StretchBlt(dc->m_hDC, 0, 0, rect.Width(), rect.Height(), SRCCOPY);//이미지를 픽쳐 컨트롤 크기로 조정
 	ReleaseDC(dc);//DC 해제
