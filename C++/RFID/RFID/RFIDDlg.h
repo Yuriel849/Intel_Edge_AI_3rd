@@ -52,4 +52,5 @@ public:
 	afx_msg void OnReadContinue();
 	CString m_strRfid;
 	
+	CStatic m_picControl;
 };

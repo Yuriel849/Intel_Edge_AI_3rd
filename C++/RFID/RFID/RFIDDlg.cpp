@@ -10,6 +10,14 @@
 #include <conio.h> // for _kbhit()
 #include "DataSource.h"
 
+
+
+#include <codecvt> 
+#include <iostream> 
+#include <locale> 
+#include <string> 
+#include <windows.h> 
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -67,6 +75,7 @@ void CRFIDDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_EDIT1, m_strRfid);
+	DDX_Control(pDX, IDC_PIC, m_picControl);
 }
 
 BEGIN_MESSAGE_MAP(CRFIDDlg, CDialogEx)
@@ -236,6 +245,36 @@ void CRFIDDlg::OnReadOnce()
 		UpdateData(FALSE);
 		
 		printf("\n");
+
+		// Create a converter object to convert between wide 
+		// strings and UTF-8 encoded strings 
+		wstring_convert<codecvt_utf8_utf16<wchar_t> > converter;
+
+		// Convert the LPCWSTR to a wstring and then to an 
+		// std::string 
+		string uid = converter.to_bytes(wstring(temp1));
+
+		if ((uid.compare("e8 a3 68 cb 50 01 04 e0 ") == 0) || (uid.compare("c3 6b 68 cb 50 01 04 e0 ") == 0)) // If ISO15693 & UID is the same
+		{
+			string src = ds.findImg(uid);
+
+			// Convert std::string 'src' to wchar_t* (alternative to _T())
+			wstring wsrc;
+			for (int i = 0; i < src.length(); ++i)
+				wsrc += wchar_t(src[i]);
+			const wchar_t* wtsrc = wsrc.c_str();
+
+			// Display image
+			CRect rect;//픽쳐 컨트롤의 크기를 저장할 CRect 객체
+			m_picControl.GetWindowRect(rect);//GetWindowRect를 사용해서 픽쳐 컨트롤의 크기를 받는다.
+			CDC* dc; //픽쳐 컨트롤의 DC를 가져올  CDC 포인터
+			dc = m_picControl.GetDC(); //픽쳐 컨트롤의 DC를 얻는다.
+			CImage image;//불러오고 싶은 이미지를 로드할 CImage 
+			image.Load(wtsrc);//이미지 로드
+
+			image.StretchBlt(dc->m_hDC, 0, 0, rect.Width(), rect.Height(), SRCCOPY);//이미지를 픽쳐 컨트롤 크기로 조정
+			ReleaseDC(dc);//DC 해제
+		}
 	}
 	//ISO14443A모드로 읽기
 	else if (is_WriteReadCommand(ftHandle, CM1_ISO14443AB, CM2_ISO14443A_ACTIVE + BUZZER_ON,
@@ -254,6 +293,37 @@ void CRFIDDlg::OnReadOnce()
 		UpdateData(FALSE);
 
 		printf("\n");
+
+		// Create a converter object to convert between wide 
+		// strings and UTF-8 encoded strings 
+		wstring_convert<codecvt_utf8_utf16<wchar_t> > converter;
+
+		// Convert the LPCWSTR to a wstring and then to an 
+		// std::string 
+		string uid = converter.to_bytes(wstring(temp1));
+
+		if ((uid.compare("01 42 b0 20 ") == 0) || (uid.compare("31 58 81 5b ") == 0)) // If ISO14443A & UID is the same
+		{
+			printf("UID identical!\n");
+			string src = ds.findImg(uid);
+
+			// Convert std::string 'src' to wchar_t* (alternative to _T())
+			wstring wsrc;
+			for (int i = 0; i < src.length(); ++i)
+				wsrc += wchar_t(src[i]);
+			const wchar_t* wtsrc = wsrc.c_str();
+
+			// Display image
+			CRect rect;//픽쳐 컨트롤의 크기를 저장할 CRect 객체
+			m_picControl.GetWindowRect(rect);//GetWindowRect를 사용해서 픽쳐 컨트롤의 크기를 받는다.
+			CDC* dc; //픽쳐 컨트롤의 DC를 가져올  CDC 포인터
+			dc = m_picControl.GetDC(); //픽쳐 컨트롤의 DC를 얻는다.
+			CImage image;//불러오고 싶은 이미지를 로드할 CImage 
+			image.Load(wtsrc);//이미지 로드
+
+			image.StretchBlt(dc->m_hDC, 0, 0, rect.Width(), rect.Height(), SRCCOPY);//이미지를 픽쳐 컨트롤 크기로 조정
+			ReleaseDC(dc);//DC 해제
+		}
 	}
 }
 

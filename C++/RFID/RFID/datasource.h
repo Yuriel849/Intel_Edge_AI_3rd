@@ -11,6 +11,7 @@ class DataSource
 {
 public:
 	void db_connect_test();
+	string findImg(string uid);
 };
 
 #endif
