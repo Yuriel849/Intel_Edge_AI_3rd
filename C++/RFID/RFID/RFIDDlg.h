@@ -53,4 +53,6 @@ public:
 	CString m_strRfid;
 	
 	CStatic m_picControl;
+	CString m_strDesc;
+	CString m_strEntryDate;
 };

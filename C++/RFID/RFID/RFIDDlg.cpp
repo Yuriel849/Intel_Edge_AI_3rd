@@ -63,6 +63,8 @@ END_MESSAGE_MAP()
 CRFIDDlg::CRFIDDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_RFID_DIALOG, pParent)
 	, m_strRfid(_T(""))
+	, m_strDesc(_T(""))
+	, m_strEntryDate(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -76,6 +78,8 @@ void CRFIDDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_EDIT1, m_strRfid);
 	DDX_Control(pDX, IDC_PIC, m_picControl);
+	DDX_Text(pDX, IDC_EDIT2, m_strDesc);
+	DDX_Text(pDX, IDC_EDIT3, m_strEntryDate);
 }
 
 BEGIN_MESSAGE_MAP(CRFIDDlg, CDialogEx)
@@ -221,7 +225,7 @@ void CRFIDDlg::OnConnect()
 void CRFIDDlg::OnReadOnce()
 {
 	DataSource ds;
-	ds.db_connect_test();
+	//ds.db_connect_test();
 
 	CString temp, temp1=_T("");
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
@@ -256,7 +260,12 @@ void CRFIDDlg::OnReadOnce()
 
 		if ((uid.compare("e8 a3 68 cb 50 01 04 e0 ") == 0) || (uid.compare("c3 6b 68 cb 50 01 04 e0 ") == 0)) // If ISO15693 & UID is the same
 		{
-			string src = ds.findImg(uid);
+			string src, desc, entry_date;
+			ds.getData(uid, src, desc, entry_date);
+
+			m_strDesc = desc.c_str();
+			m_strEntryDate = entry_date.c_str();
+			UpdateData(FALSE);
 
 			// Convert std::string 'src' to wchar_t* (alternative to _T())
 			wstring wsrc;
@@ -304,8 +313,12 @@ void CRFIDDlg::OnReadOnce()
 
 		if ((uid.compare("01 42 b0 20 ") == 0) || (uid.compare("31 58 81 5b ") == 0)) // If ISO14443A & UID is the same
 		{
-			printf("UID identical!\n");
-			string src = ds.findImg(uid);
+			string src, desc, entry_date;
+			ds.getData(uid, src, desc, entry_date);
+
+			m_strDesc = desc.c_str();
+			m_strEntryDate = entry_date.c_str();
+			UpdateData(FALSE);
 
 			// Convert std::string 'src' to wchar_t* (alternative to _T())
 			wstring wsrc;
@@ -330,40 +343,7 @@ void CRFIDDlg::OnReadOnce()
 
 void CRFIDDlg::OnReadContinue()
 {
-	CString temp, temp1 = _T("");
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	while (1)
-	{
-		if (is_WriteCommand(ftHandle, CM1_COMMON, CMD2_COMMON_ALL_UID_READ + BUZZER_ON, writeLength, wirteData) == IS_OK)
-		{
-			//스레드 작업으로 처리 할때 편리하게 사용 할수 있습니다.
-			if (is_ReadExCommand(ftHandle, &cmd1, &cmd2, &readLength, readData) == IS_OK)
-			{
-				int i;
-				printf("Command1 = %x, Command2 =  %x\n", cmd1, cmd2);
-				printf("UID : ");
-				for (i = 0; i < readLength; i++)
-				{
-					// print to console
-					printf("%x ", readData[i]);
-
-					// save to print to dialog
-					temp.Format(_T("%02x "), readData[i]);
-					temp1 += temp;
-				}
-				// print to text box "m_strRfid" in dialog
-				m_strRfid = temp1;
-				UpdateData(FALSE);
-
-				printf("\n");
-			}
-		}
-		Sleep(400);
-		if (_kbhit())
-			break;
-		printf(".");
-
-	}
+	printf("ATTEMPTING AND FAILING TO WRITE TO DB");
 }
 
 
