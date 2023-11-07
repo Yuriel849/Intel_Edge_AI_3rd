@@ -16,6 +16,9 @@
     <Filter Include="Common">
       <UniqueIdentifier>{cf14fe77-ac8b-4785-a530-36a125d542e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ISP">
+      <UniqueIdentifier>{047a2ee4-66a0-4f59-9603-865cf3b15023}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ImageProcs.cpp">
@@ -39,6 +42,21 @@
     <ClCompile Include="05.ISP_Basic_Alt.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="ISP.cpp">
+      <Filter>ISP</Filter>
+    </ClCompile>
+    <ClCompile Include="08.ISP_HistoEq.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="06.ISP_Colorspace.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="07.ISP_Color_HSV.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="09.ISP_Gamma_Correction.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Gugudan.h">
@@ -46,6 +64,9 @@
     </ClInclude>
     <ClInclude Include="Common.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ISP.h">
+      <Filter>ISP</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
