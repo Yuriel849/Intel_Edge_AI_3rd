@@ -220,6 +220,9 @@
   <ItemGroup>
     <Image Include="res\RFID.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="MariaDB_SQL_cmds.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
