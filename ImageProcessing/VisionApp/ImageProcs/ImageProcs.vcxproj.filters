@@ -54,7 +54,10 @@
     <ClCompile Include="07.ISP_Color_HSV.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="09.ISP_Gamma_Correction.cpp">
+    <ClCompile Include="09.ISP_GammaCorrection.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="10.ISP_Filter_1.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

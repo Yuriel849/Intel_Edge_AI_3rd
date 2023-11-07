@@ -5,11 +5,11 @@
 int main()
 {
 	std::string fileName = "../thirdparty/opencv_480/sources/samples/data/lena.jpg";
-	cv::Mat src = cv::imread(fileName, cv::ImreadModes::IMREAD_ANYCOLOR);
+	cv::Mat src = cv::imread(fileName, cv::ImreadModes::IMREAD_ANYCOLOR); // Reads this file and saves to matrix (Mat class)
 
-	uchar* pData = src.data;//color pointer
-	int length = src.total();//data length
-	int channels = src.channels();
+	uchar* pData = src.data; //color pointer; src.data is data of src, 512 * 512 * 3 elements array
+	int length = src.total(); //data length; src.total() is total length of src.data
+	int channels = src.channels(); // 3, for R G B color values
 
 	ISP _isp;
 
