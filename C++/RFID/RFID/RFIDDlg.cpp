@@ -65,6 +65,7 @@ CRFIDDlg::CRFIDDlg(CWnd* pParent /*=nullptr*/)
 	, m_strRfid(_T(""))
 	, m_strDesc(_T(""))
 	, m_strEntryDate(_T(""))
+	, m_strImgSrc(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -79,7 +80,7 @@ void CRFIDDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT1, m_strRfid);
 	DDX_Control(pDX, IDC_PIC, m_picControl);
 	DDX_Text(pDX, IDC_EDIT2, m_strDesc);
-	DDX_Text(pDX, IDC_EDIT3, m_strEntryDate);
+	DDX_Text(pDX, IDC_EDIT4, m_strImgSrc);
 }
 
 BEGIN_MESSAGE_MAP(CRFIDDlg, CDialogEx)
@@ -90,6 +91,8 @@ BEGIN_MESSAGE_MAP(CRFIDDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON3, &CRFIDDlg::OnReadOnce)
 	ON_BN_CLICKED(IDC_BUTTON4, &CRFIDDlg::OnReadContinue)
 	ON_BN_CLICKED(IDC_BUTTON2, &CRFIDDlg::OnDisconnect)
+//	ON_EN_CHANGE(IDC_EDIT1, &CRFIDDlg::OnEnChangeEdit1)
+//ON_EN_CHANGE(IDC_EDIT4, &CRFIDDlg::OnEnChangeEdit4)
 END_MESSAGE_MAP()
 
 
@@ -319,7 +322,7 @@ void CRFIDDlg::OnReadOnce()
 			m_strDesc = desc.c_str();
 			m_strEntryDate = entry_date.c_str();
 			UpdateData(FALSE);
-
+			
 			// Convert std::string 'src' to wchar_t* (alternative to _T())
 			wstring wsrc;
 			for (int i = 0; i < src.length(); ++i)
@@ -343,7 +346,51 @@ void CRFIDDlg::OnReadOnce()
 
 void CRFIDDlg::OnReadContinue()
 {
-	printf("ATTEMPTING AND FAILING TO WRITE TO DB");
+	DataSource ds;
+	CString temp, temp1 = _T("");
+
+	if (is_WriteReadCommand(ftHandle, CM1_COMMON, CMD2_COMMON_ALL_UID_READ + BUZZER_ON,
+		writeLength, wirteData, &readLength, readData) == IS_OK)
+	{
+		int i;
+		printf("UID : ");
+		for (i = 0; i < readLength; i++)
+		{
+			// print to console
+			printf("%02x ", readData[i]);
+
+			// save to print to dialog
+			temp.Format(_T("%02x "), readData[i]);
+			temp1 += temp;
+		}
+		printf("\n");
+
+		// Create a converter object to convert between wide 
+		// strings and UTF-8 encoded strings 
+		wstring_convert<codecvt_utf8_utf16<wchar_t> > converter;
+
+		// Convert the LPCWSTR to a wstring and then to an 
+		// std::string 
+		string uid = converter.to_bytes(wstring(temp1));
+
+		if (
+			(uid.compare("e8 a3 68 cb 50 01 04 e0 ") == 0) ||
+			(uid.compare("c3 6b 68 cb 50 01 04 e0 ") == 0) ||
+			(uid.compare("01 42 b0 20 ")) ||
+				(uid.compare("31 58 81 5b "))) {
+			UpdateData(TRUE);
+			string src = std::string(CT2CA(m_strImgSrc)), desc = std::string(CT2CA(m_strDesc)), entry_date = std::string(CT2CA(m_strEntryDate));
+			ds.setData(uid, src, desc, entry_date);
+		}
+	}
+
+
+
+
+
+	//m_strDesc = desc.c_str();
+	//m_strEntryDate = entry_date.c_str();
+	//UpdateData(FALSE);
 }
 
 
@@ -359,3 +406,6 @@ void CRFIDDlg::OnDisconnect()
 	}
 
 }
+
+
+

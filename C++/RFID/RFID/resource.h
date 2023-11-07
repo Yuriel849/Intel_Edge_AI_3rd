@@ -15,6 +15,7 @@
 #define IDC_PIC                         1005
 #define IDC_EDIT2                       1006
 #define IDC_EDIT3                       1007
+#define IDC_EDIT4                       1008
 
 // Next default values for new objects
 // 

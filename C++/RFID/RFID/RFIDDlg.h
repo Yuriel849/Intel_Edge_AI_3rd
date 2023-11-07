@@ -55,4 +55,7 @@ public:
 	CStatic m_picControl;
 	CString m_strDesc;
 	CString m_strEntryDate;
+//	afx_msg void OnEnChangeEdit1();
+	CString m_strImgSrc;
+//	afx_msg void OnEnChangeEdit4();
 };

@@ -12,7 +12,8 @@ class DataSource
 public:
 	void db_connect_test();
 	string findImg(string uid);
-	void DataSource::getData(string uid, string& src, string& desc, string& entry_date);
+	void getData(string uid, string& src, string& desc, string& entry_date);
+	void setData(string uid, string src, string desc, string entry_date);
 };
 
 #endif
