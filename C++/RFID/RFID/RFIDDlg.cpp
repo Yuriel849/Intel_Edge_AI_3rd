@@ -87,7 +87,6 @@ BEGIN_MESSAGE_MAP(CRFIDDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON2, &CRFIDDlg::OnDisconnect)
 	ON_BN_CLICKED(IDC_BUTTON3, &CRFIDDlg::OnReadOnce)
 	ON_BN_CLICKED(IDC_BUTTON4, &CRFIDDlg::OnReadContinue)
-	ON_BN_CLICKED(IDC_BUTTON5, &CRFIDDlg::OnQuery)
 	ON_BN_CLICKED(IDC_BUTTON6, &CRFIDDlg::OnDelete)
 END_MESSAGE_MAP()
 
@@ -303,7 +302,11 @@ void CRFIDDlg::OnReadOnce()
 		if (ds.exists(uid) && ds.isActive(uid)) // 등록된 사용자라면
 		{
 			ds.setEntry(uid);
-			string src = ds.findImg(uid);
+			string cur_time;
+			string src = ds.findImg(uid, cur_time);
+
+			m_strDateTime = cur_time.c_str();
+			UpdateData(FALSE);
 
 			// Convert std::string 'src' to wchar_t* (alternative to _T())
 			wstring wsrc;
@@ -364,11 +367,4 @@ void CRFIDDlg::OnDelete()
 			m_strRfid = CString(_T("This card is no longer active"));
 		}
 	}
-}
-
-
-void CRFIDDlg::OnQuery()
-{
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	std::cout << "Queried" << std::endl;
 }

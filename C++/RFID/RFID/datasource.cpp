@@ -1,6 +1,6 @@
 #include "datasource.h"
 
-string DataSource::findImg(string uid)
+string DataSource::findImg(string uid, string& time)
 {
     string src;
 
@@ -18,7 +18,8 @@ string DataSource::findImg(string uid)
 
         char query[1024];
         MYSQL_RES* result;
-        string queryStr = "SELECT img_src FROM rfid_user WHERE UID = \"" + uid + "\"";
+        MYSQL_ROW row;
+        string queryStr = "SELECT img_src, NOW() FROM rfid_user WHERE UID = \"" + uid + "\"";
         sprintf_s(query, 1024, queryStr.c_str());
 
         // Send Query
@@ -33,8 +34,11 @@ string DataSource::findImg(string uid)
 
         int fields = mysql_num_fields(result);    // 필드 갯수 구함
 
-        src = (string)mysql_fetch_row(result)[0];
-        cout << src << endl;
+        while (row = mysql_fetch_row(result))     // 모든 레코드 탐색
+        {
+            src = (string)row[0];
+            time = (string)row[1];
+        }
 
         mysql_free_result(result);
         mysql_close(conn);

@@ -13,8 +13,7 @@ class DataSource
 private:
 	unsigned int timeout_sec = 1;
 public:
-	string findImg(string uid);
-	//void getData(string uid, string& src, string& desc, string& entry_date);
+	string findImg(string uid, string& time);
 	void addUser(string uid, string src);
 	void setEntry(string uid);
 	bool exists(string uid);
