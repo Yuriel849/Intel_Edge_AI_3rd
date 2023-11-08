@@ -76,8 +76,6 @@ void CRFIDDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_EDIT1, m_strRfid);
 	DDX_Control(pDX, IDC_PIC, m_picControl);
-	//  DDX_Text(pDX, IDC_EDIT2, m_strDesc);
-	//  DDX_Text(pDX, IDC_EDIT4, m_strImgSrc);
 	DDX_Text(pDX, IDC_EDIT2, m_strDateTime);
 }
 
@@ -218,7 +216,6 @@ void CRFIDDlg::OnConnect()
 	}
 	Sleep(100);
 	flag_r = 0;
-
 }
 
 // "RFID해제" 버튼 클릭 시
@@ -261,7 +258,6 @@ void CRFIDDlg::OnReadContinue()
 		wstring_convert<codecvt_utf8_utf16<wchar_t> > converter;
 		// Convert the LPCWSTR to a wstring and then to an std::string 
 		string uid = converter.to_bytes(wstring(temp1));
-
 		if (!ds.exists(uid)) // 등록되지 않은 사용자라면
 		{
 			UpdateData(TRUE);
@@ -270,7 +266,6 @@ void CRFIDDlg::OnReadContinue()
 		}
 	}
 }
-
 
 // "출입" 버튼 클릭 시
 void CRFIDDlg::OnReadOnce()
@@ -305,68 +300,9 @@ void CRFIDDlg::OnReadOnce()
 		// Convert the LPCWSTR to a wstring and then to an std::string 
 		string uid = converter.to_bytes(wstring(temp1));
 
-		if (ds.exists(uid)) // 등록된 사용자라면
+		if (ds.exists(uid) && ds.isActive(uid)) // 등록된 사용자라면
 		{
 			ds.setEntry(uid);
-			string src = ds.findImg(uid);
-
-			// Convert std::string 'src' to wchar_t* (alternative to _T())
-			wstring wsrc;
-			for (int i = 0; i < src.length(); ++i)
-				wsrc += wchar_t(src[i]);
-			const wchar_t* wtsrc = wsrc.c_str();
-
-			// Display image
-			CRect rect;//픽쳐 컨트롤의 크기를 저장할 CRect 객체
-			m_picControl.GetWindowRect(rect);//GetWindowRect를 사용해서 픽쳐 컨트롤의 크기를 받는다.
-			CDC* dc; //픽쳐 컨트롤의 DC를 가져올  CDC 포인터
-			dc = m_picControl.GetDC(); //픽쳐 컨트롤의 DC를 얻는다.
-			CImage image;//불러오고 싶은 이미지를 로드할 CImage 
-			image.Load(wtsrc);//이미지 로드
-
-			image.StretchBlt(dc->m_hDC, 0, 0, rect.Width(), rect.Height(), SRCCOPY);//이미지를 픽쳐 컨트롤 크기로 조정
-			ReleaseDC(dc);//DC 해제
-		}
-	}
-}
-
-// "조회" 버튼 클릭 시
-void CRFIDDlg::OnQuery()
-{
-	DataSource ds;
-
-	CString temp, temp1 = _T("");
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	//ISO15693모드로 읽기( 싱글모드 읽기 )
-	if (is_WriteReadCommand(ftHandle, CM1_ISO15693, CM2_ISO15693_ACTIVE + BUZZER_ON,
-		writeLength, wirteData, &readLength, readData) == IS_OK)
-	{
-		int i;
-		printf("ISO 15693 UID : ");
-		for (i = 0; i < readLength; i++)
-		{
-			// print to console
-			printf("%02x ", readData[i]);
-
-			// save to print to dialog
-			temp.Format(_T("%02x "), readData[i]);
-			temp1 += temp;
-		}
-		// print to text box "m_strRfid" in dialog
-		m_strRfid = temp1;
-		UpdateData(FALSE);
-
-		printf("\n");
-
-		// Create a converter object to convert between wide strings and UTF-8 encoded strings 
-		wstring_convert<codecvt_utf8_utf16<wchar_t> > converter;
-		// Convert the LPCWSTR to a wstring and then to an std::string 
-		string uid = converter.to_bytes(wstring(temp1));
-
-		if (ds.exists(uid)) // 등록된 사용자라면
-		{
-			ds.getAllEntry(uid);
-
 			string src = ds.findImg(uid);
 
 			// Convert std::string 'src' to wchar_t* (alternative to _T())
@@ -428,4 +364,11 @@ void CRFIDDlg::OnDelete()
 			m_strRfid = CString(_T("This card is no longer active"));
 		}
 	}
+}
+
+
+void CRFIDDlg::OnQuery()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	std::cout << "Queried" << std::endl;
 }

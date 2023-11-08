@@ -1,0 +1,49 @@
+---- rfid_user 테이블 생성 (등록된 사용자 목록과 활성화 여부를 기록)
+CREATE TABLE `rfid_user` (
+	`UID` VARCHAR(50) NOT NULL,
+	`img_src` VARCHAR(200) NOT NULL,
+	`active` INT NOT NULL DEFAULT 1,
+	PRIMARY KEY (`UID`),
+	UNIQUE INDEX `UID` (`UID`)
+)
+COLLATE='latin1_swedish_ci'
+;
+SELECT `DEFAULT_COLLATION_NAME` FROM `information_schema`.`SCHEMATA` WHERE `SCHEMA_NAME`='mysql';
+SHOW TABLE STATUS FROM `mysql`;
+SHOW FUNCTION STATUS WHERE `Db`='mysql';
+SHOW PROCEDURE STATUS WHERE `Db`='mysql';
+SHOW TRIGGERS FROM `mysql`;
+SELECT *, EVENT_SCHEMA AS `Db`, EVENT_NAME AS `Name` FROM information_schema.`EVENTS` WHERE `EVENT_SCHEMA`='mysql';
+SELECT * FROM `information_schema`.`COLUMNS` WHERE TABLE_SCHEMA='mysql' AND TABLE_NAME='rfid_user' ORDER BY ORDINAL_POSITION;
+SHOW INDEXES FROM `rfid_user` FROM `mysql`;
+SELECT * FROM information_schema.REFERENTIAL_CONSTRAINTS WHERE   CONSTRAINT_SCHEMA='mysql'   AND TABLE_NAME='rfid_user'   AND REFERENCED_TABLE_NAME IS NOT NULL;
+SELECT * FROM information_schema.KEY_COLUMN_USAGE WHERE   TABLE_SCHEMA='mysql'   AND TABLE_NAME='rfid_user'   AND REFERENCED_TABLE_NAME IS NOT NULL;
+SHOW CREATE TABLE `mysql`.`rfid_user`;
+SELECT CONSTRAINT_NAME, CHECK_CLAUSE FROM `information_schema`.`CHECK_CONSTRAINTS` WHERE CONSTRAINT_SCHEMA='mysql' AND TABLE_NAME='rfid_user';
+/* "rfid_ex" 세션 시작 */
+SHOW CREATE TABLE `mysql`.`rfid_user`;
+
+---- rfid_entry_log 테이블 생성 (사용자들의 출입 기록)
+CREATE TABLE `rfid_entry_log` (
+	`idx` INT NOT NULL AUTO_INCREMENT,
+	`UID` VARCHAR(50) NULL DEFAULT NULL,
+	`entry` DATETIME NULL DEFAULT NOW(),
+	PRIMARY KEY (`idx`),
+	UNIQUE INDEX `idx` (`idx`)
+)
+COLLATE='latin1_swedish_ci'
+;
+SELECT `DEFAULT_COLLATION_NAME` FROM `information_schema`.`SCHEMATA` WHERE `SCHEMA_NAME`='mysql';
+SHOW TABLE STATUS FROM `mysql`;
+SHOW FUNCTION STATUS WHERE `Db`='mysql';
+SHOW PROCEDURE STATUS WHERE `Db`='mysql';
+SHOW TRIGGERS FROM `mysql`;
+SELECT *, EVENT_SCHEMA AS `Db`, EVENT_NAME AS `Name` FROM information_schema.`EVENTS` WHERE `EVENT_SCHEMA`='mysql';
+SELECT * FROM `information_schema`.`COLUMNS` WHERE TABLE_SCHEMA='mysql' AND TABLE_NAME='rfid_entry_log' ORDER BY ORDINAL_POSITION;
+SHOW INDEXES FROM `rfid_entry_log` FROM `mysql`;
+SELECT * FROM information_schema.REFERENTIAL_CONSTRAINTS WHERE   CONSTRAINT_SCHEMA='mysql'   AND TABLE_NAME='rfid_entry_log'   AND REFERENCED_TABLE_NAME IS NOT NULL;
+SELECT * FROM information_schema.KEY_COLUMN_USAGE WHERE   TABLE_SCHEMA='mysql'   AND TABLE_NAME='rfid_entry_log'   AND REFERENCED_TABLE_NAME IS NOT NULL;
+SHOW CREATE TABLE `mysql`.`rfid_entry_log`;
+SELECT CONSTRAINT_NAME, CHECK_CLAUSE FROM `information_schema`.`CHECK_CONSTRAINTS` WHERE CONSTRAINT_SCHEMA='mysql' AND TABLE_NAME='rfid_entry_log';
+/* "rfid_ex" 세션 시작 */
+SHOW CREATE TABLE `mysql`.`rfid_entry_log`;

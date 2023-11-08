@@ -51,8 +51,8 @@ public:
 	afx_msg void OnDisconnect();
 	afx_msg void OnReadOnce();
 	afx_msg void OnReadContinue();
-	afx_msg void OnQuery();
 	afx_msg void OnDelete();
+	afx_msg void OnQuery();
 	
 	CString m_strRfid;
 	CStatic m_picControl;

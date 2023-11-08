@@ -1,9 +1,2 @@
-INSERT INTO warehouse VALUES ("31 58 81 5b ", "./res/Neuschwanstein.jpg", "This is the key to the gates of the white swan castle in Bavaria.", NOW());
-INSERT INTO warehouse VALUES ("01 42 b0 20 ", "./res/Firenze.jpg", "These are the heights of the Duomo of Firenze.", NOW());
-
-INSERT INTO warehouse VALUES ("e8 a3 68 cb 50 01 04 e0 ", "./res/Budapest.jpg", "This is the ancient capital of Hungary.", NOW());
-INSERT INTO warehouse VALUES ("c3 6b 68 cb 50 01 04 e0 ", "./res/Louvre.jpg", "This glass pyramid is in the heart of Paris of France.", NOW());
-
-SELECT * FROM warehouse;
-DELETE FROM warehouse WHERE img_src = "test";
-UPDATE warehouse set img_src = "test", warehouse.`desc` = "hungary" WHERE uid = "e8 a3 68 cb 50 01 04 e0 ";
+SELECT * FROM rfid_user;
+SELECT * FROM rfid_entry_log;
