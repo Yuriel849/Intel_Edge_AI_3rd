@@ -1,6 +1,4 @@
-﻿
-// RFIDDlg.cpp: 구현 파일
-//
+﻿// RFIDDlg.cpp: 구현 파일
 #include "is_d2xx.h"
 #include "pch.h"
 #include "framework.h"

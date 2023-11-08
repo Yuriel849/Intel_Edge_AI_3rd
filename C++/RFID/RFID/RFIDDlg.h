@@ -1,6 +1,4 @@
-﻿
-// RFIDDlg.h: 헤더 파일
-//
+﻿// RFIDDlg.h: 헤더 파일
 
 #pragma once
 #include "is_d2xx.h"
