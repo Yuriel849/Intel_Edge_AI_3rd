@@ -4,6 +4,7 @@
 
 #pragma once
 #include "is_d2xx.h"
+#include "DataSource.h"
 
 // CRFIDDlg 대화 상자
 class CRFIDDlg : public CDialogEx
@@ -50,12 +51,11 @@ public:
 	afx_msg void OnDisconnect();
 	afx_msg void OnReadOnce();
 	afx_msg void OnReadContinue();
-	CString m_strRfid;
+	afx_msg void OnQuery();
+	afx_msg void OnDelete();
 	
+	CString m_strRfid;
 	CStatic m_picControl;
-	CString m_strDesc;
 	CString m_strEntryDate;
-//	afx_msg void OnEnChangeEdit1();
-	CString m_strImgSrc;
-//	afx_msg void OnEnChangeEdit4();
+	CString m_strDateTime;
 };

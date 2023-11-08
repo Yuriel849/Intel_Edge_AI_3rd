@@ -1,66 +1,15 @@
 #include "datasource.h"
 
-void DataSource::db_connect_test()
+DataSource::DataSource()
 {
-    MYSQL* conn;
-    MYSQL* conn_result;
-    unsigned int timeout_sec = 1;
-
     conn = mysql_init(NULL);
     mysql_options(conn, MYSQL_OPT_CONNECT_TIMEOUT, &timeout_sec);
     conn_result = mysql_real_connect(conn, "127.0.0.1", "root", "Springf!37D", "mysql", 3309, NULL, 0);
-
-    if (NULL == conn_result)
-    {
-        cout << "DB Connection Fail" << endl;
-    }
-    else
-    {
-        cout << "DB Connection Success" << endl;
-
-        char query[1024];
-        MYSQL_RES* result;
-        MYSQL_ROW row;
-
-        sprintf_s(query, 1024, "SELECT * FROM warehouse");
-
-        // Send Query
-        if (mysql_query(conn, query))
-        {
-            cout << "SELECT Fail" << endl;
-        }
-
-        // Get Response
-        result = mysql_store_result(conn);
-
-        int fields = mysql_num_fields(result);    // 필드 갯수 구함
-
-        while (row = mysql_fetch_row(result))     // 모든 레코드 탐색
-        {
-            for (int i = 0; i < fields; i++)    // 각각의 레코드에서 모든 필드 값 출력
-            {
-                cout << row[i] << "   ";
-            }
-            cout << endl;
-        }
-
-        mysql_free_result(result);
-        mysql_close(conn);
-    }
-
-    return;
 }
 
 string DataSource::findImg(string uid)
 {
-    MYSQL* conn;
-    MYSQL* conn_result;
-    unsigned int timeout_sec = 1;
     string src;
-
-    conn = mysql_init(NULL);
-    mysql_options(conn, MYSQL_OPT_CONNECT_TIMEOUT, &timeout_sec);
-    conn_result = mysql_real_connect(conn, "127.0.0.1", "root", "Springf!37D", "mysql", 3309, NULL, 0);
 
     if (NULL == conn_result)
     {
@@ -73,7 +22,7 @@ string DataSource::findImg(string uid)
         char query[1024];
         MYSQL_RES* result;
         MYSQL_ROW row;
-        string queryStr = "SELECT img_src FROM warehouse WHERE UID = \"" + uid + "\"";
+        string queryStr = "SELECT img_src FROM rfid_user WHERE UID = \"" + uid + "\"";
         sprintf_s(query, 1024, queryStr.c_str());
 
         // Send Query
@@ -98,16 +47,51 @@ string DataSource::findImg(string uid)
     return src;
 }
 
+bool DataSource::exists(string uid)
+{
+    string exists;
+
+    if (NULL == conn_result)
+    {
+        cout << "DB Connection Fail" << endl;
+    }
+    else
+    {
+        cout << "DB Connection Success" << endl;
+
+        char query[1024];
+        MYSQL_RES* result;
+        MYSQL_ROW row;
+        string queryStr = "SELECT EXISTS(SELECT 1 FROM rfid_user WHERE UID = \"" + uid + "\")";
+        sprintf_s(query, 1024, queryStr.c_str());
+
+        // Send Query
+        if (mysql_query(conn, query))
+        {
+            cout << "SELECT Fail" << endl;
+        }
+
+        // Get Response
+        result = mysql_store_result(conn);
+
+        int fields = mysql_num_fields(result);    // 필드 갯수 구함
+        while (row = mysql_fetch_row(result))     // 모든 레코드 탐색
+        {
+            exists = (string)row[0];
+        }
+
+        mysql_free_result(result);
+        mysql_close(conn);
+
+        if (stoi(exists) != 0) { return true; }
+    }
+
+    return false;
+}
+
+//
 void DataSource::getData(string uid, string& src, string& desc, string& entry_date)
 {
-    MYSQL* conn;
-    MYSQL* conn_result;
-    unsigned int timeout_sec = 1;
-
-    conn = mysql_init(NULL);
-    mysql_options(conn, MYSQL_OPT_CONNECT_TIMEOUT, &timeout_sec);
-    conn_result = mysql_real_connect(conn, "127.0.0.1", "root", "Springf!37D", "mysql", 3309, NULL, 0);
-
     if (NULL == conn_result)
     {
         cout << "DB Connection Fail" << endl;
@@ -146,16 +130,8 @@ void DataSource::getData(string uid, string& src, string& desc, string& entry_da
     }
 }
 
-void DataSource::setData(string uid, string src, string desc, string entry_date)
+void DataSource::addUser(string uid, string src)
 {
-    MYSQL* conn;
-    MYSQL* conn_result;
-    unsigned int timeout_sec = 1;
-
-    conn = mysql_init(NULL);
-    mysql_options(conn, MYSQL_OPT_CONNECT_TIMEOUT, &timeout_sec);
-    conn_result = mysql_real_connect(conn, "127.0.0.1", "root", "Springf!37D", "mysql", 3309, NULL, 0);
-
     if (NULL == conn_result)
     {
         cout << "DB Connection Fail" << endl;
@@ -167,7 +143,7 @@ void DataSource::setData(string uid, string src, string desc, string entry_date)
         char query[1024];
         MYSQL_RES* result;
         MYSQL_ROW row;
-        string queryStr = "UPDATE warehouse SET img_src = \"" + src + "\", warehouse.`desc` = \"" + desc + "\" WHERE uid = \"" + uid + "\"";
+        string queryStr = "INSERT INTO rfid_user VALUES (\"" + uid + "\", 1)";
         sprintf_s(query, 1024, queryStr.c_str());
 
         // Send Query
@@ -180,30 +156,35 @@ void DataSource::setData(string uid, string src, string desc, string entry_date)
             cout << "INSERT Success" << endl;
         }
 
+        mysql_close(conn);
+    }
+}
 
-        queryStr = "SELECT * FROM warehouse WHERE UID = \"" + uid + "\"";
+void DataSource::setEntry(string uid)
+{
+    if (NULL == conn_result)
+    {
+        cout << "DB Connection Fail" << endl;
+    }
+    else
+    {
+        cout << "DB Connection Success" << endl;
+
+        char query[1024];
+        MYSQL_RES* result;
+        MYSQL_ROW row;
+        string queryStr = "INSERT INTO rfid_entry_log VALUES (\"" + uid + "\", 1)";
         sprintf_s(query, 1024, queryStr.c_str());
 
         // Send Query
         if (mysql_query(conn, query))
         {
-            cout << "SELECT Fail" << endl;
+            cout << "INSERT Fail" << endl;
         }
-
-        // Get Response
-        result = mysql_store_result(conn);
-
-        int fields = mysql_num_fields(result);    // 필드 갯수 구함
-
-        while (row = mysql_fetch_row(result))     // 모든 레코드 탐색
+        else
         {
-            src = (string)row[1];
-            desc = (string)row[2];
-            entry_date = (string)row[3];
-            cout << endl;
+            cout << "INSERT Success" << endl;
         }
-
-        mysql_free_result(result);
 
         mysql_close(conn);
     }
