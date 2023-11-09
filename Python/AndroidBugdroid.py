@@ -3,6 +3,7 @@ import turtle
 ## 전역 변수 선언 부분 ##
 swidth, sheight = 500, 500
 
+
 ## 메인 코드 부분 ##
 turtle.title('Drawing Android Bugdroid with Python Turtle')
 turtle.shape('turtle')
@@ -26,7 +27,7 @@ turtle.end_fill()
 
 ## 오른팔 그리기 ##
 turtle.penup()
-turtle.goto(swidth / 5 + 75, -sheight / 5 + 50)
+turtle.goto(swidth / 5 + 60, -sheight / 5 + 50)
 turtle.begin_fill()
 turtle.pendown()
 turtle.left(90)
@@ -38,7 +39,7 @@ turtle.end_fill()
 
 ## 왼팔 그리기 ##
 turtle.penup()
-turtle.goto(-swidth / 5 - 25, -sheight / 5 + 50)
+turtle.goto(-swidth / 5 - 10, -sheight / 5 + 50)
 turtle.begin_fill()
 turtle.pendown()
 turtle.forward(120)
@@ -60,7 +61,7 @@ turtle.end_fill()
 
 ## 눈 그리기 ##
 turtle.penup()
-turtle.goto(swidth / 5 - 80, sheight / 5 + 40)
+turtle.goto(swidth / 5 - 60, sheight / 5 + 40)
 turtle.left(90)
 turtle.pencolor('white')
 turtle.fillcolor('white')
@@ -69,7 +70,7 @@ turtle.pendown()
 turtle.circle(10)
 turtle.end_fill()
 turtle.penup()
-turtle.goto(-swidth / 5 + 80, sheight / 5 + 40)
+turtle.goto(-swidth / 5 + 60, sheight / 5 + 40)
 turtle.begin_fill()
 turtle.pendown()
 turtle.circle(10)
