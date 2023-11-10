@@ -1,7 +1,7 @@
 #include <iostream>
 #include <map>
 
-#if 1
+#if 0
 int main()
 {
 	/* 가장 많은/적은 빈도수의 값을 출력하시오.

@@ -10,7 +10,7 @@ using namespace std;
 #include "cafemenu.h"
 #include "cafe.h"
 
-#if 0
+#if 1
 int main()
 {
 	Cafe cafe;
