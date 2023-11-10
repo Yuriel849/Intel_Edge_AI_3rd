@@ -10,8 +10,8 @@ def order_at_cafe():
         8 : ['카페모카 Tall', '4600'],
         9 : ['카라멜_마키아또 Short', '5100'],
         10 : ['카라멜_마키아또 Tall', '5600'],
-        11 : ['스타벅스_돌체_라뗴 Short', '5100'],
-        12 : ['스타벅스_돌체_라뗴 Tall', '5600']
+        11 : ['스타벅스_돌체_라떼 Short', '5100'],
+        12 : ['스타벅스_돌체_라떼 Tall', '5600']
     }
     total_sales = [0 for i in range(len(menu))]
     selection = [0 for i in range(0, 100)]
