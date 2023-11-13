@@ -55,6 +55,8 @@ int main()
 		}
 	}
 
+	// Calculate index of OpenCV Mat via: (row + x) * cols + (col + y)
+
 	// copy col + 1 to col, col[1] => col[0], left
 	// copy col to col + 1, col[98] => col[99], right
 	// copy row + 1 to row, row[1] => row[0], top
