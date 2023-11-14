@@ -79,5 +79,40 @@ int main()
 		cv::line(src_color, Point(CoGx + 10, CoGy - 10), Point(CoGx - 10, CoGy + 10), CV_RGB(255, 0, 0), 10);
 	}
 
+	// Draw a rectangle around each object, such that the object is entirely inside its rectangle while the rectangle is the smallest it can be
+	for (size_t i = 0; i < contours.size(); i++)
+	{
+		Point pt[4];
+		for (size_t m = 0; m < 4; m++)
+		{
+			pt[m].x = contours[i][0].x;
+			pt[m].y = contours[i][0].y;
+		}
+		for (size_t k = 1; k < contours[i].size(); k++)
+		{
+			// x-min & y-min -> upper-left
+			// x-min & y-max -> lower-left
+			// x-max & y-max -> lower-right
+			// x-max & y-min -> upper-right
+
+			if (pt[0].x > contours[i][k].x) { pt[0].x = contours[i][k].x; }
+			if (pt[0].y > contours[i][k].y) { pt[0].y = contours[i][k].y; }
+
+			if (pt[1].x > contours[i][k].x) { pt[1].x = contours[i][k].x; }
+			if (pt[1].y < contours[i][k].y) { pt[1].y = contours[i][k].y; }
+
+			if (pt[2].x < contours[i][k].x) { pt[2].x = contours[i][k].x; }
+			if (pt[2].y < contours[i][k].y) { pt[2].y = contours[i][k].y; }
+
+			if (pt[3].x < contours[i][k].x) { pt[3].x = contours[i][k].x; }
+			if (pt[3].y > contours[i][k].y) { pt[3].y = contours[i][k].y; }
+		}
+
+		cv::line(src_color, pt[0], pt[1], CV_RGB(0, 0, 255), 2);
+		cv::line(src_color, pt[1], pt[2], CV_RGB(0, 0, 255), 2);
+		cv::line(src_color, pt[2], pt[3], CV_RGB(0, 0, 255), 2);
+		cv::line(src_color, pt[3], pt[0], CV_RGB(0, 0, 255), 2);
+	}
+
 	return 1;
 }
