@@ -66,10 +66,16 @@ int main()
 		CoGx = CoGy = 0;
 		int accX = 0, accY = 0;
 		int length = contours[i].size();
+
+		int x_min = width, x_max = 0, y_min = height, y_max = 0;
 		for (size_t n = 0; n < length; n++)
 		{
 			accX += contours[i].at(n).x;
 			accY += contours[i].at(n).y;
+			if (x_min > contours[i].at(n).x) { x_min = contours[i].at(n).x; }
+			if (x_max < contours[i].at(n).x) { x_max = contours[i].at(n).x; }
+			if (y_min > contours[i].at(n).y) { y_min = contours[i].at(n).y; }
+			if (y_max < contours[i].at(n).y) { y_max = contours[i].at(n).y; }
 		}
 		CoGx = accX / length;
 		CoGy = accY / length;
@@ -77,38 +83,49 @@ int main()
 
 		cv::line(src_color, Point(CoGx - 10, CoGy - 10), Point(CoGx + 10, CoGy + 10), CV_RGB(255, 0, 0), 10);
 		cv::line(src_color, Point(CoGx + 10, CoGy - 10), Point(CoGx - 10, CoGy + 10), CV_RGB(255, 0, 0), 10);
+		
+		const int ptSz = 4;
+		Point pt[ptSz];
+		pt[0].x = x_min; pt[0].y = y_min; // ÁÂ»ó
+		pt[1].x = x_max; pt[1].y = y_min; // ¿ì»ó
+		pt[2].x = x_max; pt[2].y = y_max; // ¿ìÇÏ
+		pt[3].x = x_min; pt[3].y = y_max; // ÁÂÇÏ
+
+		for (size_t i = 0; i < ptSz; i++)
+		{
+			cv::line(src_color, pt[i%ptSz], pt[(i+1)%ptSz], CV_RGB(0, 0, 255), 1);
+		}
 	}
 
 	// Draw a rectangle around each object, such that the object is entirely inside its rectangle while the rectangle is the smallest it can be
-	for (size_t i = 0; i < contours.size(); i++)
-	{
-		Point pt[4];
-		for (size_t m = 0; m < 4; m++)
-		{
-			pt[m].x = contours[i][0].x;
-			pt[m].y = contours[i][0].y;
-		}
-		for (size_t k = 1; k < contours[i].size(); k++)
-		{
-			// x-min & y-min -> upper-left
-			if (pt[0].x > contours[i][k].x) { pt[0].x = contours[i][k].x; }
-			if (pt[0].y > contours[i][k].y) { pt[0].y = contours[i][k].y; }
-			// x-min & y-max -> lower-left
-			if (pt[1].x > contours[i][k].x) { pt[1].x = contours[i][k].x; }
-			if (pt[1].y < contours[i][k].y) { pt[1].y = contours[i][k].y; }
-			// x-max & y-max -> lower-right
-			if (pt[2].x < contours[i][k].x) { pt[2].x = contours[i][k].x; }
-			if (pt[2].y < contours[i][k].y) { pt[2].y = contours[i][k].y; }
-			// x-max & y-min -> upper-right
-			if (pt[3].x < contours[i][k].x) { pt[3].x = contours[i][k].x; }
-			if (pt[3].y > contours[i][k].y) { pt[3].y = contours[i][k].y; }
-		}
-
-		for (size_t i = 0; i < 4; i++)
-		{
-			cv::line(src_color, pt[i], pt[((i+1) == 4) ? 0 : i+1], CV_RGB(0, 0, 255), 2);
-		}
-	}
+	//for (size_t i = 0; i < contours.size(); i++)
+	//{
+	//	Point pt[4];
+	//	for (size_t m = 0; m < 4; m++)
+	//	{
+	//		pt[m].x = contours[i][0].x;
+	//		pt[m].y = contours[i][0].y;
+	//	}
+	//	for (size_t k = 1; k < contours[i].size(); k++)
+	//	{
+	//		// x-min & y-min -> upper-left
+	//		if (pt[0].x > contours[i][k].x) { pt[0].x = contours[i][k].x; }
+	//		if (pt[0].y > contours[i][k].y) { pt[0].y = contours[i][k].y; }
+	//		// x-min & y-max -> lower-left
+	//		if (pt[1].x > contours[i][k].x) { pt[1].x = contours[i][k].x; }
+	//		if (pt[1].y < contours[i][k].y) { pt[1].y = contours[i][k].y; }
+	//		// x-max & y-max -> lower-right
+	//		if (pt[2].x < contours[i][k].x) { pt[2].x = contours[i][k].x; }
+	//		if (pt[2].y < contours[i][k].y) { pt[2].y = contours[i][k].y; }
+	//		// x-max & y-min -> upper-right
+	//		if (pt[3].x < contours[i][k].x) { pt[3].x = contours[i][k].x; }
+	//		if (pt[3].y > contours[i][k].y) { pt[3].y = contours[i][k].y; }
+	//	}
+	//	for (size_t i = 0; i < 4; i++)
+	//	{
+	//		cv::line(src_color, pt[i], pt[((i+1) == 4) ? 0 : i+1], CV_RGB(0, 0, 255), 2);
+	//	}
+	//}
 
 	return 1;
 }
