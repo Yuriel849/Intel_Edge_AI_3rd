@@ -61,6 +61,33 @@ int main()
 	// contours... vector[i].. n-th 개수를 출력하세요.
 	for (size_t i = 0; i < contours.size(); i++)
 	{
+		// Additional functionalities and data of contours
+		double area = contourArea(contours[i]);
+		RotatedRect rrt = minAreaRect(contours[i]);
+		double arcLen = arcLength(contours[i], true);
+
+		Point ptTxt = Point(rrt.boundingRect().x, rrt.boundingRect().y);
+		string msg;
+		msg = std::format("area = {:.1f}", area);
+		putText(src_color, msg, Point(ptTxt.x, ptTxt.y + 30 * 0), FONT_HERSHEY_SIMPLEX, 0.8, CV_RGB(10, 0, 10), 1, 8);
+		msg = std::format("x,y = {:.1f}, {:.1f}", rrt.center.x, rrt.center.y);
+		putText(src_color, msg, Point(ptTxt.x, ptTxt.y + 30 * 1), FONT_HERSHEY_SIMPLEX, 0.8, CV_RGB(10, 0, 10), 1, 8);
+		msg = std::format("length = {:.1f}", arcLen);
+		putText(src_color, msg, Point(ptTxt.x, ptTxt.y + 30 * 2), FONT_HERSHEY_SIMPLEX, 0.8, CV_RGB(10, 0, 10), 1, 8);
+		cv::rectangle(src_color, rrt.boundingRect2f().tl(), rrt.boundingRect2f().br(), CV_RGB(0, 0, 255));
+		cv::drawMarker(src_color, rrt.center, CV_RGB(255, 0, 0));
+
+		const int ptSz = 4;
+		Point2f pt[ptSz];
+		rrt.points(pt);
+
+		for (size_t i = 0; i < ptSz; i++)
+		{
+			cv::line(src_color, pt[i % ptSz], pt[(i + 1) % ptSz], CV_RGB(255, 0, 255), 1);
+		}
+
+		continue;
+
 		std::cout << "Object[" << i + 1 << "] 개수는 " << contours[i].size() << " 입니다." << std::endl;
 		int CoGx, CoGy; // CoG = Center of Gravity
 		CoGx = CoGy = 0;
@@ -84,17 +111,17 @@ int main()
 		cv::line(src_color, Point(CoGx - 10, CoGy - 10), Point(CoGx + 10, CoGy + 10), CV_RGB(255, 0, 0), 10);
 		cv::line(src_color, Point(CoGx + 10, CoGy - 10), Point(CoGx - 10, CoGy + 10), CV_RGB(255, 0, 0), 10);
 		
-		const int ptSz = 4;
-		Point pt[ptSz];
-		pt[0].x = x_min; pt[0].y = y_min; // 좌상
-		pt[1].x = x_max; pt[1].y = y_min; // 우상
-		pt[2].x = x_max; pt[2].y = y_max; // 우하
-		pt[3].x = x_min; pt[3].y = y_max; // 좌하
+		//const int ptSz = 4;
+		//Point pt[ptSz];
+		//pt[0].x = x_min; pt[0].y = y_min; // 좌상
+		//pt[1].x = x_max; pt[1].y = y_min; // 우상
+		//pt[2].x = x_max; pt[2].y = y_max; // 우하
+		//pt[3].x = x_min; pt[3].y = y_max; // 좌하
 
-		for (size_t i = 0; i < ptSz; i++)
-		{
-			cv::line(src_color, pt[i%ptSz], pt[(i+1)%ptSz], CV_RGB(0, 0, 255), 1);
-		}
+		//for (size_t i = 0; i < ptSz; i++)
+		//{
+		//	cv::line(src_color, pt[i%ptSz], pt[(i+1)%ptSz], CV_RGB(0, 0, 255), 1);
+		//}
 	}
 
 	// Draw a rectangle around each object, such that the object is entirely inside its rectangle while the rectangle is the smallest it can be
