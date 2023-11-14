@@ -75,6 +75,9 @@
     <ClCompile Include="15.ISP_Filter_Gaussian.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="16.ISP_ShapeInfo.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Gugudan.h">
