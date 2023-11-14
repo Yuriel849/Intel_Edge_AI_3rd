@@ -19,7 +19,7 @@ int main()
 	uchar* pDataBin = src_bin.data;
 
 	int threshold_min = 60;
-	int threshold_max = 250;
+	int threshold_max = 200;
 
 	// 이진화 Binarization0
 	//	 이진화란 Color 혹은 Grayscale 영상(image)을 흑백 영상으로 변환하는 것을 의미한다.
@@ -52,13 +52,31 @@ int main()
 	for (size_t i = 0; i < contours.size(); i++)
 	{
 		Scalar color = Scalar(rng.uniform(0, 256), rng.uniform(0, 256), rng.uniform(0, 256));
-		drawContours(drawing, contours, (int)i, color, 2, LINE_8, hierarchy, 0);
+		drawContours(drawing, contours, (int)i, color, 1, LINE_8, hierarchy, 0);
 	}
+
+	cv::Mat src_color;
+	cv::cvtColor(src_gray, src_color, ColorConversionCodes::COLOR_GRAY2BGR);
 
 	// contours... vector[i].. n-th 개수를 출력하세요.
 	for (size_t i = 0; i < contours.size(); i++)
 	{
 		std::cout << "Object[" << i + 1 << "] 개수는 " << contours[i].size() << " 입니다." << std::endl;
+		int CoGx, CoGy; // CoG = Center of Gravity
+		CoGx = CoGy = 0;
+		int accX = 0, accY = 0;
+		int length = contours[i].size();
+		for (size_t n = 0; n < length; n++)
+		{
+			accX += contours[i].at(n).x;
+			accY += contours[i].at(n).y;
+		}
+		CoGx = accX / length;
+		CoGy = accY / length;
+		std::cout << "Object[" << i + 1 << "] CoG.x = " << CoGx << " CoG.y = " << CoGy << std::endl;
+
+		cv::line(src_color, Point(CoGx - 10, CoGy - 10), Point(CoGx + 10, CoGy + 10), CV_RGB(255, 0, 0), 10);
+		cv::line(src_color, Point(CoGx + 10, CoGy - 10), Point(CoGx - 10, CoGy + 10), CV_RGB(255, 0, 0), 10);
 	}
 
 	return 1;
