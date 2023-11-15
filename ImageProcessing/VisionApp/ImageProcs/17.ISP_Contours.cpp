@@ -5,31 +5,31 @@
 int main()
 {
 	std::string fileName = "../KCCImageNet/stop_img.png";
-	cv::Mat src_color = cv::imread(fileName, cv::ImreadModes::IMREAD_COLOR);
+	cv::Mat src_color = cv::imread(fileName, cv::ImreadModes::IMREAD_ANYCOLOR);
 
-	const int max_value_H = 360 / 2;
-	const int max_value = 255;
-	int low_H = 126, low_S = 138, low_V = 120; //흑백으로 변환하는 수치 160. 130
-	int high_H = max_value_H, high_S = max_value, high_V = max_value;
-
-	cv::Mat src_hsv, src_hsv_bin;
+	cv::Mat src_hsv;
 	cvtColor(src_color, src_hsv, COLOR_BGR2HSV);
+
+	cv::Mat src_hsv_bin, src_hsv_bin_Red_1, src_hsv_bin_Red_2;
 	// Detect the object based on HSV Range Values
-	inRange(src_hsv, Scalar(low_H, low_S, low_V), Scalar(high_H, high_S, high_V), src_hsv_bin);
+	inRange(src_hsv, Scalar(160, 180, 0), Scalar(180, 255, 255), src_hsv_bin_Red_1);
+	inRange(src_hsv, Scalar(0, 180, 0), Scalar(10, 255, 255), src_hsv_bin_Red_2);
+	src_hsv_bin = src_hsv_bin_Red_1 + src_hsv_bin_Red_2;
 
     RNG rng(12345);
     vector<vector<Point>> contours; //각 꼭지점 갯수 벡터배열에 저장
     vector<Vec4i> hierarchy;
     findContours(src_hsv_bin, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE);
-    Mat drawing = src_color.clone(); // Mat::zeros(src_color.size(), CV_8UC3);
+    Mat drawing = src_color.clone(); // Mat::zeros(src_color.size(), CV_3.8UC3);
     for (size_t i = 0; i < contours.size(); i++) //꼭지점 사이즈만큼 i 반복
     {
         Scalar color = Scalar(rng.uniform(0, 256), rng.uniform(0, 256), rng.uniform(0, 256));
         drawContours(drawing, contours, (int)i, color, 1, LINE_8, hierarchy, 0);
     }
 
+	//find max area object
     double max_area = 0; //면적 0부터 시작
-    int max_area_index = -1; //면적 0부터 시작
+    int max_area_index = 0; //면적 0부터 시작
     for (size_t i = 0; i < contours.size(); i++) // contours.size() 사이즈만큼 i번 반복해서 
     {
         double area = contourArea(contours[i]); //전체 면적값
@@ -39,26 +39,72 @@ int main()
             max_area_index = i;
         }
     }
-    if (max_area_index >= 0) //면적 인덱스가 0과 같거나 클시
-    {
-        drawContours(drawing, contours, (int)max_area_index, CV_RGB(255, 0, 0), CV_FILLED); // 그려주갰다. 꼭지점, 면적 전체 수 인덱스, cv_rgb(255,0,0)(빨간색으로) ,채워넣겠다. 
+	drawContours(drawing, contours, (int)max_area_index, CV_RGB(255, 0, 0), CV_FILLED);
 
-        double area = contourArea(contours[max_area_index]);
-        RotatedRect rrt = minAreaRect(contours[max_area_index]);
-        double arcLen = arcLength(contours[max_area_index], true);
+	const Point* pts = (const cv::Point*)Mat(contours[max_area_index]).data;
+	int npts = Mat(contours[max_area_index]).rows;
+	cv::polylines(drawing, &pts, &npts, 1, true, Scalar(200, 200, 200));
+	cv::fillConvexPoly(drawing, pts, npts, cv::Scalar(0, 255, 200));
 
-        Point ptTxt = Point(rrt.boundingRect().x, rrt.boundingRect().y);
-        string msg;
-        msg = std::format("area = {:.1f}", area);
-        putText(src_color, msg, Point(ptTxt.x, ptTxt.y + 30 * 0), FONT_HERSHEY_SIMPLEX, 0.8, CV_RGB(10, 0, 10), 1, 8);
-        msg = std::format("x,y = {:.1f}, {:.1f}", rrt.center.x, rrt.center.y);
-        putText(src_color, msg, Point(ptTxt.x, ptTxt.y + 30 * 1), FONT_HERSHEY_SIMPLEX, 0.8, CV_RGB(10, 0, 10), 1, 8);
-        msg = std::format("length = {:.1f}", arcLen);
-        putText(src_color, msg, Point(ptTxt.x, ptTxt.y + 30 * 2), FONT_HERSHEY_SIMPLEX, 0.8, CV_RGB(10, 0, 10), 1, 8);
-        cv::rectangle(src_color, rrt.boundingRect2f().tl(), rrt.boundingRect2f().br(), CV_RGB(0, 0, 255));
-        cv::drawMarker(src_color, rrt.center, CV_RGB(255, 0, 0));
+	//for (size_t i = 0; i < contours.size(); i++)
+	{
+		size_t i = max_area_index;
+		double area = contourArea(contours[i]);
+		RotatedRect rrt = minAreaRect(contours[i]);
+		double arcLen = arcLength(contours[i], true);
 
-    }
+		Point ptTxt = Point(rrt.boundingRect().br().x + 10, rrt.boundingRect().y);
+		string msg;
+		msg = std::format("area = {:.1f}", area);
+		putText(drawing, msg, Point(ptTxt.x, ptTxt.y + 30 * 0), FONT_HERSHEY_SIMPLEX, 0.8, CV_RGB(10, 0, 10), 1, 8);
+		msg = std::format("x,y = {:.1f}, {:.1f}", rrt.center.x, rrt.center.y);
+		putText(drawing, msg, Point(ptTxt.x, ptTxt.y + 30 * 1), FONT_HERSHEY_SIMPLEX, 0.8, CV_RGB(10, 0, 10), 1, 8);
+		msg = std::format("length = {:.1f}", arcLen);
+		putText(drawing, msg, Point(ptTxt.x, ptTxt.y + 30 * 2), FONT_HERSHEY_SIMPLEX, 0.8, CV_RGB(10, 0, 10), 1, 8);
+		cv::rectangle(drawing, rrt.boundingRect2f().tl(), rrt.boundingRect2f().br(), CV_RGB(0, 0, 255));
+		cv::drawMarker(drawing, rrt.center, CV_RGB(255, 0, 0));
+		cv::ellipse(drawing, rrt, CV_RGB(10, 255, 10));
+
+		int radius = std::min(rrt.boundingRect().width, rrt.boundingRect().height);
+		radius /= 2;
+		cv::circle(drawing, rrt.center, radius, CV_RGB(10, 50, 255));
+
+		msg = std::format("radius = {:d}", radius);
+		putText(drawing, msg, Point(ptTxt.x, ptTxt.y + 30 * 3), FONT_HERSHEY_SIMPLEX, 0.8, CV_RGB(10, 0, 10), 1, 8);
+
+		//avg_brightness - c code
+		uchar* pData = src_color.data;
+		uchar* pDataMask = src_hsv_bin.data;
+		//only red channel
+		int sum_red = 0;
+		int sum_red_count = 0;
+		for (size_t row = 0; row < src_color.rows; row++)
+		{
+			for (size_t col = 0; col < src_color.cols; col++)
+			{
+				int index = row * src_color.cols + col;
+				int index_bgr = index * 3;
+				int red = pData[index_bgr + 2];
+				int mask = pDataMask[index];
+				if (red > 0 && mask == 255)
+				{
+					sum_red += red;
+					sum_red_count++;
+				}
+			}
+		}
+		float avg_brightness_red = sum_red / sum_red_count;
+		msg = std::format("avg_red = {:.1f}", avg_brightness_red);
+		putText(drawing, msg, Point(ptTxt.x, ptTxt.y + 30 * 4), FONT_HERSHEY_SIMPLEX, 0.8, CV_RGB(10, 0, 10), 1, 8);
+
+		const int ptSz = 4;
+		Point2f pt[ptSz];
+		rrt.points(pt);
+		for (size_t i = 0; i < ptSz; i++)
+		{
+			cv::line(drawing, pt[i % ptSz], pt[(i + 1) % ptSz], CV_RGB(255, 0, 255), 1);
+		}
+	}
 
 	return 1;
 }

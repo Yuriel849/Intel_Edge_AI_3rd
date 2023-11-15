@@ -212,7 +212,6 @@
     <ClCompile Include="Gugudan.cpp" />
     <ClCompile Include="ImageProcs.cpp" />
     <ClCompile Include="ISP.cpp" />
-    <ClCompile Include="temp_HSV.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
