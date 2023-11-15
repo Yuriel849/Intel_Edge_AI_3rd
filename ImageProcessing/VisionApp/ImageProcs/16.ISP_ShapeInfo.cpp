@@ -57,7 +57,7 @@ int main()
 
 	cv::Mat src_color;
 	cv::cvtColor(src_gray, src_color, ColorConversionCodes::COLOR_GRAY2BGR);
-
+	std::cout << contours.size() << std::endl;
 	// contours... vector[i].. n-th 개수를 출력하세요.
 	for (size_t i = 0; i < contours.size(); i++)
 	{

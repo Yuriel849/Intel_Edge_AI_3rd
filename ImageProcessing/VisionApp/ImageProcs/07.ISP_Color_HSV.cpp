@@ -54,17 +54,17 @@ int main(int argc, char* argv[])
     Mat frame, frame_HSV, frame_threshold;
     while (true) {
 
-        std::string fileName = "C:/work/VisionApp/KCCImageNet/find_google_area.png";
+        std::string fileName = "../KCCImageNet/find_google_area.png";
         cv::Mat frame = cv::imread(fileName, cv::ImreadModes::IMREAD_ANYCOLOR);
 
         cv::resizeWindow(window_capture_name, frame.cols, frame.rows);
         cv::resizeWindow(window_detection_name, frame.cols, frame.rows);
         //cap >> frame;
 
-        if (frame.empty())
-        {
-            break;
-        }
+        //if (frame.empty())
+        //{
+        //    break;
+        //}
         // Convert from BGR to HSV colorspace
         cvtColor(frame, frame_HSV, COLOR_BGR2HSV);
         // Detect the object based on HSV Range Values
