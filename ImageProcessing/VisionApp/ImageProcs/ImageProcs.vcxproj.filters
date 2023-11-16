@@ -81,6 +81,9 @@
     <ClCompile Include="17.ISP_Contours.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="18.ISP_Morpology.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Gugudan.h">
