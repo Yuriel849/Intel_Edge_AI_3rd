@@ -19,7 +19,7 @@ int main()
 	Mat src_erosion = Mat::zeros(height, width, CV_8UC1);
 	Mat src_dilation = Mat::zeros(height, width, CV_8UC1);
 
-	//침식(erosion)
+	//침식 (erosion)
 	const int SE_sz = 3; int SE_half_sz = SE_sz / 2;
 	int SE_Cross[SE_sz * SE_sz] = {
 		0,255,0,
@@ -109,6 +109,47 @@ int main()
 				}
 			}
 		}
+	}
+
+
+	//OpenCV
+	{
+		//const int SE_sz = 3; int SE_half_sz = SE_sz / 2;
+		//int SE_Cross[SE_sz * SE_sz] = {
+		//	0,255,0,
+		//	255,255,255,
+		//	0,255,0 };
+		//int SE_Rect[SE_sz * SE_sz] = {
+		//	255,255,255,
+		//	255,255,255,
+		//	255,255,255 };
+
+		int kernelSz = 10;
+		int shape = MorphShapes::MORPH_ELLIPSE;
+		cv::Size sz = Size(2 * kernelSz + 1, 2 * kernelSz + 1);
+		Mat SE = cv::getStructuringElement(shape, sz);
+		
+		//침식 erode
+		//src :: src_bin
+		Mat src_erode;
+		cv::erode(src_bin, src_erode, SE);
+		Mat diff_erode = src_bin - src_erode;
+
+		Mat src_dilate;
+		cv::dilate(src_bin, src_dilate, SE);
+		Mat diff_dilate = src_dilate - src_bin;
+
+		//extention
+		Mat src_open, src_closing;
+		int type = MorphTypes::MORPH_OPEN;
+		cv::morphologyEx(src_bin, src_open, type, SE);
+		Mat diff_open = src_bin - src_open;
+
+		type = MorphTypes::MORPH_CLOSE;
+		cv::morphologyEx(src_bin, src_closing, type, SE);
+		Mat diff_closing = src_bin - src_closing;
+
+		int a = 0;
 	}
 	return 1;
 }
