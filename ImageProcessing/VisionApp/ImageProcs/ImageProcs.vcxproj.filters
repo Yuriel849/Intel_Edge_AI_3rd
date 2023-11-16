@@ -81,7 +81,13 @@
     <ClCompile Include="17.ISP_Contours.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="18.ISP_Morpology.cpp">
+    <ClCompile Include="18.ISP_Morphology.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="19.ISP_Morphology_Image.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="20.ISP_Brake_Disk_exercise.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
