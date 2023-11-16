@@ -90,6 +90,9 @@
     <ClCompile Include="20.ISP_Brake_Disk_exercise.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="21.ISP_Ampoules_ex.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Gugudan.h">

@@ -219,7 +219,11 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="20.ISP_Brake_Disk_exercise.cpp" />
+    <ClCompile Include="20.ISP_Brake_Disk_exercise.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="21.ISP_Ampoules_ex.cpp" />
     <ClCompile Include="Gugudan.cpp" />
     <ClCompile Include="ImageProcs.cpp" />
     <ClCompile Include="ISP.cpp" />
