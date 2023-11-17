@@ -88,36 +88,81 @@ int main()
 		int a = 0; // Anchor to set breakpoint
 	}
 
+	/* Process each rectangle in sequence
+	 * Sum up pixel values of each row
+	 * Compare two rows with each other
+	 * Find two rows where the difference of sums is greatest
+	 */ 
 	contours.clear();
 	hierarchy.clear();
 	findContours(src_eqa, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE);
-	for (size_t i = 0; i < contours.size(); i++) //꼭지점 사이즈만큼 i 반복
+	uchar* pEqData = src_eqa.data;
+	vector<vector<int>> sumOfRows;
+	for (size_t i = 1; i < contours.size()-1; i++) //꼭지점 사이즈만큼 i 반복
 	{
+		vector<int> sRow;
 		RotatedRect rrt = minAreaRect(contours[i]);
+		//drawContours(src_eqa, contours, (int)i, 25, 1, LINE_8, hierarchy, 0);
 		//rectangle(src_eqa, rrt.boundingRect(), 255);
 		Point2f pts[4];
 		rrt.points(pts);
 		int rrt_x = pts[1].x, rrt_y = pts[1].y;
 
-		uchar* pData = src_eqa.data;
-
-		int flag = 0;
-		for (size_t w = rrt_x; w < rrt.size.width + rrt_x; w++)
+		int max_y, max_x;
+		if (rrt.size.height >= rrt.size.width)
 		{
-			for (size_t h = rrt_y; h < rrt.size.height + rrt_y; h++)
+			max_y = rrt_y + rrt.size.height;
+			max_x = rrt_x + rrt.size.width;
+		}
+		else // if rrt.size.height < rrt.size.width
+		{
+			max_y = rrt_y + rrt.size.width;
+			max_x = rrt_x + rrt.size.height;
+		}
+		int cols = src_eqa.cols;
+
+		for (size_t y = rrt_y; y < max_y; y++)
+		{
+			int sum = 0;
+			for (size_t x = rrt_x; x < max_x; x++)
 			{
 				// Calculate index of OpenCV Mat via: (row + x) * cols + (col + y)
-				int index = h * rrt.size.width + w;
-				if (pData[index] > 140)
+				int idx = y * cols + x;
+				sum += pEqData[idx];
+			}
+			sRow.push_back(sum);
+		}
+		sumOfRows.push_back(sRow);
+		int a = 0;
+	}
+
+	bool flag = 0;
+	int target_idx = 0;
+	int prev_row = 0;
+	int cur_row = 0;
+	int outer_size = sumOfRows.size(), inner_size;
+	int target_diff = 0;
+	vector<int> target;
+	for (int out_idx = 0; out_idx < outer_size; out_idx++)
+	{
+		inner_size = sumOfRows.at(out_idx).size();
+		for (int in_idx = 1; in_idx < inner_size; in_idx++)
+		{
+			int prev = in_idx - 1;
+			if ((prev) <= inner_size)
+			{
+				int a = 0;
+				int diff = abs((sumOfRows.at(out_idx).at(in_idx) - sumOfRows.at(out_idx).at(prev)));
+				if (target_diff < diff)
 				{
-					flag = 1;
-					line(src_gray, Point(rrt_x, h), Point(rrt_x + rrt.size.width, h), 255);
-					int a = 0;
-					break;
+					target_diff = diff;
+					target_idx = in_idx;
 				}
 			}
-			if (flag == 1) { break; }
 		}
+		target.push_back(target_idx);
+		target_diff = 0;
+		target_idx = 0;
 	}
 
 	return 1;
