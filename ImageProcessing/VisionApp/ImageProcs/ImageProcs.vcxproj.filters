@@ -93,6 +93,18 @@
     <ClCompile Include="21.ISP_Ampoules_ex.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="24.ISP_Template_Matching_Willie.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="22.ISP_Template_Matching_String.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="23.ISP_Template_Matching_Img.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="25.ISP_Solar_Cell.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Gugudan.h">
