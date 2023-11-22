@@ -19,90 +19,111 @@
     <Filter Include="ISP">
       <UniqueIdentifier>{047a2ee4-66a0-4f59-9603-865cf3b15023}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\01_Basics">
+      <UniqueIdentifier>{015d0932-5c2d-467b-bd1c-58c902bf406f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02_Colors">
+      <UniqueIdentifier>{18117926-c8f5-4d18-bba9-0a661cc2fac9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03_Filters">
+      <UniqueIdentifier>{50c781b3-5e43-4662-b263-bbf9c6ae98f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04_Contours">
+      <UniqueIdentifier>{29f9c15b-e730-4cb3-b224-175a0034870c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05_Morphology">
+      <UniqueIdentifier>{bd454124-853a-4f2b-8eb3-036feb4dcca1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\06_TemplateMatching">
+      <UniqueIdentifier>{45cd39a4-8715-43f1-8959-4d358d3b9b84}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ImageProcs.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="01.C++Basic.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="02.C++Basic.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="03.C++Gugudan.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Gugudan.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="04.ISP_basic.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="05.ISP_Basic_Alt.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="ISP.cpp">
       <Filter>ISP</Filter>
     </ClCompile>
-    <ClCompile Include="08.ISP_HistoEq.cpp">
+    <ClCompile Include="25.ISP_Solar_Cell.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="01.C++Basic.cpp">
+      <Filter>소스 파일\01_Basics</Filter>
+    </ClCompile>
+    <ClCompile Include="02.C++Basic.cpp">
+      <Filter>소스 파일\01_Basics</Filter>
+    </ClCompile>
+    <ClCompile Include="03.C++Gugudan.cpp">
+      <Filter>소스 파일\01_Basics</Filter>
+    </ClCompile>
+    <ClCompile Include="04.ISP_basic.cpp">
+      <Filter>소스 파일\01_Basics</Filter>
+    </ClCompile>
+    <ClCompile Include="05.ISP_Basic_Alt.cpp">
+      <Filter>소스 파일\01_Basics</Filter>
     </ClCompile>
     <ClCompile Include="06.ISP_Colorspace.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\02_Colors</Filter>
     </ClCompile>
     <ClCompile Include="07.ISP_Color_HSV.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\02_Colors</Filter>
     </ClCompile>
     <ClCompile Include="09.ISP_GammaCorrection.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\02_Colors</Filter>
+    </ClCompile>
+    <ClCompile Include="08.ISP_HistoEq.cpp">
+      <Filter>소스 파일\02_Colors</Filter>
     </ClCompile>
     <ClCompile Include="10.ISP_Filter_1.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\03_Filters</Filter>
     </ClCompile>
     <ClCompile Include="11.ISP_Filter_2.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\03_Filters</Filter>
     </ClCompile>
     <ClCompile Include="12.ISP_Filter_Low-Pass.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\03_Filters</Filter>
     </ClCompile>
     <ClCompile Include="13.ISP_Filter_Sobel.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\03_Filters</Filter>
     </ClCompile>
     <ClCompile Include="14.ISP_Filter_Sobel_Alt.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\03_Filters</Filter>
     </ClCompile>
     <ClCompile Include="15.ISP_Filter_Gaussian.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\03_Filters</Filter>
     </ClCompile>
     <ClCompile Include="16.ISP_ShapeInfo.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\04_Contours</Filter>
     </ClCompile>
     <ClCompile Include="17.ISP_Contours.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\04_Contours</Filter>
     </ClCompile>
     <ClCompile Include="18.ISP_Morphology.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\05_Morphology</Filter>
     </ClCompile>
     <ClCompile Include="19.ISP_Morphology_Image.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\05_Morphology</Filter>
     </ClCompile>
     <ClCompile Include="20.ISP_Brake_Disk_exercise.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\05_Morphology</Filter>
     </ClCompile>
     <ClCompile Include="21.ISP_Ampoules_ex.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="24.ISP_Template_Matching_Willie.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\06_TemplateMatching</Filter>
     </ClCompile>
     <ClCompile Include="22.ISP_Template_Matching_String.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\06_TemplateMatching</Filter>
     </ClCompile>
     <ClCompile Include="23.ISP_Template_Matching_Img.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\06_TemplateMatching</Filter>
     </ClCompile>
-    <ClCompile Include="25.ISP_Solar_Cell.cpp">
+    <ClCompile Include="24.ISP_Template_Matching_Willie.cpp">
+      <Filter>소스 파일\06_TemplateMatching</Filter>
+    </ClCompile>
+    <ClCompile Include="26.ISP_TemplateMatching_basic.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
