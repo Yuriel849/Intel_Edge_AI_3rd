@@ -1,5 +1,6 @@
 #include "Common.h"
 
+// Identical to function getROIs(const Mat& search_img, const Mat& ptrn_img, vector<Rect>& rois) in "23.ISP_Template_Matching_Img.cpp"
 void MatchingMethod(const Mat& serch_img, const Mat& ptrn_img, const double& thres, vector<Rect>& rois)
 {
 	/*

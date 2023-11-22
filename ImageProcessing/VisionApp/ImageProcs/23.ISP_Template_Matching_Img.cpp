@@ -1,27 +1,34 @@
 #include "Common.h"
 
+// Compare the x-values of two Points
 bool compare_point(Point lhs, Point rhs) { return lhs.x < rhs.x; }
 
-void getROIs(const Mat& serch_img, const Mat& ptrn_img, vector<Rect>& rois)
+/* Get Regions of Interest (ROIs)
+ *	parameter:search_img : the image to be searched
+ *  parameter:ptrn_img  : the template image to be searched for
+ *  parameter:rois		: vector of rectangles (Rect) denoting the ROIs
+ */
+void getROIs(const Mat& search_img, const Mat& ptrn_img, vector<Rect>& rois)
 {
-	uchar* pSearch = serch_img.data;
-	int search_w = serch_img.cols;
-	int search_h = serch_img.rows;
+	uchar* pSearch = search_img.data;
+	int search_w = search_img.cols;
+	int search_h = search_img.rows;
 	uchar* pPtrn = ptrn_img.data;
 	int ptrn_w = ptrn_img.cols;
 	int ptrn_h = ptrn_img.rows;
 
-	Mat tm_img = Mat::zeros(Size(search_w - ptrn_w + 1, search_h - ptrn_h + 1), CV_32FC1);
-	for (size_t row = 0; row < search_h - ptrn_h + 1; row++)
+	Mat tm_img = Mat::zeros(Size(search_w - ptrn_w + 1, search_h - ptrn_h + 1), CV_32FC1); // Zero matrix for template matching
+	for (size_t row = 0; row < search_h - ptrn_h + 1; row++) // For each row of search_img
 	{
-		for (size_t col = 0; col < search_w - ptrn_w + 1; col++)
+		for (size_t col = 0; col < search_w - ptrn_w + 1; col++) // For each column of each row of search_img
 		{
-			double TM_SQDIFF = 0.0;
-			double TM_SQDIFF_NORMED = 0.0;
-			for (size_t prow = 0; prow < ptrn_h; prow++)
+			double TM_SQDIFF = 0.0;		   // Square difference
+			double TM_SQDIFF_NORMED = 0.0; // Normalized square difference
+			for (size_t prow = 0; prow < ptrn_h; prow++) // For each row of ptrn_img
 			{
-				for (size_t pcol = 0; pcol < ptrn_w; pcol++)
+				for (size_t pcol = 0; pcol < ptrn_w; pcol++) // For each column of each row of ptrn_img
 				{
+					// Check difference between each element of search_img with each element of ptrn_img; if identical images, difference will be zero
 					int search_index = (row + prow) * search_w + (col + pcol);
 					int ptrn_index = prow * ptrn_w + pcol;
 
@@ -34,6 +41,7 @@ void getROIs(const Mat& serch_img, const Mat& ptrn_img, vector<Rect>& rois)
 			{
 				for (size_t pcol = 0; pcol < ptrn_w; pcol++)
 				{
+					// Calculate square of values of each element of search_img and ptrn_img, to use in normalizing the square difference (TM_SQDIFF_NORMED)
 					int search_index = (row + prow) * search_w + (col + pcol);
 					int ptrn_index = prow * ptrn_w + pcol;
 					searchSQ += pSearch[search_index] * pSearch[search_index];
@@ -41,10 +49,12 @@ void getROIs(const Mat& serch_img, const Mat& ptrn_img, vector<Rect>& rois)
 				}
 			}
 
+			// If square difference is 0, means the image here is a perfect match for "ptrn_img"
 			//matching_img.at<double>(row, col) = TM_SQDIFF;
 			//if (TM_SQDIFF == 0)
 			//	ptFind.push_back(Point(col, row));
 
+			// Alternative to above: Use TM_SQDIFF_NORMED instead of TM_SQDIFF
 			if (ptrnSQ == 0) ptrnSQ = 1;
 			TM_SQDIFF_NORMED = TM_SQDIFF / sqrt(ptrnSQ * searchSQ);
 			tm_img.at<float>(row, col) = TM_SQDIFF_NORMED;
@@ -74,6 +84,10 @@ void getROIs(const Mat& serch_img, const Mat& ptrn_img, vector<Rect>& rois)
 
 }
 
+/* Get Regions of Interest (ROIs)
+ *	parameter:img  : the image to be searched
+ *  parameter:rois : vector of rectangles (Rect) denoting the ROIs
+ */
 void getROIs(const Mat& img, vector<Rect>& rois)
 {
 	Mat src_draw;
@@ -114,7 +128,6 @@ void getROIs(const Mat& img, vector<Rect>& rois)
 		Scalar color = Scalar(rng.uniform(0, 256), rng.uniform(0, 256), rng.uniform(0, 256));
 		drawContours(drawing, contours, (int)i, color, CV_FILLED);
 	}
-
 
 	//calc : get points of CoG
 	vector<Point> objs_center;
@@ -184,16 +197,12 @@ void getROIs(const Mat& img, vector<Rect>& rois)
 		//display
 		cv::rectangle(src_draw, rt, CV_RGB(255, 0, 0), 1);
 	}
-
-
-
 }
+
 int main()
 {
 	if (false)
 	{
-
-
 		std::vector<std::string> students = {
 	"Student1", "Student2", "Student3", "Student4", "Student5",
 	"Student6", "Student7", "Student8", "Student9", "Student10",
@@ -216,7 +225,7 @@ int main()
 		return 1;
 	}
 
-	if (false)//진완's algorithm~~~
+	if (false)
 	{
 
 		{
@@ -383,12 +392,6 @@ int main()
 		size_t height = src_gray.rows;
 
 
-		//
-		// 
-		// 우선이의 생각
-		//
-		//
-
 		//기준선
 		int spec_min_y = 80;
 		int spec_max_y = 130;
@@ -471,8 +474,6 @@ int main()
 		{
 			int detected_Y_line = 0;//image full size Y
 
-
-
 			Mat subImg = src_gray_Eq(vROIs[k]).clone();//image local size
 			//subImg size ... 0,0, w, h
 
@@ -502,7 +503,6 @@ int main()
 				//}
 			}
 
-
 			//1차 미분 값을 이용한 큰 변화랑 위치(index) 구하기
 			vector<int> grads;
 			for (size_t i = 1; i < accumulated_horizontal.size(); i++)//
@@ -526,15 +526,8 @@ int main()
 				}
 			}
 
-
 			//full(global)  =  local   +  full(global)
 			detected_Y_line = max_index + vROIs[k].y;
-
-
-
-
-
-
 
 			Scalar judge_color(0, 255, 0);
 			Scalar judge_color_OK(0, 255, 0);
@@ -558,11 +551,8 @@ int main()
 			putText(src_draw, msg, Point(vROIs[k].x, vROIs[k].y), FONT_HERSHEY_SIMPLEX, 0.8, judge_color, 1, 8);
 		}
 
-
 		int a = 0;
 	}
-
-
 	//line(src_draw, Point(0, result_line), Point(639, result_line), Scalar(255, 165, 0), 1);
 
 	return 1;
