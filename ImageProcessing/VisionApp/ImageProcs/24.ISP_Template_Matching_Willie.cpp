@@ -1,6 +1,5 @@
 #include "Common.h"
 
-
 void MatchingMethod(const Mat& serch_img, const Mat& ptrn_img, const double& thres, vector<Rect>& rois)
 {
 	/*
@@ -16,6 +15,7 @@ void MatchingMethod(const Mat& serch_img, const Mat& ptrn_img, const double& thr
 	{
 		for (size_t col = 0; col < search_w - ptrn_w + 1; col++)
 		{
+			// Below code is executed at every pixel in "serch_img"
 			double TM_SQDIFF = 0.0;
 			double TM_SQDIFF_NORMED = 0.0;
 			for (size_t prow = 0; prow < ptrn_h; prow++)
@@ -25,6 +25,7 @@ void MatchingMethod(const Mat& serch_img, const Mat& ptrn_img, const double& thr
 					int search_index = (row + prow) * search_w + (col + pcol);
 					int ptrn_index = prow * ptrn_w + pcol;
 
+					// Calculate square difference
 					double diff = pSearch[search_index] - pPtrn[ptrn_index];
 					TM_SQDIFF += (diff * diff);
 				}
@@ -34,6 +35,7 @@ void MatchingMethod(const Mat& serch_img, const Mat& ptrn_img, const double& thr
 			{
 				for (size_t pcol = 0; pcol < ptrn_w; pcol++)
 				{
+					// Calculate sum of square of "serch_img" and "ptrn_img" for use when normalizing
 					int search_index = (row + prow) * search_w + (col + pcol);
 					int ptrn_index = prow * ptrn_w + pcol;
 					searchSQ += pSearch[search_index] * pSearch[search_index];
@@ -41,10 +43,12 @@ void MatchingMethod(const Mat& serch_img, const Mat& ptrn_img, const double& thr
 				}
 			}
 
-			//matching_img.at<double>(row, col) = TM_SQDIFF;
+			// If square difference is 0, means the image here is a perfect match for "ptrn_img"
+			//result.at<double>(row, col) = TM_SQDIFF;
 			//if (TM_SQDIFF == 0)
 			//	ptFind.push_back(Point(col, row));
 
+			// Alternative to above: Use TM_SQDIFF_NORMED instead of TM_SQDIFF
 			if (ptrnSQ == 0) ptrnSQ = 1;
 			TM_SQDIFF_NORMED = TM_SQDIFF / sqrt(ptrnSQ * searchSQ);
 			result.at<float>(row, col) = TM_SQDIFF_NORMED;
@@ -58,7 +62,6 @@ void MatchingMethod(const Mat& serch_img, const Mat& ptrn_img, const double& thr
 	int match_method = TM_CCORR_NORMED;
 	matchTemplate(serch_img, ptrn_img, result, match_method);
 	normalize(result, result, 0, 1, NORM_MINMAX, -1, Mat());
-
 
 	double minVal; double maxVal; Point minLoc; Point maxLoc;
 	Point matchLoc;
@@ -77,7 +80,6 @@ void MatchingMethod(const Mat& serch_img, const Mat& ptrn_img, const double& thr
 		}
 
 		rois.push_back(Rect(matchLoc.x, matchLoc.y, ptrn_img.cols, ptrn_img.rows));
-
 	}
 	else
 	{
@@ -100,12 +102,7 @@ void MatchingMethod(const Mat& serch_img, const Mat& ptrn_img, const double& thr
 			rois.push_back(Rect(rrt.boundingRect().tl().x, rrt.boundingRect().tl().y, ptrn_img.cols, ptrn_img.rows));
 		}
 	}
-
-
-
-
 }
-
 
 void main()
 {
@@ -120,7 +117,6 @@ void main()
 	vector<Rect> finds;
 	MatchingMethod(src_gray_search, src_gray_ptrn, thres, finds);
 
-
 	for (size_t k = 0; k < finds.size(); k++)
 	{
 		cv::rectangle(src_draw, finds[k], CV_RGB(255, 0, 0), 1);
@@ -129,7 +125,6 @@ void main()
 		cv::drawMarker(src_draw, finds[k].tl(), CV_RGB(255, 0, 0), MarkerTypes::MARKER_CROSS);
 		msg = to_string(k + 1);
 		putText(src_draw, msg, finds[k].tl(), FONT_HERSHEY_SIMPLEX, 0.5, CV_RGB(10, 0, 10), 1, 8);
-
 	}
 	int a = 0;
 }
