@@ -126,6 +126,12 @@
     <ClCompile Include="26.ISP_TemplateMatching_basic.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="27.ISP_Ampoules_alt.cpp">
+      <Filter>소스 파일\06_TemplateMatching</Filter>
+    </ClCompile>
+    <ClCompile Include="28.ISP_Solar_Cell_Alt.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Gugudan.h">

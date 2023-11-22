@@ -67,5 +67,7 @@ int main()
 		}
 	}
 	src_Diff = src - src_New;
+
+
 	return 1;
 }
