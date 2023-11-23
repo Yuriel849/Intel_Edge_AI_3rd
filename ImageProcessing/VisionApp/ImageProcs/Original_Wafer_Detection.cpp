@@ -51,13 +51,17 @@ int main()
 	RNG rng(12345);
 	vector<vector<Point>> contours; //각 꼭지점 갯수 벡터배열에 저장
 	vector<Vec4i> hierarchy;
-	findContours(src_bin, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+	findContours(src_opening, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
 	Mat drawing = src.clone(); // Mat::zeros(src_color.size(), CV_3.8UC3);
 	cvtColor(drawing, drawing, COLOR_GRAY2RGB);
 	for (size_t i = 0; i < contours.size(); i++) //꼭지점 사이즈만큼 i 반복
 	{
 		Scalar color = Scalar(rng.uniform(0, 256), rng.uniform(0, 256), rng.uniform(0, 256));
-		drawContours(drawing, contours, (int)i, color, 1, LINE_8, hierarchy, 0);
+		drawContours(drawing, contours, (int)i, color, 2, LINE_8, hierarchy, 0);
+
+		RotatedRect rrt = minAreaRect(contours[i]);
+		cv::rectangle(drawing, rrt.boundingRect2f().tl(), rrt.boundingRect2f().br(), CV_RGB(0, 255, 255), 4, LINE_8);
+
 	}
 
 	// Identify squares with bounding rectangle
