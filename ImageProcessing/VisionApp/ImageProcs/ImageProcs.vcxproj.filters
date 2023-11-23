@@ -37,6 +37,12 @@
     <Filter Include="소스 파일\06_TemplateMatching">
       <UniqueIdentifier>{45cd39a4-8715-43f1-8959-4d358d3b9b84}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Exercises">
+      <UniqueIdentifier>{8c4afa9a-f60d-4019-b802-ecd06cfa0c82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\WaferDetection">
+      <UniqueIdentifier>{1fa5aed8-e5d6-4ffc-a8eb-881c7f636c89}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ImageProcs.cpp">
@@ -111,9 +117,6 @@
     <ClCompile Include="20.ISP_Brake_Disk_exercise.cpp">
       <Filter>소스 파일\05_Morphology</Filter>
     </ClCompile>
-    <ClCompile Include="21.ISP_Ampoules_ex.cpp">
-      <Filter>소스 파일\06_TemplateMatching</Filter>
-    </ClCompile>
     <ClCompile Include="22.ISP_Template_Matching_String.cpp">
       <Filter>소스 파일\06_TemplateMatching</Filter>
     </ClCompile>
@@ -123,14 +126,20 @@
     <ClCompile Include="24.ISP_Template_Matching_Willie.cpp">
       <Filter>소스 파일\06_TemplateMatching</Filter>
     </ClCompile>
-    <ClCompile Include="26.ISP_TemplateMatching_basic.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="21.ISP_Ampoules_ex.cpp">
+      <Filter>소스 파일\Exercises</Filter>
     </ClCompile>
     <ClCompile Include="27.ISP_Ampoules_alt.cpp">
+      <Filter>소스 파일\Exercises</Filter>
+    </ClCompile>
+    <ClCompile Include="26.ISP_TemplateMatching_basic.cpp">
       <Filter>소스 파일\06_TemplateMatching</Filter>
     </ClCompile>
     <ClCompile Include="28.ISP_Solar_Cell_Alt.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Exercises</Filter>
+    </ClCompile>
+    <ClCompile Include="OriginalWaferDetection.cpp">
+      <Filter>소스 파일\WaferDetection</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
