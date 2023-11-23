@@ -138,7 +138,10 @@
     <ClCompile Include="28.ISP_Solar_Cell_Alt.cpp">
       <Filter>소스 파일\Exercises</Filter>
     </ClCompile>
-    <ClCompile Include="OriginalWaferDetection.cpp">
+    <ClCompile Include="Original_Wafer_Detection.cpp">
+      <Filter>소스 파일\WaferDetection</Filter>
+    </ClCompile>
+    <ClCompile Include="Wafer_Template_Matching.cpp">
       <Filter>소스 파일\WaferDetection</Filter>
     </ClCompile>
   </ItemGroup>
