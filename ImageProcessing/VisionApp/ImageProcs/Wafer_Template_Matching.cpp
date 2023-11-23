@@ -113,6 +113,7 @@ void main()
 	cv::Mat src_draw = cv::imread(filePath_Search, cv::ImreadModes::IMREAD_ANYCOLOR);
 	cv::Mat src_gray_search = cv::imread(filePath_Search, cv::ImreadModes::IMREAD_GRAYSCALE);
 	cv::Mat src_gray_templt = cv::imread(filePath_Templt, cv::ImreadModes::IMREAD_GRAYSCALE);
+	cv::Mat src_filled = src_draw.clone();
 
 	double thres = 0.99;
 	vector<Rect> finds;
@@ -125,7 +126,9 @@ void main()
 		string msg;
 		cv::drawMarker(src_draw, finds[k].tl(), CV_RGB(255, 0, 0), MarkerTypes::MARKER_CROSS);
 		msg = to_string(k + 1);
-		putText(src_draw, msg, finds[k].tl(), FONT_HERSHEY_SIMPLEX, 0.5, CV_RGB(10, 0, 10), 1, 8);
+		putText(src_draw, msg, finds[k].tl(), FONT_HERSHEY_SIMPLEX, 0.5, CV_RGB(0, 255, 255), 1, 8);
+
+		cv::rectangle(src_filled, finds[k], CV_RGB(0, 205, 255), CV_FILLED);
 	}
 	int a = 0;
 }
