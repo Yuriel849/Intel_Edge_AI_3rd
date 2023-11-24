@@ -53,7 +53,7 @@ void main()
 {
 	bool defectFlag = false;
 
-	std::string filePath_Search = "./res/img/location_black.png";
+	std::string filePath_Search = "./res/img/donut_black.png";
 	std::string filePath_Templt = "./res/img/wafer_template.png";
 
 	cv::Mat src_draw = cv::imread(filePath_Search, cv::ImreadModes::IMREAD_ANYCOLOR);
@@ -76,12 +76,9 @@ void main()
 
 		cv::rectangle(src_filled, finds[k], CV_RGB(0, 205, 255), CV_FILLED);
 
-
-
+		// Check this wafer for defects
 		cv::Mat src_templt = src_gray_templt.clone();
 		cv::Mat src_wafer = src_gray_search(finds[k]).clone();
-		cv::Mat src_tBin = cv::Mat::zeros(src_templt.size(), CV_8UC1);	// Empty matrix for binarization
-		cv::Mat src_wBin = cv::Mat::zeros(src_wafer.size(), CV_8UC1);	// Empty matrix for binarization
 
 		// For wafer : Mask y-axis 28 - 112
 		cv::Mat mask = cv::Mat::zeros(src_wafer.size(), CV_8UC1);
@@ -110,6 +107,8 @@ void main()
 		cv::Mat src_tMasked = src_templt & mask;
 
 		// Binarization
+		cv::Mat src_tBin = cv::Mat::zeros(src_templt.size(), CV_8UC1);
+		cv::Mat src_wBin = cv::Mat::zeros(src_wafer.size(), CV_8UC1);
 		thres = 125;
 		cv::threshold(src_wMasked, src_wBin, thres, 255, ThresholdTypes::THRESH_BINARY);
 		cv::threshold(src_tMasked, src_tBin, thres, 255, ThresholdTypes::THRESH_BINARY);
@@ -118,20 +117,13 @@ void main()
 		int shape = MorphShapes::MORPH_ELLIPSE;
 		cv::Size sz = Size(2 * kernelSz + 1, 2 * kernelSz + 1);
 		Mat SE = cv::getStructuringElement(shape, sz);
-
-		//Ä§½Ä erode
-		cv::Mat src_wErode;
-		cv::Mat src_tErode;
+		cv::Mat src_wErode, src_tErode;
 		cv::erode(src_wBin, src_wErode, SE);
 		cv::erode(src_tBin, src_tErode, SE);
-		Mat diff_wErode = src_wBin - src_wErode;
-		Mat diff_tErode = src_tBin - src_tErode;
 
 		// Find contours
-		vector<vector<Point>> wContours;
-		vector<vector<Point>> tContours;
-		vector<Vec4i> wHierarchy;
-		vector<Vec4i> tHierarchy;
+		vector<vector<Point>> wContours, tContours;
+		vector<Vec4i> wHierarchy, tHierarchy;
 		findContours(src_wErode, wContours, wHierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
 		findContours(src_tErode, tContours, tHierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
 		Mat drawing_wafer = src_wafer.clone();
@@ -151,7 +143,7 @@ void main()
 				cv::rectangle(drawing_wafer, wR2f.tl(), wR2f.br(), 0, 1, LINE_8);
 				cv::rectangle(drawing_templt, tR2f.tl(), tR2f.br(), 0, 1, LINE_8);
 
-				if (abs(tR2f.area() - wR2f.area()) > 100)
+				if (abs(tR2f.area() - wR2f.area()) > 30)
 				{
 					defectFlag = true;
 					break;
@@ -164,7 +156,7 @@ void main()
 			cv::rectangle(src_filled, finds[k], CV_RGB(255, 0, 100), CV_FILLED);
 			defectFlag = false;
 		}
-
+		int b = 0;
 	}
 	int a = 0;
 }
