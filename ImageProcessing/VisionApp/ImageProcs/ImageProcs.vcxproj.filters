@@ -43,6 +43,9 @@
     <Filter Include="소스 파일\WaferDetection">
       <UniqueIdentifier>{1fa5aed8-e5d6-4ffc-a8eb-881c7f636c89}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\[Project] Wafer Defect Detection">
+      <UniqueIdentifier>{bad1c57b-ed0e-4264-be4d-d4e7ecd3a518}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ImageProcs.cpp">
@@ -143,6 +146,12 @@
     </ClCompile>
     <ClCompile Include="Wafer_Template_Matching.cpp">
       <Filter>소스 파일\WaferDetection</Filter>
+    </ClCompile>
+    <ClCompile Include="Project_Wafer_Detection.cpp">
+      <Filter>소스 파일\[Project] Wafer Defect Detection</Filter>
+    </ClCompile>
+    <ClCompile Include="Project_Wafer_Defect_Detection.cpp">
+      <Filter>소스 파일\[Project] Wafer Defect Detection</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
