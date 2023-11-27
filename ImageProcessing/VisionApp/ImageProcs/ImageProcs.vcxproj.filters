@@ -147,11 +147,8 @@
     <ClCompile Include="Wafer_Template_Matching.cpp">
       <Filter>소스 파일\WaferDetection</Filter>
     </ClCompile>
-    <ClCompile Include="Project_Wafer_Detection.cpp">
-      <Filter>소스 파일\[Project] Wafer Defect Detection</Filter>
-    </ClCompile>
     <ClCompile Include="Project_Wafer_Defect_Detection.cpp">
-      <Filter>소스 파일\[Project] Wafer Defect Detection</Filter>
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
