@@ -1,11 +1,13 @@
 #include "Common.h"
 
-std::string Template = "./res/img/wafer_template.png";
-std::string Flawless = "./res/img/final_real_wafer.png";
-std::string Donut_Black = "./res/img/donut_black.png";
-std::string Scratch_Black = "./res/img/scratch_black.png";
-std::string Location_Black = "./res/img/location_black.png";
-std::string Edge_Location_Black = "./res/img/edge_location_black.png";
+const string TEMPLATE = "./res/img/wafer_template.png";
+const string FLAWLESS = "./res/img/final_real_wafer.png";
+const string DONUT_BLACK = "./res/img/donut_black.png";
+const string SCRATCH_BLACK = "./res/img/scratch_black.png";
+const string LOCATION_BLACK = "./res/img/location_black.png";
+const string EDGE_LOCATION_BLACK = "./res/img/edge_location_black.png";
+
+Mat& mask(int boundary1, int boundary2, Mat& masked, Mat& target);
 
 // Identical to function getROIs(const Mat& search_img, const Mat& ptrn_img, vector<Rect>& rois) in "23.ISP_Template_Matching_Img.cpp"
 void MatchingMethod(const Mat& serch_img, const Mat& ptrn_img, const double& thres, vector<Rect>& rois)
@@ -59,60 +61,58 @@ void MatchingMethod(const Mat& serch_img, const Mat& ptrn_img, const double& thr
 void main()
 {
 	// -- Scratch detection
-	cv::Mat src_draw = cv::imread(Donut_Black, cv::ImreadModes::IMREAD_ANYCOLOR);	// 지금 읽을 이미지 
-	cv::Mat src_flawless = cv::imread(Flawless, cv::ImreadModes::IMREAD_GRAYSCALE);
-	cv::Mat src_gray_search = cv::imread(Donut_Black, cv::ImreadModes::IMREAD_GRAYSCALE);
-	cv::Mat src_gray_templt = cv::imread(Template, cv::ImreadModes::IMREAD_GRAYSCALE);
-	cv::Mat src_filled_flawless = src_draw.clone();
+	//cv::Mat src_draw = cv::imread(Donut_Black, cv::ImreadModes::IMREAD_ANYCOLOR);	// 지금 읽을 이미지 
+	//cv::Mat src_flawless = cv::imread(Flawless, cv::ImreadModes::IMREAD_GRAYSCALE);
+	//cv::Mat src_gray_search = cv::imread(Donut_Black, cv::ImreadModes::IMREAD_GRAYSCALE);
+	//cv::Mat src_gray_templt = cv::imread(Template, cv::ImreadModes::IMREAD_GRAYSCALE);
+	//cv::Mat src_filled_flawless = src_draw.clone();
 
-	double thres = 0.999;
-	vector<Rect> finds;
+	//double thres = 0.999;
+	//vector<Rect> finds;
 
-	MatchingMethod(src_flawless, src_gray_templt, thres, finds);
+	//MatchingMethod(src_flawless, src_gray_templt, thres, finds);
 
-	RNG rng(12345);
-	vector<vector<Point>> contours;
-	vector<Vec4i> hierarchy;
-	Scalar judge_color(0, 255, 0);
-	Scalar judge_color_NG(0, 0, 255);
+	//RNG rng(12345);
+	//vector<vector<Point>> contours;
+	//vector<Vec4i> hierarchy;
+	//Scalar judge_color(0, 255, 0);
+	//Scalar judge_color_NG(0, 0, 255);
 
-	for (size_t i = 0; i < finds.size(); i++)
-	{
-		Scalar color;
-		Mat subImg = src_gray_search(finds[i]).clone();
+	//for (size_t i = 0; i < finds.size(); i++)
+	//{
+	//	Scalar color;
+	//	Mat subImg = src_gray_search(finds[i]).clone();
 
-		double threshold_bin = 210;
-		Mat binScratch;
-		cv::threshold(subImg, binScratch, threshold_bin, 255, ThresholdTypes::THRESH_BINARY);
+	//	double threshold_bin = 210;
+	//	Mat binScratch;
+	//	cv::threshold(subImg, binScratch, threshold_bin, 255, ThresholdTypes::THRESH_BINARY);
 
-		findContours(binScratch, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE);
+	//	findContours(binScratch, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE);
 
-		if (contours.empty())
-		{
-			color = judge_color;
-		}
+	//	if (contours.empty())
+	//	{
+	//		color = judge_color;
+	//	}
 
-		else
-		{
-			if (contours[0].size() > 0)
-			{
-				color = judge_color_NG;
-			}
-		}
+	//	else
+	//	{
+	//		if (contours[0].size() > 0)
+	//		{
+	//			color = judge_color_NG;
+	//		}
+	//	}
 
-		cv::rectangle(src_draw, finds[i], CV_RGB(255, 0, 0), 2);
-		string msg;
-		cv::drawMarker(src_draw, finds[i].tl(), CV_RGB(255, 0, 0), MarkerTypes::MARKER_CROSS);
-		msg = to_string(i + 1);
-		putText(src_draw, msg, finds[i].tl(), FONT_HERSHEY_SIMPLEX, 0.5, CV_RGB(0, 255, 255), 2, 8);
-		cv::rectangle(src_filled_flawless, finds[i], color, CV_FILLED);
+	//	cv::rectangle(src_draw, finds[i], CV_RGB(255, 0, 0), 2);
+	//	string msg;
+	//	cv::drawMarker(src_draw, finds[i].tl(), CV_RGB(255, 0, 0), MarkerTypes::MARKER_CROSS);
+	//	msg = to_string(i + 1);
+	//	putText(src_draw, msg, finds[i].tl(), FONT_HERSHEY_SIMPLEX, 0.5, CV_RGB(0, 255, 255), 2, 8);
+	//	cv::rectangle(src_filled_flawless, finds[i], color, CV_FILLED);
 
-		int z = 0;
-	}
+	//	int z = 0;
+	//}
 
-
-
-	int a = 0;
+	//int a = 0;
 
 	// -- Crack detection
 
@@ -188,115 +188,91 @@ void main()
 
 	// -- Chip invasion detection
 
-	//bool defectFlag = false;
+	bool defectFlag = false;
 
-	//cv::Mat src_gray_search = cv::imread(search_path, cv::ImreadModes::IMREAD_GRAYSCALE);
-	//cv::Mat src_gray_templt = cv::imread(templt_path, cv::ImreadModes::IMREAD_GRAYSCALE);
+	cv::Mat src_gray_search = cv::imread(DONUT_BLACK, cv::ImreadModes::IMREAD_GRAYSCALE);
+	cv::Mat src_gray_templt = cv::imread(TEMPLATE, cv::ImreadModes::IMREAD_GRAYSCALE);
 
-	//double thres = 0.99;
-	//vector<Rect> finds;
-	//MatchingMethod(src_gray_search, src_gray_templt, thres, finds);
+	double thres = 0.99;
+	vector<Rect> finds;
+	MatchingMethod(src_gray_search, src_gray_templt, thres, finds);
 
+	
 
-	//cv::Mat src_draw = cv::imread(search_path, cv::ImreadModes::IMREAD_ANYCOLOR);
-	//cv::Mat src_gray_search = cv::imread(search_path, cv::ImreadModes::IMREAD_GRAYSCALE);
-	//cv::Mat src_gray_templt = cv::imread(templt_path, cv::ImreadModes::IMREAD_GRAYSCALE);
-	//cv::Mat src_filled = src_draw.clone();
+	cv::Mat src_draw = cv::imread(DONUT_BLACK, cv::ImreadModes::IMREAD_ANYCOLOR);
+	cv::Mat src_filled = src_draw.clone();
 
-	//for (size_t k = 0; k < finds.size(); k++)
-	//{
-	//	cv::rectangle(src_draw, finds[k], CV_RGB(255, 0, 0), 1);
+	for (size_t k = 0; k < finds.size(); k++)
+	{
+		cv::rectangle(src_draw, finds[k], CV_RGB(255, 0, 0), 1);
+		cv::drawMarker(src_draw, finds[k].tl(), CV_RGB(255, 0, 0), MarkerTypes::MARKER_CROSS);
+		string msg = to_string(k + 1);
+		putText(src_draw, msg, finds[k].tl(), FONT_HERSHEY_SIMPLEX, 0.5, CV_RGB(0, 255, 255), 1, 8);
+		cv::rectangle(src_filled, finds[k], CV_RGB(0, 205, 255), CV_FILLED);
 
-	//	string msg;
-	//	cv::drawMarker(src_draw, finds[k].tl(), CV_RGB(255, 0, 0), MarkerTypes::MARKER_CROSS);
-	//	msg = to_string(k + 1);
-	//	putText(src_draw, msg, finds[k].tl(), FONT_HERSHEY_SIMPLEX, 0.5, CV_RGB(0, 255, 255), 1, 8);
+		//---- Check this wafer for chip invasion defects ----//
+		cv::Mat src_templt = src_gray_templt.clone();
+		cv::Mat src_wafer = src_gray_search(finds[k]).clone();
+		cv::Mat src_wMasked = mask(28, 112, src_wMasked, src_wafer); // For wafer : Mask y-axis 28 - 112
+		cv::Mat src_tMasked = mask(24, 106, src_tMasked, src_templt); // For template : Mask y-axis 24 - 106
+		// Binarization
+		cv::Mat src_tBin = cv::Mat::zeros(src_templt.size(), CV_8UC1);
+		cv::Mat src_wBin = cv::Mat::zeros(src_wafer.size(), CV_8UC1);
+		double thres = 125;
+		cv::threshold(src_wMasked, src_wBin, thres, 255, ThresholdTypes::THRESH_BINARY);
+		cv::threshold(src_tMasked, src_tBin, thres, 255, ThresholdTypes::THRESH_BINARY);
+		//Morphology
+		int kernelSz = 1;
+		int shape = MorphShapes::MORPH_ELLIPSE;
+		cv::Size sz = Size(2 * kernelSz + 1, 2 * kernelSz + 1);
+		Mat SE = cv::getStructuringElement(shape, sz);
+		cv::Mat src_wErode, src_tErode;
+		cv::erode(src_wBin, src_wErode, SE);
+		cv::erode(src_tBin, src_tErode, SE);
+		// Find contours
+		vector<vector<Point>> wContours, tContours;
+		vector<Vec4i> wHierarchy, tHierarchy;
+		findContours(src_wErode, wContours, wHierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+		findContours(src_tErode, tContours, tHierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+		Mat drawing_wafer = src_wafer.clone();
+		Mat drawing_templt = src_templt.clone();
+		// Check area of bounding rectangles
+		if (wContours.size() == tContours.size())
+		{
+			for (size_t i = 0; i < wContours.size(); i++)
+			{
+				Rect2f wR2f = minAreaRect(wContours[i]).boundingRect2f();
+				Rect2f tR2f = minAreaRect(tContours[i]).boundingRect2f();
+				// Identify squares with minimum area bounding rectangle
+				cv::rectangle(drawing_wafer, wR2f.tl(), wR2f.br(), 0, 1, LINE_8);
+				cv::rectangle(drawing_templt, tR2f.tl(), tR2f.br(), 0, 1, LINE_8);
+				// If difference in area greater than 30
+				if (abs(tR2f.area() - wR2f.area()) > 30) { defectFlag = true; break; }
+			}
+		}
 
-	//	cv::rectangle(src_filled, finds[k], CV_RGB(0, 205, 255), CV_FILLED);
+		if (defectFlag)
+		{
+			cv::rectangle(src_filled, finds[k], CV_RGB(255, 0, 100), CV_FILLED);
+			defectFlag = false;
+		}
+		int b = 0;
+	}
+	int a = 0;
+}
 
-	//	// Check this wafer for defects
-	//	cv::Mat src_templt = src_gray_templt.clone();
-	//	cv::Mat src_wafer = src_gray_search(finds[k]).clone();
-
-	//	// For wafer : Mask y-axis 28 - 112
-	//	cv::Mat mask = cv::Mat::zeros(src_wafer.size(), CV_8UC1);
-	//	uchar* mData = mask.data;
-	//	for (size_t row = 0; row < src_wafer.rows; row++)
-	//	{
-	//		for (size_t col = 0; col < src_wafer.cols; col++)
-	//		{
-	//			int index = row * src_wafer.cols + col;
-	//			if (!(28 < row && row < 112)) { mData[index] = 255; }
-	//		}
-	//	}
-	//	cv::Mat src_wMasked = src_wafer & mask;
-
-	//	// For template : Mask y-axis 24 - 106
-	//	mask = cv::Mat::zeros(src_templt.size(), CV_8UC1);
-	//	mData = mask.data;
-	//	for (size_t row = 0; row < src_templt.rows; row++)
-	//	{
-	//		for (size_t col = 0; col < src_templt.cols; col++)
-	//		{
-	//			int index = row * src_templt.cols + col;
-	//			if (!(24 < row && row < 106)) { mData[index] = 255; }
-	//		}
-	//	}
-	//	cv::Mat src_tMasked = src_templt & mask;
-
-	//	// Binarization
-	//	cv::Mat src_tBin = cv::Mat::zeros(src_templt.size(), CV_8UC1);
-	//	cv::Mat src_wBin = cv::Mat::zeros(src_wafer.size(), CV_8UC1);
-	//	double thres = 125;
-	//	cv::threshold(src_wMasked, src_wBin, thres, 255, ThresholdTypes::THRESH_BINARY);
-	//	cv::threshold(src_tMasked, src_tBin, thres, 255, ThresholdTypes::THRESH_BINARY);
-
-	//	int kernelSz = 1;
-	//	int shape = MorphShapes::MORPH_ELLIPSE;
-	//	cv::Size sz = Size(2 * kernelSz + 1, 2 * kernelSz + 1);
-	//	Mat SE = cv::getStructuringElement(shape, sz);
-	//	cv::Mat src_wErode, src_tErode;
-	//	cv::erode(src_wBin, src_wErode, SE);
-	//	cv::erode(src_tBin, src_tErode, SE);
-
-	//	// Find contours
-	//	vector<vector<Point>> wContours, tContours;
-	//	vector<Vec4i> wHierarchy, tHierarchy;
-	//	findContours(src_wErode, wContours, wHierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
-	//	findContours(src_tErode, tContours, tHierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
-	//	Mat drawing_wafer = src_wafer.clone();
-	//	Mat drawing_templt = src_templt.clone();
-
-	//	if (wContours.size() == tContours.size())
-	//	{
-	//		for (size_t i = 0; i < wContours.size(); i++)
-	//		{
-	//			//drawContours(drawing, contours, (int)i, 50, 1, LINE_8, hierarchy, 0);
-	//			//drawContours(drawing, contours, (int)i, 50, 1, LINE_8, hierarchy, 0);
-	//			RotatedRect wRrt = minAreaRect(wContours[i]);
-	//			Rect2f wR2f = wRrt.boundingRect2f();
-	//			RotatedRect tRrt = minAreaRect(tContours[i]);
-	//			Rect2f tR2f = tRrt.boundingRect2f();
-	//			// Identify squares with minimum area bounding rectangle
-	//			cv::rectangle(drawing_wafer, wR2f.tl(), wR2f.br(), 0, 1, LINE_8);
-	//			cv::rectangle(drawing_templt, tR2f.tl(), tR2f.br(), 0, 1, LINE_8);
-
-	//			if (abs(tR2f.area() - wR2f.area()) > 30)
-	//			{
-	//				defectFlag = true;
-	//				break;
-	//			}
-	//		}
-	//	}
-
-	//	if (defectFlag)
-	//	{
-	//		cv::rectangle(src_filled, finds[k], CV_RGB(255, 0, 100), CV_FILLED);
-	//		defectFlag = false;
-	//	}
-	//	int b = 0;
-	//}
-	//int a = 0;
-
-
+Mat& mask(int boundaryLow, int boundaryHigh, Mat& masked, Mat& target)
+{
+	cv::Mat mask = cv::Mat::zeros(target.size(), CV_8UC1);
+	uchar* mData = mask.data;
+	for (size_t row = 0; row < target.rows; row++)
+	{
+		for (size_t col = 0; col < target.cols; col++)
+		{
+			int index = row * target.cols + col;
+			if (!(boundaryLow < row && row < boundaryHigh)) { mData[index] = 255; }
+		}
+	}
+	masked = target & mask;
+	return masked;
 }
