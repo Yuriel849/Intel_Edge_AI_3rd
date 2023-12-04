@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="class_calc">
+      <UniqueIdentifier>{613b434f-f83f-4ce3-b97f-63fa4e4268e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="phone">
+      <UniqueIdentifier>{1c61d92b-aa03-4736-ab3d-74058eb463c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="student">
+      <UniqueIdentifier>{6c9ecf1d-a935-4715-ab02-8d1003392ca5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="employee">
+      <UniqueIdentifier>{08867633-4678-401b-b20c-30ef72812794}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shape">
+      <UniqueIdentifier>{88d5d413-0322-4ffe-831e-a60e8084b2c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shape_dll">
+      <UniqueIdentifier>{f29ca926-a49a-4abf-9041-27428d73b38b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="final">
+      <UniqueIdentifier>{8bf16ec4-256c-47a5-92da-5a21061fb3b2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="1.opencv_basic.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="1.c++_basic.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="2.c++_logic.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="2.opencv_exe_threshold.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="3.opencv_exe_findcontour.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="week1_summary_io.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="week1_summary_namespace.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="week1_quiz_calc_using_namesapce.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="3.opencv_DIP_histogram.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="4.c++_memory.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="4.opencv_color_convert.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="5.c++_struct.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="6.c++_class.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Calc.cpp">
+      <Filter>class_calc</Filter>
+    </ClCompile>
+    <ClCompile Include="7.c++_class.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="KPhone.cpp">
+      <Filter>phone</Filter>
+    </ClCompile>
+    <ClCompile Include="8.c++_class_exam_phone.cpp">
+      <Filter>phone</Filter>
+    </ClCompile>
+    <ClCompile Include="8.c++_class_student.cpp">
+      <Filter>student</Filter>
+    </ClCompile>
+    <ClCompile Include="StudentScore_rev1.0.cpp">
+      <Filter>student</Filter>
+    </ClCompile>
+    <ClCompile Include="Employee.cpp">
+      <Filter>employee</Filter>
+    </ClCompile>
+    <ClCompile Include="10.c++_class_derived_exe.cpp">
+      <Filter>employee</Filter>
+    </ClCompile>
+    <ClCompile Include="9.c++_class_student_exe.cpp">
+      <Filter>phone</Filter>
+    </ClCompile>
+    <ClCompile Include="11.c++_class_shape_exe.cpp">
+      <Filter>shape</Filter>
+    </ClCompile>
+    <ClCompile Include="shape.cpp">
+      <Filter>shape</Filter>
+    </ClCompile>
+    <ClCompile Include="circle.cpp">
+      <Filter>shape</Filter>
+    </ClCompile>
+    <ClCompile Include="Polygone.cpp">
+      <Filter>shape</Filter>
+    </ClCompile>
+    <ClCompile Include="Rectangle.cpp">
+      <Filter>shape</Filter>
+    </ClCompile>
+    <ClCompile Include="12.c++_class_shape_dll_exe.cpp">
+      <Filter>shape_dll</Filter>
+    </ClCompile>
+    <ClCompile Include="13.c++_final.cpp">
+      <Filter>final</Filter>
+    </ClCompile>
+    <ClCompile Include="10.xml_RW.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Calc.h">
+      <Filter>class_calc</Filter>
+    </ClInclude>
+    <ClInclude Include="common.h">
+      <Filter>class_calc</Filter>
+    </ClInclude>
+    <ClInclude Include="KPhone.h">
+      <Filter>phone</Filter>
+    </ClInclude>
+    <ClInclude Include="StudentScore_rev1.0.h">
+      <Filter>student</Filter>
+    </ClInclude>
+    <ClInclude Include="Employee.h">
+      <Filter>employee</Filter>
+    </ClInclude>
+    <ClInclude Include="shape.h">
+      <Filter>shape</Filter>
+    </ClInclude>
+    <ClInclude Include="circle.h">
+      <Filter>shape</Filter>
+    </ClInclude>
+    <ClInclude Include="Polygone.h">
+      <Filter>shape</Filter>
+    </ClInclude>
+    <ClInclude Include="Rectangle.h">
+      <Filter>shape</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

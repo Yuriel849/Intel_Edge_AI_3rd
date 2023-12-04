@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- ***************************************************-->
+<!-- AXIOS 3D Services GmbH                             -->
+<!-- Marienstrasse 16                                   -->
+<!-- 26121 Oldenburg                                    -->
+<!-- Germany                                            -->
+<!-- Fon:0441-2174700 / Fax:0441-2174710                -->
+<!-- www.axios3d.de                                     -->
+<!-- ***************************************************-->
+<!-- Calibrationfile Metrology-System                   -->
+<!-- ***************************************************-->
+<metrology_calibration>
+  <format_version>1</format_version>
+  <format_version_minor>1</format_version_minor>
+  <serial_number>333</serial_number>
+  <revision>1.0</revision>
+<set date="2004-02-05" time="11:15:00" temperature="-33.33" humidity="49">
+	<camera name="1">
+		<ior type="1">
+			<projection>
+				<c unit="mm">-12.2</c>
+				<temperature_correction_factor>0.0</temperature_correction_factor>
+			</projection>
+			<distortion>
+				<a1>-0.00463444</a1>
+				<a2>-1.83318e-05</a2>
+				<a3>3.96268e-07</a3>
+				<b1>0.0</b1>
+				<b2>0.0</b2>
+				<c1>0.0</c1>
+				<c2>0.0</c2>
+				<ppx unit="mm">9.62923</ppx>
+				<ppy unit="mm">-5.35508</ppy>
+				<r0 unit="mm">0.0</r0>
+			</distortion>
+			<sensor>
+				<esx unit="mm">0.005</esx>
+				<esy unit="mm">0.005</esy>
+				<ssx unit="pix">3840</ssx>
+				<ssy unit="pix">2168</ssy>
+			</sensor>
+		</ior>
+		<eor>
+			<rotation transpose="1">
+				<!--Luftbilddrehreihenfolge-->
+				<rx unit="rad">0.0</rx>
+				<ry unit="rad">0.0</ry>
+				<rz unit="rad">0.0</rz>
+			</rotation>
+			<translation>
+				<x unit="mm">0.0</x>
+				<y unit="mm">0.0</y>
+				<z unit="mm">0.0</z>
+			</translation>
+		</eor>
+	</camera>
+
+</set>
+<!--#SIGNATURE#654445286-1563614122-111686698-2386461222-->
+</metrology_calibration>
