@@ -81,11 +81,11 @@ static void MX_USART6_UART_Init(void);
 static void MX_TIM10_Init(void);
 static void MX_TIM11_Init(void);
 static void MX_TIM3_Init(void);
-static void MX_I2C1_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_RTC_Init(void);
 static void MX_TIM5_Init(void);
+static void MX_I2C1_Init(void);
 /* USER CODE BEGIN PFP */
 extern void led_main(void);
 extern void pc_command_processing(void);
@@ -104,6 +104,7 @@ extern void get_rtc(void);
 extern void lcd_display_mode_select(void);
 extern void set_time_button_ui(void);
 extern void buzzer_main();
+extern int dotmatrix_main_test(void);
 
 void delay_us(unsigned long us);
 /* USER CODE END PFP */
@@ -197,11 +198,11 @@ int main(void)
   MX_TIM10_Init();
   MX_TIM11_Init();
   MX_TIM3_Init();
-  MX_I2C1_Init();
   MX_TIM4_Init();
   MX_TIM2_Init();
   MX_RTC_Init();
   MX_TIM5_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
   HAL_UART_Receive_IT(&huart3, &rx_data, 1);   // assing to RX INT
   HAL_UART_Receive_IT(&huart6, &bt_rx_data, 1);   // for BT assing to RX INT
@@ -212,16 +213,18 @@ int main(void)
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);   // for SERVO motor PWM control
   HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_4);   // PIEZO Buzzer
 
-  DHT11_Init();
-  i2c_lcd_init();
+//  DHT11_Init();
+//  i2c_lcd_init();
 
   TIM10_10ms_counter=0;
+
+  dotmatrix_main_test();
 
 //  led_main();
 //  DHT11_main();
 //  i2c_lcd_main();
 //  servo_motor_test_main();
-    buzzer_main();
+//    buzzer_main();
 
   /* USER CODE END 2 */
 
@@ -229,14 +232,14 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	DHT11_processing();
- 	pc_command_processing();
- 	bt_command_processing();
- 	ultrasonic_processing();
- 	dcmotor_pwm_control();
- 	get_rtc();
- 	lcd_display_mode_select();
- 	set_time_button_ui();
+//	DHT11_processing();
+// 	pc_command_processing();
+// 	bt_command_processing();
+// 	ultrasonic_processing();
+// 	dcmotor_pwm_control();
+// 	get_rtc();
+// 	lcd_display_mode_select();
+// 	set_time_button_ui();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -840,14 +843,18 @@ static void MX_GPIO_Init(void)
 /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOF_CLK_ENABLE();
-  __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOG_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOE, COL1_Pin|COL2_Pin|COL3_Pin|COL4_Pin
+                          |COL5_Pin|COL6_Pin|COL7_Pin|COL8_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(DHT11_GPIO_Port, DHT11_Pin, GPIO_PIN_RESET);
@@ -859,14 +866,20 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(ULTRASONIC_TRIGGER_GPIO_Port, ULTRASONIC_TRIGGER_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOE, IN1_DCMOTOR_Pin|IN2_DCMOTOR_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(USB_PowerSwitchOn_GPIO_Port, USB_PowerSwitchOn_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3
-                          |GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOD, ROW1_Pin|ROW2_Pin|ROW3_Pin|ROW4_Pin
+                          |ROW5_Pin|ROW6_Pin|ROW7_Pin|ROW8_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : COL1_Pin COL2_Pin COL3_Pin COL4_Pin
+                           COL5_Pin COL6_Pin COL7_Pin COL8_Pin */
+  GPIO_InitStruct.Pin = COL1_Pin|COL2_Pin|COL3_Pin|COL4_Pin
+                          |COL5_Pin|COL6_Pin|COL7_Pin|COL8_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
   /*Configure GPIO pin : USER_Btn_Pin */
   GPIO_InitStruct.Pin = USER_Btn_Pin;
@@ -895,13 +908,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(ULTRASONIC_TRIGGER_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : IN1_DCMOTOR_Pin IN2_DCMOTOR_Pin */
-  GPIO_InitStruct.Pin = IN1_DCMOTOR_Pin|IN2_DCMOTOR_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
-
   /*Configure GPIO pins : BUTTON3_Pin BUTTON2_Pin BUTTON1_Pin BUTTON0_Pin */
   GPIO_InitStruct.Pin = BUTTON3_Pin|BUTTON2_Pin|BUTTON1_Pin|BUTTON0_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
@@ -921,10 +927,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(USB_OverCurrent_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PD0 PD1 PD2 PD3
-                           PD4 PD5 PD6 PD7 */
-  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3
-                          |GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7;
+  /*Configure GPIO pins : ROW1_Pin ROW2_Pin ROW3_Pin ROW4_Pin
+                           ROW5_Pin ROW6_Pin ROW7_Pin ROW8_Pin */
+  GPIO_InitStruct.Pin = ROW1_Pin|ROW2_Pin|ROW3_Pin|ROW4_Pin
+                          |ROW5_Pin|ROW6_Pin|ROW7_Pin|ROW8_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

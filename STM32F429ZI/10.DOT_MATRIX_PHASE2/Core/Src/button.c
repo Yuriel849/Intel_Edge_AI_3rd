@@ -2,7 +2,7 @@
 #include "i2c_lcd.h"
 // 초기버튼 상태 table
 char button_status[BUTTON_NUMBER] =
-{BUTTON_RELEASE,BUTTON_RELEASE,BUTTON_RELEASE,BUTTON_RELEASE,BUTTON_RELEASE};
+{BUTTON_RELEASE,BUTTON_RELEASE,BUTTON_RELEASE,BUTTON_RELEASE};
 uint8_t lcd_display_mode_flag=0;
 
 extern RTC_HandleTypeDef hrtc;

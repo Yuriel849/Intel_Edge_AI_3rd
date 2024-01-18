@@ -50,10 +50,38 @@ void button0_toggle()
 
 int func_index=0;
 
+int led01_status = 0;
+int led02_status = 0;
+int led03_status = 0;
+
 void led_main(void)
 {
 	while(1)
 	{
+		// 버튼을 한번 눌렀다 뗀 상태라면
+		if (get_button(BUTTON0_GPIO_Port, BUTTON0_Pin, 0) == BUTTON_PRESS)
+		{
+			HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
+		}
+		if (get_button(BUTTON1_GPIO_Port, BUTTON1_Pin, 1) == BUTTON_PRESS)
+		{
+			HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_7);
+		}
+		if (get_button(BUTTON2_GPIO_Port, BUTTON2_Pin, 2) == BUTTON_PRESS)
+		{
+			HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_14);
+		}
+		if (get_button(BUTTON3_GPIO_Port, BUTTON3_Pin, 3) == BUTTON_PRESS)
+		{
+			HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);   // LED1
+			HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_7);   // LED2
+			HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_14);   // LED3
+		}
+
+
+
+
+
 #if 0
 		if (t1ms_counter >= 200)
 		{
@@ -96,7 +124,7 @@ void led_main(void)
 		led_all_off();
 #endif
 
-#if 1
+#if 0
 		// Phase#3
 		// 0->1->2->3->4->5->6->7
 		// 해당 되는 bit의 LED만 ON
