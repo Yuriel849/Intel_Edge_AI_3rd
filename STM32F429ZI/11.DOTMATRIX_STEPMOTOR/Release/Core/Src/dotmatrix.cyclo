@@ -1,0 +1,4 @@
+dotmatrix.c:162:6:init_dotmatrix	4
+dotmatrix.c:180:6:write_column_data	3
+dotmatrix.c:198:6:write_row_data	3
+dotmatrix.c:223:5:dotmatrix_main_test	5
