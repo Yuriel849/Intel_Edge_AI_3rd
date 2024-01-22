@@ -1,0 +1,5 @@
+../Core/Src/dotmatrix.c:216:6:write_column_data	24	static
+../Core/Src/dotmatrix.c:226:6:write_row_data	24	static
+../Core/Src/dotmatrix.c:238:5:dotmatrix_main_test	16	static
+../Core/Src/dotmatrix.c:267:6:init_dotmatrix	32	static
+../Core/Src/dotmatrix.c:340:6:upper_elevator	88	dynamic

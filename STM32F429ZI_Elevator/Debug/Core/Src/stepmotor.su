@@ -1,0 +1,5 @@
+../Core/Src/stepmotor.c:17:6:do_demo	16	static
+../Core/Src/stepmotor.c:42:6:kenGwon_test	16	static
+../Core/Src/stepmotor.c:69:6:stepmotor_drive	16	static
+../Core/Src/stepmotor.c:138:6:set_RPM	16	static
+../Core/Src/stepmotor.c:145:6:stepmotor_main_test	24	static
