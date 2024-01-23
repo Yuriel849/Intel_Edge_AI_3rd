@@ -34,34 +34,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := WASHING_MACHINE
+BUILD_ARTIFACT_NAME := STM32F429ZI_Washing_Machine
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-WASHING_MACHINE.elf \
+STM32F429ZI_Washing_Machine.elf \
 
 MAP_FILES += \
-WASHING_MACHINE.map \
+STM32F429ZI_Washing_Machine.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-WASHING_MACHINE.list \
+STM32F429ZI_Washing_Machine.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: WASHING_MACHINE.elf secondary-outputs
+main-build: STM32F429ZI_Washing_Machine.elf secondary-outputs
 
 # Tool invocations
-WASHING_MACHINE.elf WASHING_MACHINE.map: $(OBJS) $(USER_OBJS) D:\source\STM32F429ZI\WASHING_MACHINE\STM32F429ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "WASHING_MACHINE.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\source\STM32F429ZI\WASHING_MACHINE\STM32F429ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="WASHING_MACHINE.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+STM32F429ZI_Washing_Machine.elf STM32F429ZI_Washing_Machine.map: $(OBJS) $(USER_OBJS) D:\git\Intel3rd\STM32F429ZI_Washing_Machine\STM32F429ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "STM32F429ZI_Washing_Machine.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\git\Intel3rd\STM32F429ZI_Washing_Machine\STM32F429ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32F429ZI_Washing_Machine.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -70,14 +70,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-WASHING_MACHINE.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "WASHING_MACHINE.list"
+STM32F429ZI_Washing_Machine.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "STM32F429ZI_Washing_Machine.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) WASHING_MACHINE.elf WASHING_MACHINE.list WASHING_MACHINE.map default.size.stdout
+	-$(RM) STM32F429ZI_Washing_Machine.elf STM32F429ZI_Washing_Machine.list STM32F429ZI_Washing_Machine.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
