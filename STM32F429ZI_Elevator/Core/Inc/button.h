@@ -7,6 +7,6 @@
 #define BUTTON_PRESS 0 // 하드웨어에서 버튼 회로를 Pull-up으로 구성해놓았기 때문에 active-low이고, 소프트웨어에서도 형상을 일치 시키기 위해 BUTTON_PRESS를 0으로 정의함
 #define BUTTON_NUMBER 4 // 하드웨어에 연결되어 있는 버튼의 갯수는 4개
 
-int Get_Button(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin, uint8_t button_number);
+int get_button(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin, uint8_t button_number);
 
 #endif /*_BUTTON_H_*/

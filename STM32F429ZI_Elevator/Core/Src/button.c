@@ -12,21 +12,21 @@ char button_status[BUTTON_NUMBER] = {
  * param3: 함수가 접근하는 푸시 버튼 1개가 button_status[] 배열 상의 몇번째 인덱스에 해당하게 할 것인지를 결정하는 값
  * return: 푸시 버튼의 상태 (BUTTON_RELEASE 또는 BUTTON_PRESS)
  */
-int Get_Button(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin, uint8_t button_number)
+int get_button(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin, uint8_t button_number)
 {
 	unsigned char curr_state; // uint8_t로 선언해도 되지만 unsigned char로 선언한 이유는 여기에 담기는 값이 비록 0 또는 1이겠지만, 그것을 BUTTON_PRESS 또는 BUTTON_RELEASE와 같은 논리적 상태로 보겠다는 개발자의 의도를 담은 선언이다.
 	curr_state = HAL_GPIO_ReadPin(GPIOx, GPIO_Pin); // 0(BUTTON_PRESS) 또는 1(BUTTON_RELEASE)
 
 	if (curr_state == BUTTON_PRESS && button_status[button_number] == BUTTON_RELEASE)
 	{
-		HAL_Delay(100); // 0.1초 동안 노이즈가 지나가길 기다림
+		HAL_Delay(80); // 0.1초 동안 노이즈가 지나가길 기다림
 		button_status[button_number] = BUTTON_PRESS; // 누르긴 눌렀으니까 우선 button_status배열 상의 상태를 BUTTON_PRESS로 바꿔준다.
 		return BUTTON_RELEASE; // 아직은 버튼을 누른것으로 간주할 수 없다.(왜냐하면 button_status배열 상의 버튼의 기존 상태가 BUTTON_RELEASE였기 때문이다.)
 	}
 	else if (curr_state == BUTTON_RELEASE && button_status[button_number] == BUTTON_PRESS)
 	{
-		button_status[button_number] = BUTTON_RELEASE; // button_status배열 상의 상태를 curr_state에 맞게 다시 초기화해주고
 		HAL_Delay(30);
+		button_status[button_number] = BUTTON_RELEASE; // button_status배열 상의 상태를 curr_state에 맞게 다시 초기화해주고
 		return BUTTON_PRESS; // 정말 버튼을 누른 것으로 인정
 	}
 

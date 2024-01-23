@@ -1,5 +1,5 @@
-dotmatrix.c:216:6:write_column_data	3
-dotmatrix.c:226:6:write_row_data	3
-dotmatrix.c:238:5:dotmatrix_main_test	2
-dotmatrix.c:267:6:init_dotmatrix	5
-dotmatrix.c:340:6:upper_elevator	11
+../Core/Src/dotmatrix.c:216:6:write_column_data	3
+../Core/Src/dotmatrix.c:226:6:write_row_data	3
+../Core/Src/dotmatrix.c:238:5:dotmatrix_main_test	2
+../Core/Src/dotmatrix.c:267:6:init_dotmatrix	5
+../Core/Src/dotmatrix.c:340:6:upper_elevator	11
