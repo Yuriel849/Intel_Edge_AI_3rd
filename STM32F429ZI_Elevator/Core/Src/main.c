@@ -130,6 +130,10 @@ int main(void)
 
 //  led_main();
 //  i2c_lcd_main();
+  static char state = 0;	   // current state
+  static char sel_floor = 1;
+  static char cur_floor = 1;
+  static int diff = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -140,9 +144,6 @@ int main(void)
 	  // Show "<< FLOOR_NUMBER >>" on I2C LCD display and switch between floors when Button 3 and 2 are pressed
 	  // Show "Floor X selected" when button 1 is pressed
 	  // Show "Floor selection cancelled" when button 0 is pressed
-	  lcd_string((uint8_t*) "<< FLOOR NUMBER >>");
-	  HAL_Delay(1000);
-
 
 	  // BTN3 BTN2 BTN1 BTN0 : left-to-right
       // Button 3 and 2 to switch between floor numbers (3=previous, 2=next)
@@ -153,6 +154,115 @@ int main(void)
 	  // When elevator starts moving, keep moving until photo interrupter for specific floor is triggered
 	  // When floor selection is cancelled with button 0, stop when next photo interrupter is triggered
 
+
+	  switch(state)
+	  {
+	  case 0: // IDLE state / DO NOTHING
+		  lcd_command(CLEAR_DISPLAY);
+		  HAL_Delay(10);
+		  move_cursor(0,0);
+		  lcd_string((uint8_t*) "Welcome!!");
+		  // If any BTN is pressed, change to state == 1
+		  if((get_button(BTN0_GPIO_Port, BTN0_Pin, 0) == BUTTON_PRESS) ||
+				  (get_button(BTN1_GPIO_Port, BTN1_Pin, 1) == BUTTON_PRESS) ||
+				  (get_button(BTN2_GPIO_Port, BTN2_Pin, 2) == BUTTON_PRESS) ||
+				  (get_button(BTN3_GPIO_Port, BTN3_Pin, 3) == BUTTON_PRESS))
+		  {
+			  lcd_command(CLEAR_DISPLAY);
+			  state = 1;
+		  }
+		  break;
+	  case 1: // FLOOR SELECTION state
+		  // Display user interface
+		  move_cursor(0,0);
+		  lcd_string((uint8_t*) "<< Select Floor >>");
+		  move_cursor(1,0);
+		  lcd_string((uint8_t*) cur_floor);
+		  sel_floor = cur_floor;
+
+		  // Switch between floors when Button 3 and 2 are pressed (BTN3 for previous, BTN2 for next)
+		  if(get_button(BTN3_GPIO_Port, BTN3_Pin, 3) == BUTTON_PRESS)
+		  {
+			  if(1 < sel_floor)
+			  {
+				  sel_floor--;
+			  }
+		  }
+		  else if (get_button(BTN2_GPIO_Port, BTN2_Pin, 2) == BUTTON_PRESS)
+		  {
+			  if(sel_floor < 5)
+			  {
+				  sel_floor++;
+			  }
+		  }
+
+		  // Display "Floor X selected" when button 1 is pressed and start elevator
+		  if(get_button(BTN1_GPIO_Port, BTN1_Pin, 1) == BUTTON_PRESS)
+		  {
+			  if(sel_floor == cur_floor)
+			  {
+				  move_cursor(1,0);
+				  lcd_string((uint8_t*) "Same floor");
+			  }
+			  else
+			  {
+				  lcd_command(CLEAR_DISPLAY);
+				  move_cursor(0,0);
+				  lcd_string((uint8_t*) "Floor selected :");
+				  move_cursor(1,0);
+				  lcd_string((uint8_t*) sel_floor);
+				  state = 2;
+			  }
+		  }
+		  break;
+	  case 2: // ELEVATOR MOVE state
+		  // Show "Floor selection cancelled" when button 0 is pressed
+		  if(get_button(BTN0_GPIO_Port, BTN0_Pin, 0) == BUTTON_PRESS)
+		  {
+			  lcd_command(CLEAR_DISPLAY);
+			  move_cursor(0,0);
+			  lcd_string((uint8_t*) "Floor selection");
+			  move_cursor(1,0);
+			  lcd_string((uint8_t*) "cancelled.");
+			  state = 3;
+		  }
+
+		  diff = (sel_floor - '0') - (cur_floor - '0');
+		  if(diff > 0)
+		  {
+			  for (int step = 0; step < 8; step++)
+			  {
+				  stepmotor_drive(step);
+				  set_RPM(13);
+			  }
+		  }
+		  else if (diff < 0)
+		  {
+			  for (int step = 7; step >= 0; step--)
+			  {
+				  stepmotor_drive(step);
+				  set_RPM(13);
+			  }
+		  }
+		  else // if diff == 0
+		  {
+			  lcd_command(CLEAR_DISPLAY);
+			  move_cursor(0,0);
+			  lcd_string((uint8_t*) "Elevator arrived.");
+			  state = 0;
+		  }
+		  break;
+	  case 3: // CANCEL ELEVATOR state
+		  int current = (cur_floor - '0') + diff;
+		  cur_floor = current + '0';
+		  sel_floor = cur_floor;
+		  state = 2;
+		  break;
+	  default:
+		  break;
+	  }
+
+	  HAL_Delay(500);
 
     /* USER CODE END WHILE */
 
