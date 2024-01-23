@@ -131,8 +131,8 @@ int main(void)
 //  led_main();
 //  i2c_lcd_main();
   static char state = 0;	   // current state
-  static char sel_floor = 1;
-  static char cur_floor = 1;
+  static int sel_floor = 1;
+  static int cur_floor = 1;
   static int diff = 0;
   /* USER CODE END 2 */
 
@@ -169,16 +169,17 @@ int main(void)
 				  (get_button(BTN3_GPIO_Port, BTN3_Pin, 3) == BUTTON_PRESS))
 		  {
 			  lcd_command(CLEAR_DISPLAY);
+			  sel_floor = cur_floor;
 			  state = 1;
+			  HAL_Delay(100);
 		  }
 		  break;
 	  case 1: // FLOOR SELECTION state
 		  // Display user interface
 		  move_cursor(0,0);
-		  lcd_string((uint8_t*) "<< Select Floor >>");
+		  lcd_string((uint8_t*) "<< Select >>");
 		  move_cursor(1,0);
-		  lcd_string((uint8_t*) cur_floor);
-		  sel_floor = cur_floor;
+		  lcd_string((uint8_t*) "Currently...");
 
 		  // Switch between floors when Button 3 and 2 are pressed (BTN3 for previous, BTN2 for next)
 		  if(get_button(BTN3_GPIO_Port, BTN3_Pin, 3) == BUTTON_PRESS)
@@ -203,6 +204,7 @@ int main(void)
 			  {
 				  move_cursor(1,0);
 				  lcd_string((uint8_t*) "Same floor");
+				  HAL_Delay(100);
 			  }
 			  else
 			  {
@@ -212,6 +214,7 @@ int main(void)
 				  move_cursor(1,0);
 				  lcd_string((uint8_t*) sel_floor);
 				  state = 2;
+				  HAL_Delay(100);
 			  }
 		  }
 		  break;
@@ -225,9 +228,10 @@ int main(void)
 			  move_cursor(1,0);
 			  lcd_string((uint8_t*) "cancelled.");
 			  state = 3;
+			  HAL_Delay(100);
 		  }
 
-		  diff = (sel_floor - '0') - (cur_floor - '0');
+		  diff = sel_floor - cur_floor - '0';
 		  if(diff > 0)
 		  {
 			  for (int step = 0; step < 8; step++)
@@ -250,19 +254,20 @@ int main(void)
 			  move_cursor(0,0);
 			  lcd_string((uint8_t*) "Elevator arrived.");
 			  state = 0;
+			  HAL_Delay(100);
 		  }
 		  break;
 	  case 3: // CANCEL ELEVATOR state
-		  int current = (cur_floor - '0') + diff;
-		  cur_floor = current + '0';
+		  cur_floor = cur_floor + diff;
 		  sel_floor = cur_floor;
 		  state = 2;
+		  HAL_Delay(100);
 		  break;
 	  default:
 		  break;
 	  }
 
-	  HAL_Delay(500);
+	  HAL_Delay(100);
 
     /* USER CODE END WHILE */
 
