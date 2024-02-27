@@ -1,0 +1,1 @@
+cmd_/home/ubuntu/pi_bsp/drivers/p238_ledkey_array/modules.order := {   echo /home/ubuntu/pi_bsp/drivers/p238_ledkey_array/ledkey_array_dev.ko; :; } > /home/ubuntu/pi_bsp/drivers/p238_ledkey_array/modules.order

@@ -1,0 +1,1 @@
+cmd_/home/ubuntu/pi_bsp/drivers/p238_ledkey_array/ledkey_array_dev.mod := printf '%s\n'   ledkey_array_dev.o | awk '!x[$$0]++ { print("/home/ubuntu/pi_bsp/drivers/p238_ledkey_array/"$$0) }' > /home/ubuntu/pi_bsp/drivers/p238_ledkey_array/ledkey_array_dev.mod
