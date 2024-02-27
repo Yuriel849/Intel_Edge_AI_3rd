@@ -1,4 +1,4 @@
-http://，빼 linuxhardware.netMOD := hello
+MOD := hello
 obj-m := $(MOD).o
 
 CROSS = ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-
